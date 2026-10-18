@@ -1,5 +1,12 @@
 // Reusable API Client for THIS SUCKS.™ Backend
-import { placeFirestoreOrder } from './firebase.js';
+import {
+  placeFirestoreOrder,
+  recordFirestoreVisitorHit,
+  fetchFirestoreVisitorCount,
+  submitFirestoreGuestbookMessage,
+  fetchFirestoreGuestbookMessages,
+  getFirestoreVisitorMemory
+} from './firebase.js';
 
 const API_BASE = '/api';
 
@@ -43,21 +50,31 @@ export async function submitComplaint(complaintText) {
 }
 
 export async function getVisitorCount() {
-  const res = await fetch(`${API_BASE}/visitors`);
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.success) {
-    throw new Error(data.error || 'Failed to get visitor count.');
-  }
-  return data.count;
+  try {
+    const res = await fetch(`${API_BASE}/visitors`);
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success && typeof data.count === 'number') {
+        return data.count;
+      }
+    }
+  } catch (err) {}
+
+  return await fetchFirestoreVisitorCount();
 }
 
 export async function recordVisitorHit() {
-  const res = await fetch(`${API_BASE}/visitors/hit`, { method: 'POST' });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.success) {
-    throw new Error(data.error || 'Failed to record visitor hit.');
-  }
-  return data.count;
+  try {
+    const res = await fetch(`${API_BASE}/visitors/hit`, { method: 'POST' });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success && typeof data.count === 'number') {
+        return data.count;
+      }
+    }
+  } catch (err) {}
+
+  return await recordFirestoreVisitorHit();
 }
 
 export async function getClassifiedFiles() {
@@ -74,42 +91,53 @@ export async function getClassifiedFiles() {
 // ----------------------------------------------------------------------------
 
 export async function submitGuestbookMessage({ message, visitorId }) {
-  const res = await fetch(`${API_BASE}/guestbook`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, visitorId })
-  });
+  try {
+    const res = await fetch(`${API_BASE}/guestbook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, visitorId })
+    });
 
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok || !data.success) {
-    throw new Error(data.error || 'Failed to record review with CEO Babu.');
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('Backend /api/guestbook unavailable, falling back to direct Firestore:', err.message);
   }
 
-  return data;
+  return await submitFirestoreGuestbookMessage({ message, visitorId });
 }
 
 export async function getGuestbookFeed(limit = 20) {
-  const res = await fetch(`${API_BASE}/guestbook?limit=${limit}`);
-  const data = await res.json().catch(() => ({}));
+  try {
+    const res = await fetch(`${API_BASE}/guestbook?limit=${limit}`);
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success && Array.isArray(data.messages)) {
+        return data.messages;
+      }
+    }
+  } catch (err) {}
 
-  if (!res.ok || !data.success) {
-    throw new Error(data.error || 'Failed to load guestbook messages.');
-  }
-
-  return data.messages || [];
+  return await fetchFirestoreGuestbookMessages(limit);
 }
 
 export async function getVisitorMemory(visitorId) {
   if (!visitorId) return { success: true, recognized: false };
 
-  const res = await fetch(`${API_BASE}/guestbook/visitor-memory?visitorId=${encodeURIComponent(visitorId)}`);
-  const data = await res.json().catch(() => ({}));
+  try {
+    const res = await fetch(`${API_BASE}/guestbook/visitor-memory?visitorId=${encodeURIComponent(visitorId)}`);
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        return data;
+      }
+    }
+  } catch (err) {}
 
-  if (!res.ok || !data.success) {
-    return { success: true, recognized: false };
-  }
-
-  return data;
+  return await getFirestoreVisitorMemory(visitorId);
 }
 

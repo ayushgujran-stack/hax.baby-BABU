@@ -18,10 +18,13 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
+  increment,
   serverTimestamp,
   onSnapshot,
   collection,
   query,
+  where,
   orderBy,
   limit,
   getDocs
@@ -283,4 +286,124 @@ export async function placeFirestoreOrder(productName) {
       message: 'Delivery after sucked and approved by CEO.'
     }
   };
+}
+
+/**
+ * Increment visitor counter directly in Cloud Firestore
+ * @returns {Promise<number>}
+ */
+export async function recordFirestoreVisitorHit() {
+  const docRef = doc(db, 'siteStats', 'visitorCounter');
+  try {
+    await updateDoc(docRef, {
+      count: increment(1),
+      updatedAt: serverTimestamp()
+    });
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data().count || 1338;
+    }
+  } catch (err) {
+    // If document doesn't exist yet, initialize it
+    await setDoc(docRef, {
+      count: 1338,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    return 1338;
+  }
+  return 1338;
+}
+
+/**
+ * Submit guestbook message directly to Cloud Firestore
+ * @param {{ message: string, visitorId: string }} param0
+ * @returns {Promise<Object>}
+ */
+export async function submitFirestoreGuestbookMessage({ message, visitorId }) {
+  const trimmed = (message || '').trim();
+  if (trimmed.length < 5 || trimmed.length > 500) {
+    throw new Error('Valid review between 5 and 500 characters required.');
+  }
+
+  const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+  const messageId = `GB-${Date.now().toString(36).toUpperCase()}-${randomSuffix}`;
+  const createdAtIso = new Date().toISOString();
+
+  // Rule-based lightweight sentiment
+  const lower = trimmed.toLowerCase();
+  let sentiment = 'neutral';
+  if (lower.includes("doesn't work") || lower.includes("broken") || lower.includes("bug") || lower.includes("glitch") || lower.includes("error")) {
+    sentiment = 'issue';
+  } else if (lower.includes("not bad") || lower.includes("love") || lower.includes("great") || lower.includes("best") || lower.includes("awesome") || lower.includes("cute") || lower.includes("good")) {
+    sentiment = 'positive';
+  } else if (lower.includes("terrible") || lower.includes("worst") || lower.includes("awful") || lower.includes("hate") || lower.includes("bad")) {
+    sentiment = 'negative';
+  }
+
+  const babuResponses = {
+    positive: "YOU'RE MY FAVOURITE HUMAN! I AM PROMOTING YOU TO SENIOR SUCKER.",
+    negative: "WOW. OKAY. I AM GOING TO CRY ABOUT THIS IN BOARDROOM A.",
+    issue: "OH NO. MOM! WE HAVE A TECHNICAL GLITCH! CODE RED IN NURSERY!",
+    neutral: "HMM. I WILL THINK ABOUT THIS DURING NAP TIME."
+  };
+  const babuResponse = babuResponses[sentiment] || babuResponses.neutral;
+
+  const docRef = doc(db, 'guestbook', messageId);
+  await setDoc(docRef, {
+    message: trimmed,
+    visitorId: visitorId || 'anonymous',
+    sentiment,
+    babuResponse,
+    status: 'RESOLVED BY BABU',
+    createdAt: serverTimestamp(),
+    createdAtIso
+  });
+
+  return {
+    success: true,
+    messageId,
+    message: trimmed,
+    sentiment,
+    babuResponse,
+    status: 'RESOLVED BY BABU',
+    createdAt: createdAtIso
+  };
+}
+
+/**
+ * Lookup returning visitor memory directly from Cloud Firestore
+ * @param {string} visitorId
+ * @returns {Promise<Object>}
+ */
+export async function getFirestoreVisitorMemory(visitorId) {
+  if (!visitorId) return { success: true, recognized: false };
+
+  try {
+    const q = query(
+      collection(db, 'guestbook'),
+      where('visitorId', '==', visitorId),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      const data = snap.docs[0].data();
+      const excerpt = (data.message || '').substring(0, 60);
+      return {
+        success: true,
+        recognized: true,
+        sentiment: data.sentiment || 'neutral',
+        previousMessage: excerpt,
+        greeting: {
+          headline: data.sentiment === 'positive' ? '"YOU\'RE BACK! I REMEMBER YOU!"' : '"YOU AGAIN?! DID YOU BRING A PACIFIER?"',
+          subtext: `Babu remembers: "${excerpt}"`,
+          tag: "RETURNING INVESTOR DETECTED ★"
+        }
+      };
+    }
+  } catch (err) {
+    console.warn('Direct Firestore visitor memory lookup notice:', err.message);
+  }
+
+  return { success: true, recognized: false };
 }
