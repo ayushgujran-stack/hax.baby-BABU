@@ -1,21 +1,29 @@
 // Reusable API Client for THIS SUCKS.™ Backend
+import { placeFirestoreOrder } from './firebase.js';
 
 const API_BASE = '/api';
 
 export async function placeOrder(productName) {
-  const res = await fetch(`${API_BASE}/orders`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ product: productName })
-  });
+  // 1. Try local or serverless backend endpoint (/api/orders)
+  try {
+    const res = await fetch(`${API_BASE}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product: productName })
+    });
 
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok || !data.success) {
-    throw new Error(data.error || 'Failed to place order with CEO Babu.');
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && data.success) {
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn('Backend /api/orders unavailable, falling back to direct Firestore:', err.message);
   }
 
-  return data;
+  // 2. Resilient Cloud Firestore fallback for deployed static Vercel environments
+  return await placeFirestoreOrder(productName);
 }
 
 export async function submitComplaint(complaintText) {

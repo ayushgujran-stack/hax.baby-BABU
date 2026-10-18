@@ -1,0 +1,13 @@
+{
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/orders",
+      "destination": "/api/orders.js"
+    },
+    {
+      "source": "/api/orders/:path*",
+      "destination": "/api/orders.js"
+    }
+  ]
+}

@@ -17,6 +17,8 @@ import {
   getFirestore,
   doc,
   getDoc,
+  setDoc,
+  serverTimestamp,
   onSnapshot,
   collection,
   query,
@@ -223,4 +225,62 @@ export async function fetchFirestoreGuestbookMessages(maxCount = 20) {
     console.warn('Direct Firestore guestbook fetch error:', err.message);
     return [];
   }
+}
+
+// ============================================================================
+// FIRESTORE ORDER SUBMISSION (Direct & Resilient Vercel Persistence)
+// ============================================================================
+
+export const APPROVED_PRODUCTS = [
+  'Pacifier my aunt gifted',
+  'Found at Suzie’s house',
+  'It just spawned on my bedroom'
+];
+
+/**
+ * Place a persistent order directly into Cloud Firestore orders collection
+ * Ensures 100% functionality on deployed Vercel static environments without an Express server
+ * @param {string} productName
+ * @returns {Promise<Object>}
+ */
+export async function placeFirestoreOrder(productName) {
+  if (typeof productName !== 'string' || !productName.trim()) {
+    throw new Error('Product name is required. Babu cannot fulfill orders of thin air.');
+  }
+
+  const trimmed = productName.trim().toLowerCase();
+  const matched = APPROVED_PRODUCTS.find(p => p.toLowerCase() === trimmed);
+
+  if (!matched) {
+    throw new Error(`Invalid product "${productName}". Approved products are: ${APPROVED_PRODUCTS.join(', ')}.`);
+  }
+
+  const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+  const orderId = `ORD-${Date.now().toString(36).toUpperCase()}-${randomSuffix}`;
+  const createdAtIso = new Date().toISOString();
+
+  const docRef = doc(db, 'orders', orderId);
+  await setDoc(docRef, {
+    orderId,
+    product: matched,
+    status: 'AWAITING_CEO_APPROVAL',
+    createdAt: serverTimestamp(),
+    createdAtIso,
+    confirmation: {
+      headline: 'ORDER PLACED!',
+      message: 'Delivery after sucked and approved by CEO.'
+    }
+  });
+
+  return {
+    success: true,
+    orderId,
+    product: matched,
+    status: 'AWAITING_CEO_APPROVAL',
+    createdAt: createdAtIso,
+    confirmation: {
+      headline: 'ORDER PLACED!',
+      message: 'Delivery after sucked and approved by CEO.'
+    }
+  };
 }

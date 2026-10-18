@@ -205,3 +205,80 @@ export const guestbook = onRequest({ cors: true }, async (req, res) => {
   }
 });
 
+// ============================================================================
+// ORDERS CLOUD FUNCTION (Serverless Endpoint)
+// ============================================================================
+
+const APPROVED_ORDER_PRODUCTS = [
+  'Pacifier my aunt gifted',
+  'Found at Suzie’s house',
+  'It just spawned on my bedroom'
+];
+
+export const orders = onRequest({ cors: true }, async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).send('');
+  }
+
+  if (req.method === 'POST') {
+    try {
+      const product = req.body?.product;
+      if (!product) {
+        return res.status(400).json({
+          success: false,
+          error: 'Product name is required. Babu cannot fulfill orders of thin air.'
+        });
+      }
+
+      const trimmed = product.trim().toLowerCase();
+      const matched = APPROVED_ORDER_PRODUCTS.find(p => p.toLowerCase() === trimmed);
+
+      if (!matched) {
+        return res.status(400).json({
+          success: false,
+          error: `Invalid product "${product}". Approved products are: ${APPROVED_ORDER_PRODUCTS.join(', ')}.`
+        });
+      }
+
+      const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const orderId = `ORD-${Date.now().toString(36).toUpperCase()}-${randomSuffix}`;
+      const createdAt = new Date().toISOString();
+
+      await db.collection('orders').doc(orderId).set({
+        orderId,
+        product: matched,
+        status: 'AWAITING_CEO_APPROVAL',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        confirmation: {
+          headline: 'ORDER PLACED!',
+          message: 'Delivery after sucked and approved by CEO.'
+        }
+      });
+
+      return res.status(201).json({
+        success: true,
+        orderId,
+        product: matched,
+        status: 'AWAITING_CEO_APPROVAL',
+        createdAt,
+        confirmation: {
+          headline: 'ORDER PLACED!',
+          message: 'Delivery after sucked and approved by CEO.'
+        }
+      });
+    } catch (err) {
+      console.error('Orders Cloud Function error:', err);
+      return res.status(500).json({
+        success: false,
+        error: 'Babu dropped his pacifier. Please retry in a moment.'
+      });
+    }
+  }
+
+  return res.status(405).json({ success: false, error: 'Method Not Allowed' });
+});
+

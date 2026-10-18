@@ -44,6 +44,14 @@
         "function": "guestbook"
       },
       {
+        "source": "/api/orders",
+        "function": "orders"
+      },
+      {
+        "source": "/api/orders/**",
+        "function": "orders"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

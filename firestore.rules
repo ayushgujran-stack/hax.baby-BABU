@@ -17,6 +17,17 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Orders Collection: Publicly creatable for approved products,
+    // cannot be read publicly or deleted/updated by unauthorized clients
+    match /orders/{orderId} {
+      allow create: if request.resource.data.product in [
+        "Pacifier my aunt gifted",
+        "Found at Suzie’s house",
+        "It just spawned on my bedroom"
+      ];
+      allow read, update, delete: if false;
+    }
+
     // Default deny for all other collections and documents
     match /{document=**} {
       allow read, write: if false;

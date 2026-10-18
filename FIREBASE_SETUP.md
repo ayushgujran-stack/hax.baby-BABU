@@ -45,16 +45,33 @@ The frontend initializes Firebase via `src/firebase.js` using the web client SDK
 }
 ```
 
-> 🔒 **Privacy Guarantee**: `visitorId` is stored internally in Firestore solely for returning-visitor memory. It is **never** returned in public feed responses or rendered in the DOM.
+### C. Pacifier Orders Collection
+- **Path**: `orders/{orderId}`
+- **Document ID Format**: `ORD-{timestamp36}-{randomSuffix}` (e.g. `ORD-MG5ABC-XYZ12`)
+- **Schema**:
+```json
+{
+  "orderId": "ORD-MG5ABC-XYZ12",
+  "product": "Pacifier my aunt gifted",
+  "status": "AWAITING_CEO_APPROVAL",
+  "createdAt": "server timestamp",
+  "createdAtIso": "2026-10-18T16:00:00.000Z",
+  "confirmation": {
+    "headline": "ORDER PLACED!",
+    "message": "Delivery after sucked and approved by CEO."
+  }
+}
+```
 
 ---
 
 ## 3. Backend Endpoints & Cloud Functions
 
-The backend exposes the following endpoints (available via Express on port 3001 or Cloud Functions via Firebase rewrites):
+The backend exposes the following endpoints (available via Express on port 3001, Vercel Serverless Functions in `api/`, or Cloud Functions via Firebase rewrites):
 
 | Method | Endpoint | Description | Validation / Safeguards |
 | :--- | :--- | :--- | :--- |
+| `POST` | `/api/orders` | Places a persistent order for one of the 3 approved pacifier products. | Validates against `APPROVED_PRODUCTS`. Resilient fallback to direct Firestore on static Vercel hosts. |
 | `GET` | `/api/visitors` | Retrieves the current verified visitor count. | Returns `{ count: number }`. |
 | `POST` | `/api/visitors/hit` | Atomically increments the visitor counter by 1. | Rate-limited, atomic `FieldValue.increment(1)`. |
 | `POST` | `/api/guestbook` | Validates, classifies, and persists a new review/grievance. | Enforces 5–500 chars, server-side sentiment analysis, sanitized HTML escaping. |
@@ -108,7 +125,17 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // 3. Deny all other collections
+    // 3. Orders Collection: Direct client creation allowed for approved products
+    match /orders/{orderId} {
+      allow create: if request.resource.data.product in [
+        "Pacifier my aunt gifted",
+        "Found at Suzie’s house",
+        "It just spawned on my bedroom"
+      ];
+      allow read, update, delete: if false;
+    }
+
+    // 4. Deny all other collections
     match /{document=**} {
       allow read, write: if false;
     }
