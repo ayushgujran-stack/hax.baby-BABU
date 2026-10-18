@@ -4,6 +4,7 @@
 
 import { sound } from './audio.js';
 import { getVisitorCount, recordVisitorHit } from './api.js';
+import { subscribeToVisitorCounter } from './firebase.js';
 
 const STORAGE_SESSION_KEY = 'paci_boss_visit_session_active';
 const STORAGE_CACHE_KEY = 'paci_boss_last_visitor_count';
@@ -128,5 +129,16 @@ export async function initOdometer() {
   } catch (err) {
     console.warn('ℹ️ [Odometer] Notice during visitor count sync:', err.message);
     // Graceful error handling: retains last known good count without crashing or showing NaN
+  }
+
+  // 3. Realtime Firestore Sync (updates odometer automatically if another session increments)
+  try {
+    subscribeToVisitorCounter((liveCount) => {
+      if (typeof liveCount === 'number' && liveCount !== displayedCount) {
+        animateToCount(liveCount);
+      }
+    });
+  } catch (err) {
+    // Non-fatal if offline
   }
 }
