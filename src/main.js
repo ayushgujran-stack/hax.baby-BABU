@@ -4,7 +4,8 @@ import { initOdometer } from './odometer.js';
 import { CartManager } from './cart.js';
 import { initCertificate } from './certificate.js';
 import { initEasterEggs } from './easter-eggs.js';
-import { initComplaints } from './complaints.js';
+import { initGuestbook } from './guestbook.js';
+import { initVisitorMemory } from './visitor-memory.js';
 import { mountDotCursor } from './cursor-init.tsx';
 import { initChaseScene } from './chase-scene.js';
 import { initVinylRoom } from './vinyl-room.js';
@@ -21,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initOdometer();
   initCertificate();
   initEasterEggs();
-  initComplaints();
+  initGuestbook();
+  initVisitorMemory();
   mountDotCursor();
   initHeroBaby();
   initChaseScene();
@@ -51,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.id === 'baby-ceo' ||
         button.id === 'speech-bubble' ||
         button.id === 'submit-complaint' ||
+        button.id === 'complaint-submit-btn' ||
         button.closest('#auth-modal') ||
         button.closest('#vinyl-room-modal') ||
         button.closest('#confidential-modal') ||

@@ -67,3 +67,6 @@ export const FieldValue = admin.firestore?.FieldValue;
 // Target Firestore document path as specified: siteStats/visitorCounter
 export const VISITOR_COUNTER_COLLECTION = 'siteStats';
 export const VISITOR_COUNTER_DOC = 'visitorCounter';
+
+// Guestbook collection path
+export const GUESTBOOK_COLLECTION = 'guestbook';

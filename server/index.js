@@ -7,6 +7,7 @@ import ordersRouter from './routes/orders.js';
 import complaintsRouter from './routes/complaints.js';
 import visitorsRouter from './routes/visitors.js';
 import classifiedRouter from './routes/classified.js';
+import guestbookRouter from './routes/guestbook.js';
 
 dotenv.config();
 
@@ -54,7 +55,7 @@ function rateLimiter(req, res, next) {
 }
 
 // Cleanup stale rate limit records every 5 minutes
-setInterval(() => {
+const cleanupInterval = setInterval(() => {
   const now = Date.now();
   for (const [ip, record] of rateLimitMap.entries()) {
     if (now > record.resetTime) {
@@ -62,6 +63,9 @@ setInterval(() => {
     }
   }
 }, 300000);
+if (cleanupInterval.unref) {
+  cleanupInterval.unref();
+}
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -77,6 +81,7 @@ app.get('/api/health', (req, res) => {
 // Mount feature routes
 app.use('/api/orders', rateLimiter, ordersRouter);
 app.use('/api/complaints', rateLimiter, complaintsRouter);
+app.use('/api/guestbook', rateLimiter, guestbookRouter);
 app.use('/api/visitors', visitorsRouter);
 app.use('/api/classified-files', classifiedRouter);
 

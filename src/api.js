@@ -60,3 +60,48 @@ export async function getClassifiedFiles() {
   }
   return data;
 }
+
+// ----------------------------------------------------------------------------
+// GUESTBOOK & RETURNING VISITOR API METHODS
+// ----------------------------------------------------------------------------
+
+export async function submitGuestbookMessage({ message, visitorId }) {
+  const res = await fetch(`${API_BASE}/guestbook`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, visitorId })
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data.success) {
+    throw new Error(data.error || 'Failed to record review with CEO Babu.');
+  }
+
+  return data;
+}
+
+export async function getGuestbookFeed(limit = 20) {
+  const res = await fetch(`${API_BASE}/guestbook?limit=${limit}`);
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data.success) {
+    throw new Error(data.error || 'Failed to load guestbook messages.');
+  }
+
+  return data.messages || [];
+}
+
+export async function getVisitorMemory(visitorId) {
+  if (!visitorId) return { success: true, recognized: false };
+
+  const res = await fetch(`${API_BASE}/guestbook/visitor-memory?visitorId=${encodeURIComponent(visitorId)}`);
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data.success) {
+    return { success: true, recognized: false };
+  }
+
+  return data;
+}
+

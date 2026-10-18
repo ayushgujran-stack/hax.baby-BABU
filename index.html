@@ -1419,6 +1419,9 @@
       </p>
     </div>
 
+    <!-- RETURNING VISITOR RECOGNITION BANNER (Hidden initially, shown if visitor has a previous review) -->
+    <div id="guestbook-memory-banner"></div>
+
     <form id="complaint-form" class="space-y-4">
       <div>
         <label for="complaint-input" class="block font-label-stamp text-xs text-ink-black mb-1.5 uppercase font-bold">
@@ -1438,6 +1441,42 @@
         <span>📢</span> <span>SUBMIT COMPLAINT TO CEO</span>
       </button>
     </form>
+
+    <!-- LIVE GUESTBOOK & GRIEVANCE ARCHIVE -->
+    <div class="mt-10 pt-8 border-t-[3px] border-dashed border-ink-black/25">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <span class="font-label-stamp text-[10px] text-crayon-red uppercase bg-sunshine-yellow px-1.5 py-0.5 border border-ink-black shadow-[1px_1px_0_#292521] rotate-[-1deg] inline-block mb-1">
+            VERIFIED BABU REGISTRY
+          </span>
+          <h4 class="font-headline-md text-ink-black text-lg tracking-tight">
+            RECENT REVIEWS & RESOLVED GRIEVANCES
+          </h4>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-lime-green border border-ink-black animate-pulse"></span>
+          <span class="font-label-stamp text-[11px] text-ink-black font-bold uppercase tracking-wider">LIVE FIRESTORE FEED</span>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="guestbook-feed-loading" class="py-8 text-center border-2 border-dashed border-ink-black/20 rounded-xl bg-paper-cream/50">
+        <div class="inline-block text-2xl animate-spin mb-2">🍼</div>
+        <p class="font-label-stamp text-xs text-ink-black uppercase font-bold tracking-wider">
+          FETCHING OFFICIAL GRIEVANCES FROM CLOUD...
+        </p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="guestbook-feed-empty" class="hidden py-8 text-center border-2 border-dashed border-ink-black/20 rounded-xl bg-paper-cream/50">
+        <p class="text-2xl mb-1">👶💤</p>
+        <p class="font-headline-sm text-sm text-ink-black font-bold">No grievances filed yet.</p>
+        <p class="font-body-sm text-xs text-on-surface-variant italic mt-1">Babu is deeply suspicious of this absolute silence.</p>
+      </div>
+
+      <!-- Feed Cards Grid -->
+      <div id="guestbook-feed-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
   </div>
 </section>
 <!-- SECTION 5: CARDBOARD TIMELINE (ROAD TO DOMINATION) -->

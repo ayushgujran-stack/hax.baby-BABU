@@ -36,6 +36,14 @@
         "function": "visitors"
       },
       {
+        "source": "/api/guestbook",
+        "function": "guestbook"
+      },
+      {
+        "source": "/api/guestbook/**",
+        "function": "guestbook"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

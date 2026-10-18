@@ -9,6 +9,14 @@ service cloud.firestore {
       allow write: if false; // Mutated ONLY by secure server-side endpoint / Cloud Functions via Admin SDK
     }
 
+    // Public Guestbook Collection: Publicly readable for live reviews feed,
+    // writable ONLY by secure server-side endpoint / Cloud Functions via Admin SDK
+    // to enforce server-side sentiment classification, length limits, and anti-abuse validation
+    match /guestbook/{messageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
     // Default deny for all other collections and documents
     match /{document=**} {
       allow read, write: if false;

@@ -582,6 +582,53 @@ html[data-theme="night"] footer {
   border-top-color: #0E0C14 !important;
 }
 
+/* Guestbook & Complaints in Night Mode */
+html[data-theme="night"] #complaints > div {
+  background-color: #241F33 !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 8px 8px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] #complaints h3,
+html[data-theme="night"] #complaints h4 {
+  color: #FFE066 !important;
+}
+
+html[data-theme="night"] #complaints label,
+html[data-theme="night"] #complaints .font-label-stamp {
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] #complaints textarea {
+  background-color: #1A1626 !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 3px 3px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] #guestbook-feed-list > div {
+  background-color: #1E192B !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 4px 4px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] #guestbook-feed-list p.font-body-md {
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] #guestbook-feed-list .border-ink-black\/20 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html[data-theme="night"] #guestbook-feed-loading,
+html[data-theme="night"] #guestbook-feed-empty {
+  background-color: #1A1626 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #F8F2EC !important;
+}
+
 /* Accessibility Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-mom-rocking,

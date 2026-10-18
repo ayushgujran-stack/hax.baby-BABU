@@ -41,6 +41,19 @@ export function initDatabase() {
     );
   `);
 
+  // Guestbook messages table (persistent local fallback for Firestore)
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS guestbook_messages (
+      id TEXT PRIMARY KEY,
+      message TEXT NOT NULL,
+      visitor_id TEXT NOT NULL,
+      sentiment TEXT NOT NULL DEFAULT 'neutral',
+      babu_response TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'RESOLVED BY BABU',
+      created_at TEXT NOT NULL
+    );
+  `);
+
   // Visitors table
   db.exec(`
     CREATE TABLE IF NOT EXISTS visitors (

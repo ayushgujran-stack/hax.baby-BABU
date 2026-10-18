@@ -1,143 +1,114 @@
-# Firebase Cloud Firestore Setup Guide — THIS SUCKS.™
-## Visitor Odometer Backend Architecture & Deployment
+# Firebase Cloud Firestore & Backend Setup Guide — THIS SUCKS.™
+## Visitor Odometer, Live Interactive Guestbook & Returning-Visitor Memory
 
-> **Scope Restriction**: Per project requirements, the Visitor Odometer (`#odometer-container`) is the **ONLY** feature connected to Firebase Cloud Firestore. Products, complaints, the origin story, the Secret Vinyl Room Easter egg, and the Pacifier Chase interaction run purely on the frontend.
-
----
-
-## 1. Create or Select a Firebase Project
-
-1. Go to the [Firebase Console](https://console.firebase.google.com/).
-2. Click **"Add project"** (or select an existing project).
-3. Name your project (e.g. `this-sucks-paci-boss` or `hax-baby-babu`).
-4. You may enable or disable Google Analytics (it is not needed for the visitor counter).
-5. Click **"Create project"** and wait for it to provision.
+**Project:** THIS SUCKS.™ (*Small mouth. BIG business.*)  
+**Database:** Cloud Firestore (`baby-46ada`)  
+**Backend:** Node.js Express API (`server/`) and Cloud Functions (`functions/`)
 
 ---
 
-## 2. Enable Cloud Firestore
+## 1. Architecture Overview & Reused Configuration
 
-1. In the left-hand navigation of the Firebase Console, go to **Build** → **Firestore Database**.
-2. Click **"Create database"**.
-3. Choose a location closest to your audience (e.g., `nam5 (us-central)` or `asia-south1`).
-4. In the security rules step, choose **"Start in production mode"**. (We will apply custom locked-down security rules in Step 6).
-5. Click **"Enable"**.
+This project connects two persistent features to Firebase Cloud Firestore without duplicating apps or breaking existing features:
 
----
+1. **Visitor Odometer (`siteStats/visitorCounter`)**: Realtime persistent visitor count incremented atomically and rendered on the 6-wheel mechanical odometer in the hero header.
+2. **Interactive Guestbook (`guestbook/{messageId}`)**: Persistent visitor reviews and complaints desk. Computes lightweight server-side sentiment, generates Babu's character reactions, safely archives messages with server timestamps, and remembers returning browsers.
 
-## 3. Configure Environment Variables
-
-The server accesses Firestore using the official **Firebase Admin SDK** to guarantee safe atomic increments and protect your credentials from public exposure.
-
-### Step 3.1: Generate a Service Account Private Key
-1. In the Firebase Console, click the **Gear icon (Project settings)** in the top left.
-2. Select the **"Service accounts"** tab.
-3. Under **Firebase Admin SDK**, ensure **Node.js** is selected.
-4. Click **"Generate new private key"**, then confirm **"Generate key"**.
-5. Save the downloaded `.json` file securely (e.g., as `serviceAccountKey.json` in your local project root).
-   > ⚠️ **Security Warning**: `serviceAccountKey.json` and `.env` are listed in `.gitignore` and must **NEVER** be committed to GitHub.
-
-### Step 3.2: Configure `.env`
-You can provide the credentials in one of two ways:
-
-#### Option A: Reference the local JSON key file path (Recommended for local dev)
-In `/Users/ayushrajeshpoojary/PROJECTS/Hax baby/.env`:
-```env
-PORT=3001
-CORS_ORIGIN=http://localhost:3000
-FIREBASE_SERVICE_ACCOUNT_KEY=./serviceAccountKey.json
-```
-
-#### Option B: Set individual environment variables (Recommended for production/Vercel/Render)
-```env
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project-id.iam.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC...\n-----END PRIVATE KEY-----\n"
-```
-
-*Note: If no Firebase credentials are provided in `.env`, the server automatically operates in a resilient local fallback mode using SQLite so development and tests never crash.*
+The frontend initializes Firebase via `src/firebase.js` using the web client SDK for real-time document streams (`onSnapshot`), while all untrusted writes, validation, and sentiment analysis occur strictly through the backend via the Firebase Admin SDK.
 
 ---
 
-## 4. Firestore Document Structure
+## 2. Firestore Collections & Document Schemas
 
-The database maintains a single minimal document for aggregate visits:
-
-- **Collection**: `siteStats`
-- **Document ID**: `visitorCounter`
-
-### Document Schema
+### A. Visitor Counter Document
+- **Path**: `siteStats/visitorCounter`
+- **Schema**:
 ```json
 {
   "count": 1337,
-  "updatedAt": "2026-10-18T13:00:00.000Z"
+  "updatedAt": "2026-10-18T14:30:00.000Z"
 }
 ```
 
-### Initializing the Document
-The backend code automatically initializes this document with `{ count: 1337, updatedAt: FieldValue.serverTimestamp() }` on the very first read if it does not yet exist.
+### B. Guestbook Messages Collection
+- **Path**: `guestbook/{messageId}`
+- **Document ID Format**: `GB-{timestamp36}-{randomSuffix}` (e.g. `GB-MG4B91Z-X8K2Q`)
+- **Schema**:
+```json
+{
+  "message": "I respect the business hustle. Babu is a visionary CEO!",
+  "visitorId": "anon-m8q9p2-k3j4l5m",
+  "sentiment": "positive",
+  "babuResponse": "GOO GOO GA GA! YOU GET IT! YOU HAVE EXECUTIVE TASTE.",
+  "status": "RESOLVED BY BABU",
+  "createdAt": "server timestamp"
+}
+```
 
-To manually initialize it via Firebase Console:
-1. Navigate to **Firestore Database** → **Start collection**.
-2. Collection ID: `siteStats` → Next.
-3. Document ID: `visitorCounter`.
-4. Add fields:
-   - `count` (number): `1337`
-   - `updatedAt` (timestamp): current time
-5. Click **Save**.
+> 🔒 **Privacy Guarantee**: `visitorId` is stored internally in Firestore solely for returning-visitor memory. It is **never** returned in public feed responses or rendered in the DOM.
 
 ---
 
-## 5. Deploying the Backend Endpoint
+## 3. Backend Endpoints & Cloud Functions
 
-You can deploy the visitor counter backend using either of two architectures:
+The backend exposes the following endpoints (available via Express on port 3001 or Cloud Functions via Firebase rewrites):
 
-### Architecture 1: Node.js Express Server (Existing Setup)
-Run the project's existing server:
-```bash
-npm run server
-```
-The server routes:
-- `GET /api/visitors`: Fetches the current persistent count from Firestore.
-- `POST /api/visitors/hit`: Atomically increments the count using `FieldValue.increment(1)` and returns the updated count.
+| Method | Endpoint | Description | Validation / Safeguards |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/visitors` | Retrieves the current verified visitor count. | Returns `{ count: number }`. |
+| `POST` | `/api/visitors/hit` | Atomically increments the visitor counter by 1. | Rate-limited, atomic `FieldValue.increment(1)`. |
+| `POST` | `/api/guestbook` | Validates, classifies, and persists a new review/grievance. | Enforces 5–500 chars, server-side sentiment analysis, sanitized HTML escaping. |
+| `GET` | `/api/guestbook` | Returns the latest 20 public guestbook entries. | Strips `visitorId` to preserve privacy. Ordered by `createdAt DESC`. |
+| `GET` | `/api/guestbook/visitor-memory` | Looks up prior visit sentiment and message for a visitor ID. | Accepts `?visitorId=...`. Returns excerpt and greeting without enumerating other entries. |
 
-### Architecture 2: Firebase Cloud Functions (Serverless Setup)
-A pre-configured Cloud Function is provided in `functions/index.js` and `firebase.json`:
-1. Install the Firebase CLI:
-   ```bash
-   npm install -g firebase-tools
-   ```
-2. Log in and select your project:
-   ```bash
-   firebase login
-   firebase use your-project-id
-   ```
-3. Deploy functions and rules:
-   ```bash
-   firebase deploy --only functions,firestore:rules
-   ```
-4. Cloud Functions will expose the endpoint at:
-   `https://<region>-<project-id>.cloudfunctions.net/visitors`
+---
+
+## 4. Lightweight Sentiment Detection (Option C)
+
+Sentiment is computed server-side in `server/sentiment.js` before persistence:
+- **Positive**: Recognizes praises and affirmations (`"love"`, `"great"`, `"genius"`).
+- **Negative**: Recognizes complaints and critiques (`"terrible"`, `"awful"`, `"bad"`).
+- **Technical Issue**: Recognizes bugs and broken features (`"doesn't work"`, `"broken on mobile"`, `"crashed"`).
+- **Neutral / Ambiguous**: Fallback for mild, factual, or mixed reviews.
+- **Negation Handling**: Inspects 1–2 words prior to sentiment tokens (e.g. `"not bad"` -> positive; `"not good"` -> negative).
+- **Brand Protection**: The brand name phrase `"THIS SUCKS.™"` is guarded from false negative classification when used as the brand title.
+
+---
+
+## 5. Returning-Visitor Memory Architecture
+
+1. **First Visit**: An anonymous ID (`paci_visitor_id`) is created and saved in `localStorage`.
+2. **Submission**: When the visitor submits a message, the server associates the message with their anonymous ID.
+3. **Return Visit**:
+   - On page load, `initVisitorMemory()` calls `GET /api/guestbook/visitor-memory?visitorId=...`.
+   - If a previous message is found, Babu's hero speech bubble displays a contextual greeting (`"YOU'RE BACK! I REMEMBER YOU!"`).
+   - A sticky note memo banner appears above the Guestbook desk with their past sentiment badge and message snippet.
+   - Session storage (`paci_greeted`) gates the greeting to trigger exactly once per session, preventing annoying repetitive loops on re-renders.
+4. **Limitations**: Memory is browser-bound (`localStorage`). Clearing site data or opening an incognito window resets the visitor to first-time status. No invasive device tracking, fingerprints, or accounts are used.
 
 ---
 
 ## 6. Firestore Security Rules
 
-To ensure public visitors cannot arbitrarily overwrite or falsify the aggregate count, the security rules in [`firestore.rules`](file:///Users/ayushrajeshpoojary/PROJECTS/Hax%20baby/firestore.rules) allow **read-only** access to the public while strictly restricting writes to the server:
+Deploy the included `firestore.rules` to Cloud Firestore:
 
-```cel
+```javascript
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Aggregate Visitor Counter Document: Publicly readable, server-only writable
-    match /siteStats/visitorCounter {
+    // 1. Visitor Odometer: Public read, all writes must go through server
+    match /siteStats/{docId} {
       allow read: if true;
-      allow write: if false; // Mutated ONLY by secure server-side endpoint / Cloud Functions via Admin SDK
+      allow write: if false;
     }
 
-    // Default deny for all other collections and documents
+    // 2. Guestbook Messages: Public read for real-time feed, writes via backend Admin SDK
+    match /guestbook/{messageId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 3. Deny all other collections
     match /{document=**} {
       allow read, write: if false;
     }
@@ -145,53 +116,54 @@ service cloud.firestore {
 }
 ```
 
-Deploy the rules via Firebase CLI:
-```bash
-firebase deploy --only firestore:rules
+---
+
+## 7. Environment Variables & Credentials
+
+Create or configure `.env` in the project root:
+
+```env
+PORT=3001
+CORS_ORIGIN=http://localhost:3000
+
+# Firebase Admin SDK Credentials (Optional for local dev, used in production)
+# Option A: Local service account file path
+FIREBASE_SERVICE_ACCOUNT_KEY=./serviceAccountKey.json
+
+# Option B: Individual environment variables
+# FIREBASE_PROJECT_ID=baby-46ada
+# FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@baby-46ada.iam.gserviceaccount.com
+# FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 ```
-Or paste the contents into **Firebase Console** → **Firestore Database** → **Rules** → **Publish**.
+
+> 💡 **Resilient Local Fallback**: When `serviceAccountKey.json` is not provided, the backend seamlessly mirrors persistence into SQLite (`./data/paci_boss.db`). Development and testing will never crash even when working offline.
 
 ---
 
-## 7. Connecting the Existing Frontend
+## 8. Deployment Instructions
 
-The frontend module [`src/odometer.js`](file:///Users/ayushrajeshpoojary/PROJECTS/Hax%20baby/src/odometer.js) is already wired into the application lifecycle:
+### Deploy Cloud Functions & Firestore Rules:
+```bash
+firebase deploy --only firestore:rules,functions
+```
 
-1. **Session Deduplication**: Checks `sessionStorage.getItem('paci_boss_visit_session_active')`.
-   - If **new session**: Triggers `POST /api/visitors/hit` to atomically increment the counter, then sets the session flag.
-   - If **existing session**: Triggers `GET /api/visitors` to retrieve the current count without re-incrementing on refresh.
-2. **Smooth Rolling Digit Animation**: Dynamically constructs rolling drum windows that roll each digit smoothly into position with authentic mechanical stagger and sound tick.
-3. **Resilience & Fallback**: Caches the last known count in `localStorage` so the counter never flashes `NaN`, `undefined`, or empty space during network latency or offline states.
-
----
-
-## 8. How to Test the Counter
-
-1. **Local Test Suite**:
-   Run the backend integration test:
-   ```bash
-   npm run test
-   ```
-   Verifies:
-   - `GET /api/visitors` returns 200 with integer count.
-   - `POST /api/visitors/hit` atomically increments count.
-   - Rate limiting and session integrity.
-
-2. **Browser Validation**:
-   - Start the development servers: `npm run dev`.
-   - Open `http://localhost:3000/`.
-   - Scroll to `#odometer-container` ("HEADQUARTERS LIVE ODOMETER").
-   - Observe the digits rolling into place.
-   - Refresh the page: Observe that the count does **not** double-increment in the same session.
-   - Open a private/incognito window to `http://localhost:3000/`: Observe that a new session is recorded and the counter increments by 1.
+### Run Locally (Concurrently Frontend + Backend):
+```bash
+npm run dev
+```
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:3001`
 
 ---
 
-## 9. Billing, Limits & Free-Tier Considerations
+## 9. Verification & Automated Testing
 
-- **Firebase Spark Plan (Free Tier)**:
-  - Firestore allows **50,000 document reads/day** and **20,000 document writes/day**.
-  - Since the odometer uses session deduplication and a single document, a website receiving thousands of visits per day stays well within the 100% free Spark plan.
-- **Cloud Functions**:
-  - Cloud Functions (v2) requires the **Blaze (Pay as you go)** plan, but includes a generous free tier (2 million invocations/month).
-  - If you prefer to stay on the 100% free Spark plan, use **Architecture 1** (Node.js Express server) with the Firestore Admin SDK.
+Run the full automated test suite:
+```bash
+# Test guestbook validation, sentiment engine, and visitor memory
+node test/guestbook.test.js
+
+# Test overall backend API suite
+node test/api.test.js
+```
+Both suites run with zero external mock dependencies and test all edge cases.

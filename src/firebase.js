@@ -17,7 +17,12 @@ import {
   getFirestore,
   doc,
   getDoc,
-  onSnapshot
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs
 } from 'firebase/firestore';
 
 // Official Web SDK configuration for Firebase project: baby-46ada
@@ -129,4 +134,93 @@ export async function fetchFirestoreVisitorCount() {
     return typeof data.count === 'number' ? data.count : 1337;
   }
   return 1337;
+}
+
+// ============================================================================
+// FIRESTORE GUESTBOOK REALTIME SYNC
+// ============================================================================
+
+/**
+ * Listen to live real-time updates for guestbook collection
+ * @param {function(Array)} onUpdate
+ * @param {number} [maxCount=20]
+ * @returns {function()} unsubscribe function
+ */
+export function subscribeToGuestbook(onUpdate, maxCount = 20) {
+  try {
+    const q = query(
+      collection(db, 'guestbook'),
+      orderBy('createdAt', 'desc'),
+      limit(maxCount)
+    );
+
+    return onSnapshot(q, (snapshot) => {
+      const messages = snapshot.docs.map(docSnap => {
+        const d = docSnap.data();
+        let dateStr = new Date().toISOString();
+        if (d.createdAt) {
+          if (typeof d.createdAt.toDate === 'function') {
+            dateStr = d.createdAt.toDate().toISOString();
+          } else if (typeof d.createdAt === 'string') {
+            dateStr = d.createdAt;
+          }
+        }
+
+        return {
+          id: docSnap.id,
+          message: d.message || '',
+          sentiment: d.sentiment || 'neutral',
+          babuResponse: d.babuResponse || 'Babu clapped enthusiastically.',
+          status: d.status || 'RESOLVED BY BABU',
+          createdAt: dateStr
+        };
+      });
+
+      onUpdate(messages);
+    }, (err) => {
+      console.warn('Firestore guestbook live listener notice:', err.message);
+    });
+  } catch (err) {
+    console.warn('Failed to attach Firestore guestbook snapshot listener:', err.message);
+    return () => {};
+  }
+}
+
+/**
+ * Fetch recent guestbook messages directly from Firestore
+ * @param {number} [maxCount=20]
+ * @returns {Promise<Array>}
+ */
+export async function fetchFirestoreGuestbookMessages(maxCount = 20) {
+  try {
+    const q = query(
+      collection(db, 'guestbook'),
+      orderBy('createdAt', 'desc'),
+      limit(maxCount)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map(docSnap => {
+      const d = docSnap.data();
+      let dateStr = new Date().toISOString();
+      if (d.createdAt) {
+        if (typeof d.createdAt.toDate === 'function') {
+          dateStr = d.createdAt.toDate().toISOString();
+        } else if (typeof d.createdAt === 'string') {
+          dateStr = d.createdAt;
+        }
+      }
+
+      return {
+        id: docSnap.id,
+        message: d.message || '',
+        sentiment: d.sentiment || 'neutral',
+        babuResponse: d.babuResponse || 'Babu clapped enthusiastically.',
+        status: d.status || 'RESOLVED BY BABU',
+        createdAt: dateStr
+      };
+    });
+  } catch (err) {
+    console.warn('Direct Firestore guestbook fetch error:', err.message);
+    return [];
+  }
 }
