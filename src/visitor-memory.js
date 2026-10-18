@@ -34,14 +34,7 @@ export function getVisitorId() {
 export async function initVisitorMemory() {
   const visitorId = getVisitorId();
 
-  // Prevent repeated greeting triggers during re-renders or multiple script calls
-  try {
-    if (sessionStorage.getItem(SESSION_KEY_GREETED)) {
-      return;
-    }
-  } catch (e) {
-    // Ignore storage restrictions
-  }
+  // Check visitor memory from serverless backend or Firestore
 
   try {
     const memory = await getVisitorMemory(visitorId);

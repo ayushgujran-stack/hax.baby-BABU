@@ -8,6 +8,18 @@
     {
       "source": "/api/orders/:path*",
       "destination": "/api/orders.js"
+    },
+    {
+      "source": "/api/guestbook/visitor-memory",
+      "destination": "/api/guestbook.js?action=visitor-memory"
+    },
+    {
+      "source": "/api/guestbook",
+      "destination": "/api/guestbook.js"
+    },
+    {
+      "source": "/api/guestbook/:path*",
+      "destination": "/api/guestbook.js"
     }
   ]
 }
