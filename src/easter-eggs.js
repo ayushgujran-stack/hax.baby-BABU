@@ -130,7 +130,8 @@ export function initEasterEggs() {
     modal.classList.add('hidden');
   }
 
-  if (easterBtn) easterBtn.addEventListener('click', openSecretModal);
+  const roomDossierBtn = document.getElementById('room-secret-dossier-btn');
+  if (roomDossierBtn) roomDossierBtn.addEventListener('click', openSecretModal);
   if (closeBtn) closeBtn.addEventListener('click', closeSecretModal);
   if (okBtn) okBtn.addEventListener('click', closeSecretModal);
   if (modal) {

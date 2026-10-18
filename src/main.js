@@ -7,6 +7,7 @@ import { initEasterEggs } from './easter-eggs.js';
 import { initComplaints } from './complaints.js';
 import { mountDotCursor } from './cursor-init.tsx';
 import { initChaseScene } from './chase-scene.js';
+import { initVinylRoom } from './vinyl-room.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Expose sound engine globally
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initComplaints();
   mountDotCursor();
   initChaseScene();
+  initVinylRoom();
 
   // Play pop on interactive button clicks that don't already have specific sounds
   document.addEventListener('click', (e) => {
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.id === 'baby-ceo' ||
         button.id === 'speech-bubble' ||
         button.id === 'submit-complaint' ||
+        button.closest('#vinyl-room-modal') ||
         button.closest('#confidential-modal') ||
         button.closest('#order-confirmation-modal') ||
         button.closest('header nav') ||

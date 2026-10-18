@@ -116,11 +116,170 @@ body.chase-in-arena #originkit-cursor-root {
   user-select: none;
 }
 
+/* ==========================================================================
+   SECRET VINYL ROOM EASTER EGG ANIMATIONS
+   ========================================================================== */
+
+/* 1. Turntable Platter & Vinyl Rotation (33 1/3 RPM vibe) */
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-vinyl-spin {
+  animation: vinyl-spin 1.8s linear infinite;
+}
+
+/* 2. Tonearm Needle Swivel onto Record */
+.tonearm-resting {
+  transform-origin: 85% 15%;
+  transform: rotate(-10deg);
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tonearm-playing {
+  transform-origin: 85% 15%;
+  transform: rotate(26deg);
+  transition: transform 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 3. Babu Waddling Stride (Walking across the room) */
+@keyframes babu-waddle {
+  0%, 100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(4deg);
+  }
+}
+
+.babu-is-walking {
+  animation: babu-waddle 0.32s ease-in-out infinite;
+}
+
+/* 4. Toddler Dance Styles */
+/* A. CEO Strut (Funkorama - Bouncy, confident hip swagger) */
+@keyframes dance-ceo-strut {
+  0%, 100% {
+    transform: translateY(0) rotate(-6deg) scale(1, 1);
+  }
+  25% {
+    transform: translateY(-14px) rotate(0deg) scale(0.96, 1.05);
+  }
+  50% {
+    transform: translateY(2px) rotate(6deg) scale(1.06, 0.94);
+  }
+  75% {
+    transform: translateY(-10px) rotate(0deg) scale(0.98, 1.03);
+  }
+}
+
+/* B. Toddler Bounce (Fluffing a Duck - Goofy, fast knee bends) */
+@keyframes dance-toddler-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1, 1) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-16px) scale(0.92, 1.08) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(3px) scale(1.08, 0.92) rotate(3deg);
+  }
+  70% {
+    transform: translateY(-12px) scale(0.95, 1.05) rotate(-2deg);
+  }
+}
+
+/* C. Chaos Spin (Scheming Weasel - Wild chaotic toddler dance) */
+@keyframes dance-chaos-spin {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-18px) rotate(-14deg) scale(1.05); }
+  40% { transform: translateY(4px) rotate(10deg) scale(0.95); }
+  60% { transform: translateY(-14px) rotate(180deg) scale(0.9, 1.1); }
+  80% { transform: translateY(-6px) rotate(340deg) scale(1.05); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+
+/* D. Wobble Rave (Monkeys Spinning Monkeys - Side-to-side party wobble) */
+@keyframes dance-wobble-rave {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg) scale(1.02, 0.98);
+  }
+  33% {
+    transform: translateY(-14px) rotate(8deg) scale(0.96, 1.04);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-4deg) scale(1.04, 0.96);
+  }
+}
+
+.babu-dancing-ceo-strut {
+  animation: dance-ceo-strut 0.65s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.babu-dancing-toddler-bounce {
+  animation: dance-toddler-bounce 0.46s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.babu-dancing-chaos-spin {
+  animation: dance-chaos-spin 0.58s ease-in-out infinite;
+}
+
+.babu-dancing-wobble-rave {
+  animation: dance-wobble-rave 0.52s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+}
+
+/* 5. Floating Musical Notes */
+@keyframes float-note {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6) rotate(0deg);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--note-x, 20px), -65px) scale(1.2) rotate(var(--note-rot, 20deg));
+  }
+}
+
+.floating-music-note {
+  animation: float-note 1.8s ease-out forwards;
+}
+
+/* 6. Active Vinyl Wall Selection Glow & Pulse */
+@keyframes vinyl-selected-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px #292521, 0 8px 0 #292521;
+  }
+  50% {
+    box-shadow: 0 0 0 3px #292521, 0 0 20px rgba(255, 216, 77, 0.8), 0 8px 0 #292521;
+  }
+}
+
+.vinyl-active-selection {
+  animation: vinyl-selected-pulse 1.4s ease-in-out infinite;
+}
+
+/* Accessibility Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-mom-rocking,
   #mom-needle-left,
   #mom-needle-right,
-  .tommy-idle-tail {
+  .tommy-idle-tail,
+  .animate-vinyl-spin,
+  .babu-is-walking,
+  .babu-dancing-ceo-strut,
+  .babu-dancing-toddler-bounce,
+  .babu-dancing-chaos-spin,
+  .babu-dancing-wobble-rave,
+  .floating-music-note,
+  .vinyl-active-selection {
     animation: none !important;
   }
 }
+
