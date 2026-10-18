@@ -1,26 +1,64 @@
+// THIS SUCKS.™ — Mechanical Odometer Visitor Counter
+// Connects to Firebase Cloud Firestore via secure server-side endpoint with atomic increment
+// Features smooth rolling digit animation, session deduplication, and error resilience
+
 import { sound } from './audio.js';
 import { getVisitorCount, recordVisitorHit } from './api.js';
+
+const STORAGE_SESSION_KEY = 'paci_boss_visit_session_active';
+const STORAGE_CACHE_KEY = 'paci_boss_last_visitor_count';
+const DEFAULT_BASELINE_COUNT = 1337;
 
 export async function initOdometer() {
   const container = document.getElementById('odometer-container');
   if (!container) return;
 
-  let currentCount = 1337;
+  // Retrieve cached count from localStorage to avoid visual flicker if available
+  const cachedCountRaw = localStorage.getItem(STORAGE_CACHE_KEY);
+  let displayedCount = cachedCountRaw && !isNaN(parseInt(cachedCountRaw, 10))
+    ? parseInt(cachedCountRaw, 10)
+    : DEFAULT_BASELINE_COUNT;
 
-  function renderDigits(num) {
-    const formatted = String(num).padStart(6, '0');
-    const part1 = formatted.slice(0, 3);
-    const part2 = formatted.slice(3);
-    const fullStr = `${part1},${part2}`;
-
+  // Build the mechanical odometer drum structure
+  function buildOdometerStructure() {
     container.innerHTML = '';
-    for (const char of fullStr) {
-      const span = document.createElement('span');
-      span.className = 'font-headline-md text-headline-md text-sunshine-yellow bg-ink-black px-2 py-0.5 border border-sunshine-yellow/30 rounded font-mono inline-block text-center select-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] transition-transform duration-150';
-      span.textContent = char;
-      container.appendChild(span);
+    container.setAttribute('role', 'status');
+    container.setAttribute('aria-label', `Visitor counter: ${displayedCount}`);
+
+    const formatted = String(displayedCount).padStart(6, '0');
+    const fullStr = `${formatted.slice(0, 3)},${formatted.slice(3)}`;
+
+    for (let i = 0; i < fullStr.length; i++) {
+      const char = fullStr[i];
+      if (char === ',') {
+        const commaSpan = document.createElement('span');
+        commaSpan.className = 'font-headline-md text-headline-md text-sunshine-yellow bg-ink-black px-1 py-0.5 rounded font-mono inline-flex items-center justify-center select-none';
+        commaSpan.textContent = ',';
+        container.appendChild(commaSpan);
+      } else {
+        // Rolling drum window
+        const drumWindow = document.createElement('div');
+        drumWindow.className = 'odometer-digit-window relative overflow-hidden bg-ink-black border border-sunshine-yellow/30 rounded font-mono inline-block text-center select-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)] w-6 sm:w-7 h-8 sm:h-9';
+        drumWindow.dataset.digitIndex = i;
+
+        // Strip containing digits 0-9
+        const strip = document.createElement('div');
+        strip.className = 'odometer-digit-strip flex flex-col transition-transform duration-700 ease-out will-change-transform';
+        for (let d = 0; d <= 9; d++) {
+          const numSpan = document.createElement('span');
+          numSpan.className = 'h-8 sm:h-9 flex items-center justify-center font-headline-md text-headline-md text-sunshine-yellow';
+          numSpan.textContent = d;
+          strip.appendChild(numSpan);
+        }
+
+        const digitVal = parseInt(char, 10) || 0;
+        strip.style.transform = `translateY(-${digitVal * 10}%)`;
+        drumWindow.appendChild(strip);
+        container.appendChild(drumWindow);
+      }
     }
 
+    // Label Stamp Badge
     const badge = document.createElement('span');
     badge.className = 'font-label-stamp text-label-stamp text-xs text-on-primary bg-crayon-red px-2 py-1 ml-1 rounded select-none cursor-pointer hover:bg-crayon-pink active:scale-95 transition-all';
     badge.textContent = 'VISITORS LOGGED';
@@ -28,20 +66,67 @@ export async function initOdometer() {
     container.appendChild(badge);
   }
 
-  // Initial placeholder while fetching
-  renderDigits(currentCount);
+  // Animate the drums to a new target count
+  function animateToCount(newCount) {
+    if (typeof newCount !== 'number' || isNaN(newCount)) return;
 
-  // Fetch real persistent visitor count from database
-  try {
-    const alreadyCounted = sessionStorage.getItem('paci_boss_visit_counted');
-    if (!alreadyCounted) {
-      currentCount = await recordVisitorHit();
-      sessionStorage.setItem('paci_boss_visit_counted', 'true');
-    } else {
-      currentCount = await getVisitorCount();
+    displayedCount = newCount;
+    localStorage.setItem(STORAGE_CACHE_KEY, String(newCount));
+    container.setAttribute('aria-label', `Visitor counter: ${displayedCount}`);
+
+    const formatted = String(newCount).padStart(6, '0');
+    const fullStr = `${formatted.slice(0, 3)},${formatted.slice(3)}`;
+
+    const windows = container.querySelectorAll('.odometer-digit-window');
+    let windowIdx = 0;
+
+    for (let i = 0; i < fullStr.length; i++) {
+      const char = fullStr[i];
+      if (char !== ',') {
+        const drumWindow = windows[windowIdx];
+        if (drumWindow) {
+          const strip = drumWindow.querySelector('.odometer-digit-strip');
+          const targetDigit = parseInt(char, 10) || 0;
+          if (strip) {
+            // Stagger each wheel slightly for realistic mechanical odometer feel
+            strip.style.transitionDelay = `${windowIdx * 0.04}s`;
+            strip.style.transform = `translateY(-${targetDigit * 10}%)`;
+          }
+        }
+        windowIdx++;
+      }
     }
-    renderDigits(currentCount);
+
+    try {
+      sound.playTick();
+    } catch {
+      // Audio tick is optional enhancement
+    }
+  }
+
+  // 1. Initial build with cached/baseline count
+  buildOdometerStructure();
+
+  // 2. Determine if this session has already been counted
+  try {
+    const isSessionCounted = sessionStorage.getItem(STORAGE_SESSION_KEY);
+
+    if (!isSessionCounted) {
+      // First visit in this session: increment counter via secure server endpoint
+      const result = await recordVisitorHit();
+      if (typeof result === 'number' && !isNaN(result)) {
+        sessionStorage.setItem(STORAGE_SESSION_KEY, 'true');
+        setTimeout(() => animateToCount(result), 250);
+      }
+    } else {
+      // Repeat visit in existing session: read persisted count without re-incrementing
+      const result = await getVisitorCount();
+      if (typeof result === 'number' && !isNaN(result)) {
+        setTimeout(() => animateToCount(result), 250);
+      }
+    }
   } catch (err) {
-    console.warn('Could not reach visitor counter endpoint, using fallback:', err.message);
+    console.warn('ℹ️ [Odometer] Notice during visitor count sync:', err.message);
+    // Graceful error handling: retains last known good count without crashing or showing NaN
   }
 }

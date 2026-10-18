@@ -1,0 +1,17 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Aggregate Visitor Counter Document: Publicly readable, server-only writable
+    match /siteStats/visitorCounter {
+      allow read: if true;
+      allow write: if false; // Mutated ONLY by secure server-side endpoint / Cloud Functions via Admin SDK
+    }
+
+    // Default deny for all other collections and documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,1 +1,25 @@
+# Dependencies
+node_modules/
+dist/
+
+# Environment and Secrets
+.env
+.env.local
+.env.*.local
+*serviceAccount*.json
+*service-account*.json
+*.pem
+*.key
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+
+# Database & System
+data/*.db-shm
+data/*.db-wal
+.DS_Store
+
+# Tooling
 .originkit/

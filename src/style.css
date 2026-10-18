@@ -272,6 +272,11 @@ body.chase-in-arena #originkit-cursor-root {
   animation: vinyl-selected-pulse 1.4s ease-in-out infinite;
 }
 
+/* 7. Mechanical Odometer Digit Drum */
+.odometer-digit-window {
+  contain: content;
+}
+
 /* Accessibility Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-mom-rocking,
@@ -285,8 +290,11 @@ body.chase-in-arena #originkit-cursor-root {
   .babu-dancing-chaos-spin,
   .babu-dancing-wobble-rave,
   .floating-music-note,
-  .vinyl-active-selection {
+  .vinyl-active-selection,
+  .odometer-digit-strip {
     animation: none !important;
+    transition: none !important;
   }
 }
+
 
