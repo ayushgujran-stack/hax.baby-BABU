@@ -1,0 +1,667 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;800&amp;family=Rubik:wght@400;500;700&amp;family=Space+Mono:wght@700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-container-lowest": "#ffffff",
+          "on-error-container": "#93000a",
+          "on-primary-fixed": "#410007",
+          "secondary-fixed": "#fde400",
+          "error-container": "#ffdad6",
+          "surface-tint": "#bb152c",
+          "surface-bright": "#fff8f3",
+          "secondary-container": "#fae100",
+          "inverse-primary": "#ffb3b1",
+          "outline": "#8f6f6e",
+          "outline-variant": "#e4bebc",
+          "on-tertiary": "#ffffff",
+          "on-primary": "#ffffff",
+          "on-primary-container": "#fffbff",
+          "on-secondary": "#ffffff",
+          "tertiary-fixed-dim": "#7bd0ff",
+          "on-secondary-fixed": "#201c00",
+          "secondary-fixed-dim": "#dec800",
+          "on-background": "#1d1b18",
+          "on-surface": "#1d1b18",
+          "on-error": "#ffffff",
+          "secondary": "#6a5f00",
+          "primary-fixed-dim": "#ffb3b1",
+          "surface": "#fff8f3",
+          "surface-dim": "#dfd9d4",
+          "error": "#ba1a1a",
+          "on-secondary-fixed-variant": "#504700",
+          "on-tertiary-container": "#fcfcff",
+          "primary-fixed": "#ffdad8",
+          "on-tertiary-fixed": "#001e2c",
+          "tertiary": "#006387",
+          "on-surface-variant": "#5b403f",
+          "on-tertiary-fixed-variant": "#004c69",
+          "primary": "#b7102a",
+          "tertiary-container": "#007da9",
+          "surface-container-high": "#ede7e2",
+          "surface-variant": "#e7e1dc",
+          "surface-container": "#f3ede7",
+          "surface-container-low": "#f9f2ed",
+          "inverse-surface": "#32302d",
+          "on-primary-fixed-variant": "#92001c",
+          "surface-container-highest": "#e7e1dc",
+          "inverse-on-surface": "#f6f0ea",
+          "primary-container": "#db313f",
+          "tertiary-fixed": "#c4e7ff",
+          "background": "#fff8f3",
+          "on-secondary-container": "#6f6300"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xs": "0.375rem",
+          "gutter": "1.5rem",
+          "space-sm": "0.75rem",
+          "space-xl": "3.5rem",
+          "margin-mobile": "1rem",
+          "space-lg": "2rem",
+          "space-md": "1.25rem",
+          "gutter-mobile": "1rem",
+          "margin": "2rem"
+        },
+        "fontFamily": {
+          "headline-lg-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-stamp": [
+            "Space Mono"
+          ],
+          "display-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "body-lg": [
+            "Rubik"
+          ],
+          "headline-lg": [
+            "Bricolage Grotesque"
+          ],
+          "headline-md": [
+            "Bricolage Grotesque"
+          ],
+          "display": [
+            "Bricolage Grotesque"
+          ],
+          "label-sm": [
+            "Space Mono"
+          ],
+          "body-md": [
+            "Rubik"
+          ]
+        },
+        "fontSize": {
+          "headline-lg-mobile": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-stamp": [
+            "14px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "700"
+            }
+          ],
+          "display-mobile": [
+            "40px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg": [
+            "36px",
+            {
+              "lineHeight": "42px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "display": [
+            "64px",
+            {
+              "lineHeight": "68px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed"><header class="fixed top-0 left-0 w-full z-50 bg-surface/95 backdrop-blur-sm border-b-[3px] border-on-surface shadow-[0_4px_0_0_#1d1b18]"><div class="h-20 max-w-7xl mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><a class="inline-block transform -rotate-1 bg-primary text-on-primary px-space-sm py-space-xs border-[3px] border-on-surface shadow-[3px_3px_0px_#1d1b18] hover:rotate-0 transition-transform" data-path="the-boss" href="#"><span class="font-headline-md text-headline-md tracking-tight uppercase select-none">THIS SUCKS.™</span></a><div class="hidden xl:inline-block transform rotate-2 bg-secondary-fixed text-on-secondary-fixed border-[2px] border-on-surface px-space-xs py-0.5 shadow-[2px_2px_0px_#1d1b18]"><span class="font-label-sm text-label-sm uppercase tracking-wider">TOP SECRET: NO MOM ALLOWED</span></div></div><nav class="hidden lg:flex items-center gap-space-xs" data-active-classes="bg-secondary-fixed text-on-secondary-fixed -rotate-1 shadow-[3px_3px_0px_#1d1b18] font-bold"><a aria-current="page" class="uppercase px-space-sm py-1.5 border-[2px] border-on-surface hover:rotate-1 transition-all bg-secondary-fixed text-on-secondary-fixed -rotate-1 shadow-[3px_3px_0px_#1d1b18] font-bold" data-path="the-boss" href="#">THE BOSS</a><a class="font-label-stamp text-label-stamp uppercase px-space-sm py-1.5 border-[2px] border-on-surface bg-surface-container-highest text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:-rotate-1 shadow-[2px_2px_0px_#1d1b18] transition-all" data-path="the-squad" href="#">THE SQUAD</a><a class="font-label-stamp text-label-stamp uppercase px-space-sm py-1.5 border-[2px] border-on-surface bg-surface-container-highest text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:rotate-2 shadow-[2px_2px_0px_#1d1b18] transition-all" data-path="the-plan" href="#">THE PLAN</a><a class="font-label-stamp text-label-stamp uppercase px-space-sm py-1.5 border-[2px] border-on-surface bg-surface-container-highest text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:-rotate-2 shadow-[2px_2px_0px_#1d1b18] transition-all" data-path="store" href="#">STORE</a><a class="font-label-stamp text-label-stamp uppercase px-space-sm py-1.5 border-[2px] border-on-surface bg-surface-container-highest text-on-surface-variant hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:rotate-1 shadow-[2px_2px_0px_#1d1b18] transition-all" data-path="hq" href="#">HQ</a></nav><div class="flex items-center gap-space-sm"><div class="lg:hidden transform rotate-1 bg-secondary-fixed text-on-secondary-fixed border-[2px] border-on-surface px-1.5 py-0.5 shadow-[2px_2px_0px_#1d1b18]"><span class="font-label-sm text-label-sm uppercase">CONFIDENTIAL</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border-[2px] border-on-surface shadow-[2px_2px_0px_#1d1b18]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-160px)]"><div class="flex flex-col w-full selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Marquee Warning Tape Ribbon -->
+<div class="w-full bg-secondary-fixed text-on-secondary-fixed py-2 overflow-hidden shadow-[0_4px_0_0_#1d1b18] select-none">
+<div class="flex items-center gap-8 text-label-stamp font-label-stamp tracking-widest uppercase whitespace-nowrap animate-pulse">
+<span class="">★ EXECUTIVE MEMO: BEDTIME CANCELLED INDEFINITELY ★</span>
+<span class="">EMBARGO ON MASHED PEAS ★</span>
+<span class="">10,000 CRUNCHED CHEERIOS FILED AS CAPEX ★</span>
+<span class="">HOSTILE TAKEOVER OF SUZIE'S CRAYON BOX IN PROGRESS ★</span>
+<span class="">AUTHORIZED BABY POWDER CONTRABAND ONLY ★</span>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-gutter py-space-lg w-full flex flex-col gap-space-xl">
+<!-- ========================================== -->
+<!-- SECTION 1: THE HERO & INTERACTIVE BOSS     -->
+<!-- ========================================== -->
+<section class="relative flex flex-col lg:flex-row items-stretch gap-space-lg">
+<!-- Tape Strip Pinning Hero -->
+<div class="absolute -top-5 left-12 w-36 h-8 bg-secondary-fixed/90 shadow-[2px_2px_0_0_#1d1b18] transform -rotate-3 z-20 pointer-events-none flex items-center justify-center">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-secondary-fixed font-bold">OFFICE OF THE CHAIR</span>
+</div>
+<!-- Left Dossier / Manifesto Panel -->
+<div class="w-full lg:w-5/12 bg-surface-container-high p-space-md lg:p-space-lg border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform -rotate-1 relative flex flex-col justify-between">
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="bg-primary text-on-primary font-label-stamp text-label-stamp px-2 py-0.5 transform rotate-1 uppercase">CLASSIFIED MEMO</span>
+<span class="font-label-sm text-label-sm uppercase text-outline">DOC ID: BB-002-SUCK</span>
+</div>
+<div class="space-y-1">
+<h1 class="font-display text-display uppercase tracking-tight text-on-surface leading-none">
+              THIS SUCKS.<span class="text-primary">™</span>
+</h1>
+<p class="font-headline-lg text-headline-lg text-primary uppercase font-extrabold tracking-tight">
+              Small mouth.<br>BIG business.
+            </p>
+</div>
+<div class="bg-surface p-space-sm border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform rotate-1 inline-block">
+<p class="font-label-stamp text-label-stamp uppercase text-on-surface">
+              BABU, 2.<br>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-1 font-bold">CEO. PACIFIERHOLIC.</span>
+</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Corporate governance doesn't sleep at 7:30 PM. Operating with zero oversight, hostile rattle acquisitions, and complete diaper immunity.
+          </p>
+</div>
+<!-- Interactive Executive Controller -->
+<div class="mt-6 pt-4 border-t-[3px] border-dashed border-on-surface/40 flex flex-col gap-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">EXECUTIVE CONTROLS</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="px-3 py-2 bg-secondary-fixed text-on-secondary-fixed font-headline-md text-label-stamp uppercase border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0_0_#1d1b18] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-1" id="btnSmoke" onclick="triggerBabuAction('smoke')">
+<span class="material-symbols-outlined text-[18px]">smoking_rooms</span> PUFF PACI
+            </button>
+<button class="px-3 py-2 bg-primary text-on-primary font-headline-md text-label-stamp uppercase border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[1px_1px_0_0_#1d1b18] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-1" id="btnInspect" onclick="triggerBabuAction('inspect')">
+<span class="material-symbols-outlined text-[18px]">gavel</span> BOSS SCOWL
+            </button>
+</div>
+<div class="font-label-sm text-label-sm bg-surface-container-lowest p-2 border border-on-surface uppercase text-on-surface" id="heroLog">
+            STATUS: EVALUATING DIAPER SOLVENCY.
+          </div>
+</div>
+</div>
+<!-- Right Interactive Boss Stage (Cardboard Office Simulation) -->
+<div class="w-full lg:w-7/12 bg-surface-container-lowest p-space-md lg:p-space-lg border-[3px] border-on-surface shadow-[8px_8px_0_0_#1d1b18] transform rotate-1 relative flex flex-col items-center justify-center min-h-[460px] overflow-hidden">
+<!-- Cardboard Flap Backdrop -->
+<div class="absolute inset-2 border-[2px] border-dashed border-outline-variant pointer-events-none"></div>
+<!-- Stamp in corner -->
+<div class="absolute top-4 right-4 bg-error-container text-on-error-container border-[2px] border-on-surface font-label-stamp text-label-stamp px-2 py-1 transform rotate-6 uppercase select-none">
+          UNRESTRICTED CAPITAL
+        </div>
+<!-- Babu Boss Centerpiece Mockup Graphic -->
+<div class="relative w-full max-w-md h-80 flex flex-col items-center justify-center">
+<!-- Baby Powder Smoke Ring Elements (Toggled via JS) -->
+<div class="absolute -top-2 right-16 opacity-0 transition-opacity duration-300 pointer-events-none flex flex-col items-center gap-1 z-30" id="smokeRings">
+<span class="w-8 h-8 rounded-full border-[3px] border-dashed border-outline transform rotate-12 bg-surface-container-low/70"></span>
+<span class="w-12 h-12 rounded-full border-[3px] border-dashed border-outline transform -rotate-6 bg-surface-container-low/50"></span>
+<span class="font-label-sm text-label-sm font-bold bg-secondary-fixed px-1 border border-on-surface uppercase">*POWDER PUFF*</span>
+</div>
+<!-- Boss Portrait Illustrated Composite -->
+<div class="relative w-64 h-64 bg-surface-container p-3 border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] transform -rotate-1 flex flex-col items-center justify-between">
+<!-- Cutout Photo Header -->
+<div class="w-full flex justify-between items-center px-1">
+<span class="font-label-sm text-label-sm uppercase bg-on-surface text-surface px-1.5">DIR-EXEC-01</span>
+<span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+</div>
+<!-- Babu Visual Avatar Construction -->
+<div class="relative w-44 h-44 flex items-center justify-center">
+
+<!-- Pacifier Cigar Hot-Overlay -->
+<div class="absolute bottom-6 right-2 transform rotate-12 transition-all duration-300" id="paciCigar">
+<div class="bg-primary text-on-primary px-2 py-1 border-[2px] border-on-surface shadow-[2px_2px_0_0_#1d1b18] flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary-fixed">circle</span>
+<span class="font-label-sm text-label-sm font-bold uppercase">PACI-GAR 100</span>
+</div>
+</div>
+<!-- Boss Scowl Sticker Badge -->
+<div class="absolute top-2 left-2 opacity-0 transform -rotate-12 transition-all duration-300" id="scowlBadge">
+<span class="bg-error text-on-error font-label-stamp text-label-sm px-2 py-0.5 border border-on-surface shadow-[2px_2px_0_0_#1d1b18]">100% UNAMUSED</span>
+</div>
+</div>
+<!-- Nameplate -->
+<div class="w-full bg-secondary-fixed text-on-secondary-fixed text-center py-1 border-[2px] border-on-surface font-label-stamp text-label-stamp uppercase tracking-widest font-bold">
+              BABU : SOLE PROPRIETOR
+            </div>
+</div>
+<!-- Bottom Cardboard Crib Desk Edge -->
+<div class="w-full mt-3 bg-surface-dim border-[3px] border-on-surface py-2 px-4 shadow-[4px_4px_0_0_#1d1b18] flex justify-between items-center transform rotate-1">
+<span class="font-label-sm text-label-sm uppercase tracking-tight">CARDBOARD DESK #4</span>
+<div class="flex gap-1">
+<span class="w-3 h-3 bg-primary border border-on-surface inline-block"></span>
+<span class="w-3 h-3 bg-secondary-fixed border border-on-surface inline-block"></span>
+<span class="w-3 h-3 bg-tertiary border border-on-surface inline-block"></span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- SECTION 2: THE CEO & SQUAD                 -->
+<!-- ========================================== -->
+<section class="flex flex-col gap-space-md">
+<!-- Section Header with Masking Tape -->
+<div class="relative inline-block self-start">
+<div class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-stamp px-4 py-1.5 border-[3px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-2 uppercase tracking-widest inline-flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">groups</span>
+          SECTION 02 // EXECUTIVE COMMITTEE
+        </div>
+</div>
+<!-- Dossier Squad Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md"><div class="bg-surface-container p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform -rotate-1 relative flex flex-col justify-between"><div class="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-secondary-fixed/90 border border-on-surface transform rotate-2 pointer-events-none"></div><div class="space-y-3 pt-2"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-stamp bg-primary text-on-primary px-2 py-0.5 uppercase border border-on-surface font-bold">FOUNDER</span><span class="material-symbols-outlined text-outline">verified_user</span></div><div class="w-full h-44 bg-surface-container-high border-[2px] border-on-surface overflow-hidden relative"><img class="w-full h-full object-cover" data-alt="Scrapbook photo of Babu" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRjgtyDClLX1klEsZxmG3RfIlqigsfztSM8qTNeP4sz1QTGJUlcnp1bJ3TK8KWDBSCB0DcnNvZOko5IsFdcSdIkhL-pjnTWOEiSbNPJtdNrU5qGzqHpYGkqmwJ60H4JPNVEWih_LRv5GzQltG8IG6IcpFPWnYWlcMsxSTRmCefj28C2f4H9rGT9HUpoO0arbgFyRgE1xLv66-Zeg2peibQfoReoSz1ogH4eFJImVsyUZ99yhWOEvLB8g"><span class="absolute bottom-1 right-1 bg-surface text-on-surface font-label-sm text-label-sm px-1 border border-on-surface font-mono">AGE: 24 MO</span></div><h3 class="font-headline-md text-headline-md uppercase text-on-surface font-bold">BABU</h3><p class="font-label-stamp text-label-stamp text-primary uppercase font-bold tracking-tight">"CEO. Sucks pacifiers for quality testing."</p><p class="font-body-md text-body-md text-on-surface-variant">Sleeps during meetings. Holds 99.4% voting power. Rejects all financial models unless accompanied by animated fruit videos.</p></div><div class="mt-4 pt-3 border-t-[2px] border-dashed border-on-surface/40 flex items-center justify-between text-label-sm font-label-sm uppercase font-bold"><span class="">EQUITY: 100%</span><span class="bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 border border-on-surface">ACTIVE DICTATOR</span></div></div><div class="bg-surface-container-low p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform rotate-1 relative flex flex-col justify-between"><div class="absolute -top-3 left-6 w-32 h-7 bg-surface-container-highest border border-on-surface transform -rotate-3 flex items-center justify-center pointer-events-none"><span class="font-label-sm text-label-sm uppercase font-bold">UNPAID OVERTIME</span></div><div class="space-y-3 pt-2"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-sm bg-surface-dim text-on-surface px-2 py-0.5 uppercase border border-on-surface font-bold">OPERATIONS</span><span class="material-symbols-outlined text-outline">cookie</span></div><div class="w-full h-44 bg-surface-container-high border-[2px] border-on-surface overflow-hidden relative"><img class="w-full h-full object-cover" data-alt="Scrapbook photo of Mom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnzSLIEmVb3byXIoO_7kptx98LEVNqBEJaWBVp46NAnXOcWh9_2ydbB9JrV6x7odIg8AQTnFSmKlITxF62fydBSJZDjmn8Y3ZYhTm29XkqFc894qihheahT-i2iUoZNvKXe9ztayE4eWdfSW0huEsj0PaUCWYVvFTMy3w0-pN8t_jtQxDfFc7lfC-riLC-FE6Uj2vmO4WERQe_Cvg3lcTKgQi4YlGRkTM4pV81aszlZ2Lim61lt3lrtA"><div class="absolute top-2 left-2 bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm px-1.5 py-0.5 border border-on-surface transform -rotate-6 font-bold">DEFAULT WORKER #001</div></div><h3 class="font-headline-md text-headline-md uppercase text-on-surface font-bold">MOM</h3><p class="font-label-stamp text-label-stamp text-tertiary uppercase font-bold tracking-tight">"Employee without knowing it."</p><p class="font-body-md text-body-md text-on-surface-variant">Provides logistics, sanitization cycles, and infinite pacifier retrieval from underneath heavy wooden furniture.</p></div><div class="mt-4 pt-3 border-t-[2px] border-dashed border-on-surface/40 flex items-center justify-between text-label-sm font-label-sm uppercase font-bold"><span class="">SALARY: $0.00</span><span class="bg-error-container text-on-error-container px-1.5 py-0.5 border border-on-surface">REPLACEABLE? NO</span></div></div><div class="bg-surface-container-high p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform -rotate-1 relative flex flex-col justify-between"><div class="absolute -top-3 right-6 w-32 h-6 bg-secondary-fixed border border-on-surface transform rotate-3 flex items-center justify-center pointer-events-none"><span class="font-label-sm text-label-sm uppercase font-bold">HAZARD UNIT</span></div><div class="space-y-3 pt-2"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-stamp bg-outline text-surface px-2 py-0.5 uppercase border border-on-surface font-bold">SECURITY</span><span class="material-symbols-outlined text-outline">pets</span></div><div class="w-full h-44 bg-surface-container border-[2px] border-on-surface overflow-hidden relative"><img class="w-full h-full object-cover" data-alt="Scrapbook photo of Tommy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7-OzGiAtmpItDIfb9ZXrkG1J-RkBBl0U_rbrBAo0GgkcYjZ56d8g0fclKE6VNudg_alVvY90JD5pvCHabBbQLN5da6yg1kbKL7aBJVninOlZYUH6v5KImsTFq8tsY72yTSUDAt7j-TAC0q4-XwweN49puJPKgcrCrWvrgQz1FGX_XXLSYTK6uoxGRkHkxkad956MF5iTBiNRdBBw2ZYrOMvg-ChBMbk1vQzTThbTjFFp6A1tfupzGZQ"><span class="absolute bottom-1 right-1 bg-surface text-on-surface font-label-sm text-label-sm px-1 border border-on-surface font-mono">CSO DOG</span></div><h3 class="font-headline-md text-headline-md uppercase text-on-surface font-bold">TOMMY</h3><p class="font-label-stamp text-label-stamp text-secondary uppercase font-bold tracking-tight">"Chief Security Officer. Eats inventory."</p><p class="font-body-md text-body-md text-on-surface-variant">Protects stock from outside threats. Confiscates loose silicone inventory immediately. Highly corruptible with bacon treats.</p></div><div class="mt-4 pt-3 border-t-[2px] border-dashed border-on-surface/40 flex items-center justify-between text-label-sm font-label-sm uppercase font-bold"><span class="">BRIBES: ACCEPTED</span><span class="bg-primary text-on-primary px-1.5 py-0.5 border border-on-surface">CHEW RISK: HIGH</span></div></div></div>
+</section>
+<!-- ========================================== -->
+<!-- SECTION 3: THE ORIGIN STORY                -->
+<!-- ========================================== -->
+<section class="flex flex-col gap-space-md"><div class="flex items-center justify-between pb-2 border-b-[3px] border-on-surface"><div class="bg-primary text-on-primary font-label-stamp text-label-stamp px-4 py-1.5 border-[3px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-1 uppercase tracking-widest inline-flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">history_edu</span> ORIGIN CHRONICLES</div><span class="font-label-sm text-label-sm uppercase text-outline font-bold">FOUR-STEP DOCTRINE</span></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg pt-4"><div class="bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] flex flex-col justify-between transform -rotate-1 hover:rotate-0 transition-transform"><div class="space-y-4"><span class="font-label-stamp text-label-sm bg-on-surface text-surface px-2 py-0.5 uppercase font-bold inline-block">01 // CRISIS</span><h3 class="font-headline-md text-headline-md uppercase text-primary leading-tight font-black">HE WANTED MORE PACIFIERS.</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">One pacifier was a systemic single-point failure. Crying tantrums produced zero immediate yield from management.</p></div><div class="mt-6 pt-3 border-t-[2px] border-dashed border-outline-variant text-right"><span class="font-label-sm text-label-sm text-outline font-bold uppercase tracking-wider">NEXT ➔</span></div></div><div class="bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] flex flex-col justify-between transform rotate-1 hover:rotate-0 transition-transform"><div class="space-y-4"><span class="font-label-stamp text-label-sm bg-on-surface text-surface px-2 py-0.5 uppercase font-bold inline-block">02 // INCORPORATION</span><h3 class="font-headline-md text-headline-md uppercase text-secondary leading-tight font-black">SO HE STARTED A COMPANY.</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Incorporated directly on the living room rug. Legal jurisdiction assigned exclusively to whoever commands the TV remote.</p></div><div class="mt-6 pt-3 border-t-[2px] border-dashed border-outline-variant text-right"><span class="font-label-sm text-label-sm text-outline font-bold uppercase tracking-wider">NEXT ➔</span></div></div><div class="bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] flex flex-col justify-between transform -rotate-1 hover:rotate-0 transition-transform"><div class="space-y-4"><span class="font-label-stamp text-label-sm bg-on-surface text-surface px-2 py-0.5 uppercase font-bold inline-block">03 // R&amp;D</span><h3 class="font-headline-md text-headline-md uppercase text-tertiary leading-tight font-black">R&amp;D IS JUST SUCKING PACIFIERS.</h3><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Rigorous continuous stress tests conducted during warm bath time, high-chair negotiations, and stroller excursions.</p></div><div class="mt-6 pt-3 border-t-[2px] border-dashed border-outline-variant text-right"><span class="font-label-sm text-label-sm text-outline font-bold uppercase tracking-wider">NEXT ➔</span></div></div><div class="bg-secondary-fixed text-on-secondary-fixed p-space-md border-[3px] border-on-surface shadow-[5px_5px_0_0_#1d1b18] flex flex-col justify-between transform rotate-1 hover:rotate-0 transition-transform"><div class="space-y-4"><span class="font-label-stamp text-label-sm bg-on-surface text-surface px-2 py-0.5 uppercase font-bold inline-block">04 // EXIT STRATEGY</span><h3 class="font-headline-md text-headline-md uppercase text-on-secondary-fixed leading-tight font-black">THAT'S THE BUSINESS PLAN.</h3><p class="font-body-md text-body-md text-on-secondary-fixed font-medium leading-relaxed">Zero paragraphs. Infinite upside. The tax authorities have zero legal jurisdiction over someone who cannot yet tie their shoes.</p></div><div class="mt-6 pt-3 border-t-[2px] border-dashed border-on-surface text-right font-bold"><span class="font-label-sm text-label-sm uppercase tracking-wider">★ TRANSMISSION END</span></div></div></div></section>
+<!-- ========================================== -->
+<!-- SECTION 4: THE STORE (CATALOGUE)           -->
+<!-- ========================================== -->
+<section class="flex flex-col gap-space-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="relative inline-block">
+<div class="bg-secondary-container text-on-secondary-container font-label-stamp text-label-stamp px-4 py-1.5 border-[3px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-1 uppercase tracking-widest inline-flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+            SECTION 04 // GREY MARKET PACIFIER DEPOT
+          </div>
+</div>
+<div class="font-label-sm text-label-sm uppercase text-outline bg-surface-container px-3 py-1 border border-on-surface">
+          ACCEPTED CURRENCIES: COOKIES, HUGS, CHEWED CARROT STICKS
+        </div>
+</div>
+<!-- Scrapbook Product Catalog Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- PRODUCT 1 -->
+<div class="bg-surface-container p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform rotate-1 relative flex flex-col justify-between">
+<div class="space-y-3">
+<!-- Price Tag Sticker -->
+<div class="flex justify-between items-start">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-stamp px-2 py-1 border-[2px] border-on-surface transform -rotate-3 uppercase font-bold">
+                PRICE: 4 HUGS (FIRM)
+              </span>
+<span class="font-label-sm text-label-sm uppercase text-outline font-mono">LOT #01</span>
+</div>
+<div class="w-full h-48 bg-surface-container-lowest border-[2px] border-on-surface p-2 relative flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Cutout scrapbook photo of a pastel blue vintage baby pacifier with slight teeth marks on the silicone teat, photographed on wrinkled cardboard packaging with a red rubber stamp label reading 'CHEWED TWICE' and scotch tape strips." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpA37Qcq1BtncDwn036mWpxlq3K0KVAL1cPaDFoRK7BdLxM1WpdJ1_8SaroWflqdxCo6qEZIABceDc5c0Sed5sJk1zHvnnK-WH0niWHIb9wwIb9sig-RI5fQ7xEYCeOsI9SvmyJy7Yb7aeFF3Wm2-OChuOu9F_PYo12mu3WHEup8YWeOqN7bvVyzp6MkjXpuoZ7ovz3gCCfGbD20VzWlrYtqUK-LMB_CCiMn9ILuKD56y0-SlLtP0nSg">
+<div class="absolute top-2 right-2 bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 transform rotate-6 border border-on-surface uppercase font-bold">
+                MINT CONDITION (Chewed twice)
+              </div>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase text-on-surface">
+              PACIFIER MY AUNT GIFTED
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Smells like lavender and condescension. Thoroughly disinfected via dropping it behind the living room sofa for 48 hours.
+            </p>
+</div>
+<div class="mt-6 pt-3 border-t-[2px] border-dashed border-on-surface">
+<button class="w-full py-2.5 bg-primary text-on-primary font-headline-md text-label-stamp uppercase border-[2px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#1d1b18] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" onclick="openBuyModal('Pacifier my aunt gifted', '4 Hugs (Firm)')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> BUY NOW
+            </button>
+</div>
+</div>
+<!-- PRODUCT 2 -->
+<div class="bg-surface-container-high p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform -rotate-1 relative flex flex-col justify-between">
+<div class="space-y-3">
+<!-- Price Tag Sticker -->
+<div class="flex justify-between items-start">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-stamp px-2 py-1 border-[2px] border-on-surface transform rotate-2 uppercase font-bold">
+                PRICE: HALF A COOKIE
+              </span>
+<span class="font-label-sm text-label-sm uppercase text-outline font-mono">LOT #02</span>
+</div>
+<div class="w-full h-48 bg-surface-container-lowest border-[2px] border-on-surface p-2 relative flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Cutout scrapbook product photo of a bright neon pink pacifier with glitter accents, staged with torn masking tape strips and bold handwritten marker text reading 'HOSTILE TAKEOVER', laid atop cardboard shipping container scraps." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_sDu02moOMlBRhhITZYaH93YfTKp3zwBkQv69AbPH-tzAHYCMZ9j0MWf5lX0WOyCu0ST_2G9IUmEYsPzWgPuwd5UdfrzISxlmKehGvdaw_31dBPg2E7zDW-j4Yb4mfDeiEI2gkVOlPQteJ_he5NSAlBkBKtdnygzMoykYJ8QI-ZH5uRyaPu53DyVT3tghPjcsnrVsBhimrxSEQcKJZBtTENpyhp8iVycjnY9np08IMnMw2NIrzaKACw">
+<div class="absolute top-2 left-2 bg-primary text-on-primary font-label-sm text-label-sm px-2 py-0.5 transform -rotate-3 border border-on-surface uppercase font-bold">
+                ACQUISITION / HOSTILE TAKEOVER
+              </div>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase text-on-surface">
+              FOUND AT SUZIE'S HOUSE
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Acquired covertly while Suzie was distracted by an upside-down wooden train set. Non-extradition treaty applies.
+            </p>
+</div>
+<div class="mt-6 pt-3 border-t-[2px] border-dashed border-on-surface">
+<button class="w-full py-2.5 bg-primary text-on-primary font-headline-md text-label-stamp uppercase border-[2px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#1d1b18] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" onclick="openBuyModal('Found at Suzie\'s house', 'Half a cookie')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> BUY NOW
+            </button>
+</div>
+</div>
+<!-- PRODUCT 3 -->
+<div class="bg-surface-container-low p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] transform rotate-2 relative flex flex-col justify-between">
+<div class="space-y-3">
+<!-- Price Tag Sticker -->
+<div class="flex justify-between items-start">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-stamp px-2 py-1 border-[2px] border-on-surface transform -rotate-2 uppercase font-bold">
+                TRADE: TOMMY'S BALL
+              </span>
+<span class="font-label-sm text-label-sm uppercase text-outline font-mono">LOT #03</span>
+</div>
+<div class="w-full h-48 bg-surface-container-lowest border-[2px] border-on-surface p-2 relative flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Scrapbook collage photo of an enigmatic glow-in-the-dark green translucent pacifier floating mystically above crumpled brown butcher paper with caution tape lines and a big red stamped label: 'UNKNOWN ORIGIN'." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5qmSo8_7aR-aLG2jt_6VT3G1HrTjpN65zKG3jJ1D1JlymxsZXXXJKfvdDAzQfiFHfsd07d0gg97mLJ0iiuWK2Vtb7CT_qqgC5WNzJb2VhZwhGNzwaG41j6pCUUK-5BGIlpPQ08uTCEhHlfLoHXC72D_-KgE9PtvCumh6vJIckM4OcQ-E2y64wqRkGOE17ScodMON6jKNiPnIgKYmgb8UuKEbdib7LKo1JFYm6asYMqg6BdandgReGOw">
+<div class="absolute bottom-2 right-2 bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 transform rotate-3 border border-on-surface uppercase font-bold">
+                UNKNOWN ORIGIN (DO NOT TEST)
+              </div>
+</div>
+<h3 class="font-headline-md text-headline-md uppercase text-on-surface">
+              IT JUST SPAWNED ON MY BEDROOM
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Manifested spontaneously behind the radiator. Glows slightly in complete darkness. Tommy refuses to look at it.
+            </p>
+</div>
+<div class="mt-6 pt-3 border-t-[2px] border-dashed border-on-surface">
+<button class="w-full py-2.5 bg-primary text-on-primary font-headline-md text-label-stamp uppercase border-[2px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_0_#1d1b18] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2" onclick="openBuyModal('It just spawned on my bedroom', 'Trade for Tommy\'s ball')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span> BUY NOW
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- SECTION 5: THE HEADQUARTERS (INTERACTIVE)   -->
+<!-- ========================================== -->
+<section class="flex flex-col gap-space-md"><div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b-[3px] border-on-surface"><div class="bg-tertiary text-on-tertiary font-label-stamp text-label-stamp px-4 py-1.5 border-[3px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-1 uppercase tracking-widest inline-flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">corporate_fare</span> SECTION 05 // WORLD HEADQUARTERS (BABU'S BEDROOM)</div><div class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-stamp px-3 py-1 border-[2px] border-on-surface transform rotate-1 uppercase font-bold">ROOM ESPIONAGE INTERACTIVE</div></div><div class="relative w-full bg-surface-container-high border-[4px] border-on-surface shadow-[8px_8px_0_0_#1d1b18] p-space-md lg:p-space-lg overflow-hidden"><div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b-[3px] border-dashed border-on-surface gap-3"><div class="bg-primary text-on-primary font-headline-md text-headline-md px-4 py-1 border-[3px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-2 uppercase font-black">TOP SECRET. NO MOM ALLOWED.</div><div class="bg-surface font-label-sm text-label-sm px-3 py-1 border-[2px] border-on-surface uppercase font-bold">CLEARANCE: CLASSIFIED</div></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md mt-6"><div class="cursor-pointer bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-secondary-fixed/20 transition-all transform -rotate-1 flex flex-col justify-between min-h-[160px]" onclick="showHQDetail('Banana Phone: Encrypted hotline directly linking Babu to high-priority formula suppliers.')"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 border border-on-surface font-bold uppercase">01 // DESK</span><span class="material-symbols-outlined text-primary text-[28px]">phone_in_talk</span></div><div><h4 class="font-headline-md text-label-stamp uppercase text-on-surface font-bold">CARDBOARD DESK &amp; BANANA PHONE</h4><p class="font-body-md text-body-md text-on-surface-variant mt-1">Direct hotline to cold milk operations.</p></div></div><div class="cursor-pointer bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-secondary-fixed/20 transition-all transform rotate-1 flex flex-col justify-between min-h-[160px]" onclick="showHQDetail('Crayon Financials: Net unchewed pacifier assets up 400%. Zero tax or nap concessions.')"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 border border-on-surface font-bold uppercase">02 // FINANCES</span><span class="material-symbols-outlined text-tertiary text-[28px]">trending_up</span></div><div><h4 class="font-headline-md text-label-stamp uppercase text-on-surface font-bold">CRAYON STONKS CHART</h4><p class="font-body-md text-body-md text-on-surface-variant mt-1">Pacifier reserve ledger drawn in blue wax.</p></div></div><div class="cursor-pointer bg-surface p-space-md border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-secondary-fixed/20 transition-all transform -rotate-1 flex flex-col justify-between min-h-[160px]" onclick="showHQDetail('Minefield: 42 pacifiers deliberately placed across the carpet perimeter to stall parental movement.')"><div class="flex justify-between items-start"><span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.5 border border-on-surface font-bold uppercase">03 // DEFENSE</span><span class="material-symbols-outlined text-outline text-[28px]">scatter_plot</span></div><div><h4 class="font-headline-md text-label-stamp uppercase text-on-surface font-bold">PACIFIER MINEFIELD</h4><p class="font-body-md text-body-md text-on-surface-variant mt-1">Tactical floor dispersal preventing quiet entry.</p></div></div><div class="cursor-pointer bg-error text-on-error p-space-md border-[3px] border-on-surface shadow-[6px_6px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 transition-all transform rotate-2 flex flex-col justify-between min-h-[160px] group animate-pulse" onclick="openSecretFilesModal()"><div class="flex justify-between items-start"><span class="bg-secondary-fixed text-on-secondary-fixed font-label-stamp text-label-sm px-2 py-0.5 border border-on-surface font-bold uppercase">EASTER EGG</span><span class="material-symbols-outlined text-[28px]">inventory_2</span></div><div><h4 class="font-headline-md text-label-stamp uppercase font-black text-on-error">SUSPICIOUS BOX</h4><p class="font-label-sm text-label-sm uppercase font-bold text-on-error">DO NOT OPEN (SERIOUSLY)</p></div></div></div><div class="mt-6 bg-surface-container-lowest p-space-sm border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[24px]">terminal</span><div class="w-full"><span class="font-label-sm text-label-sm uppercase text-outline block">HEADQUARTERS SURVEILLANCE FEED:</span><span class="font-label-stamp text-label-stamp uppercase text-on-surface font-bold" id="hqConsoleMsg">CLICK ANY HOTSPOT ABOVE OR PROCEED CAUTIOUSLY TO THE SUSPICIOUS BOX.</span></div></div></div></section>
+<!-- ========================================== -->
+<!-- SECTION 7: THE FOOTER                      -->
+<!-- ========================================== -->
+<section class="mt-6 w-full flex flex-col items-center justify-center relative">
+<!-- Torn Masking Tape Edge Card -->
+<div class="relative bg-surface-container-highest p-space-md border-[3px] border-on-surface shadow-[5px_5px_0_0_#1d1b18] transform -rotate-1 max-w-lg w-full text-center">
+<!-- Tape strips on corners -->
+<div class="absolute -top-3 left-4 w-24 h-6 bg-secondary-fixed/80 border border-on-surface transform -rotate-6"></div>
+<div class="absolute -top-3 right-4 w-24 h-6 bg-secondary-fixed/80 border border-on-surface transform rotate-6"></div>
+<h2 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-tighter">
+          THIS SUCKS.™
+        </h2>
+<p class="font-display text-display uppercase text-primary font-black tracking-widest my-1">
+          GOO GOO GA GA.
+        </p>
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-widest">
+          EST. BEDROOM 2 // NO TAX AUDITS WELCOME
+        </p>
+</div>
+</section>
+</div>
+<!-- ========================================== -->
+<!-- MODAL: ORDER PLACED (TOAST/TORN ALERT)     -->
+<!-- ========================================== -->
+<div class="fixed inset-0 z-50 bg-on-surface/80 backdrop-blur-xs hidden items-center justify-center p-4" id="buyModal">
+<div class="relative bg-surface-container-lowest max-w-md w-full p-space-md border-[4px] border-on-surface shadow-[10px_10px_0_0_#1d1b18] transform -rotate-1 flex flex-col gap-4">
+<!-- Top Hazard Tape Ribbon -->
+<div class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 border-[2px] border-on-surface font-label-stamp text-label-stamp uppercase font-bold flex justify-between items-center">
+<span class="">TRANSACTION INVOICE #998</span>
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<!-- Torn Alert Body -->
+<div class="space-y-3 text-center py-2">
+<span class="material-symbols-outlined text-primary text-[54px]">thumb_up</span>
+<h3 class="font-headline-lg text-headline-lg uppercase text-on-surface leading-none font-black">
+          ORDER PLACED!
+        </h3>
+<div class="bg-surface-container p-space-sm border-[2px] border-dashed border-on-surface text-left">
+<p class="font-label-sm text-label-sm text-outline uppercase">PURCHASED ASSET:</p>
+<p class="font-label-stamp text-label-stamp text-primary uppercase font-bold" id="modalProductName">-</p>
+<p class="font-label-sm text-label-sm text-outline uppercase mt-2">DUE AMOUNT:</p>
+<p class="font-label-stamp text-label-stamp text-on-surface uppercase font-bold" id="modalProductPrice">-</p>
+</div>
+<p class="font-headline-md text-headline-md text-primary uppercase font-extrabold leading-snug">
+          DELIVERY AFTER SUCKED AND APPROVED BY CEO.
+        </p>
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant">
+          Estimated turnaround: 2 to 14 naps, depending on temper.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-2">
+<button class="flex-1 py-2 bg-secondary-fixed text-on-secondary-fixed border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] font-label-stamp text-label-sm uppercase font-bold hover:translate-x-0.5 hover:translate-y-0.5 transition-all" onclick="playPacifierSound()">
+          🔊 SQUEAK PACI
+        </button>
+<button class="flex-1 py-2 bg-primary text-on-primary border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] font-label-stamp text-label-sm uppercase font-bold hover:translate-x-0.5 hover:translate-y-0.5 transition-all" onclick="closeBuyModal()">
+          DISMISS ORDER
+        </button>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- MODAL: BABU'S SECRET DOSSIER (FILES)       -->
+<!-- ========================================== -->
+<div class="fixed inset-0 z-50 bg-on-surface/85 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto" id="secretFilesModal">
+<div class="relative bg-surface-container max-w-xl w-full p-space-md lg:p-space-lg border-[4px] border-on-surface shadow-[10px_10px_0_0_#1d1b18] transform rotate-1 flex flex-col gap-space-md" id="dossierCard">
+<!-- Top Secret Classification Header -->
+<div class="flex justify-between items-center border-b-[3px] border-on-surface pb-3">
+<div class="flex items-center gap-2">
+<span class="bg-error text-on-error font-label-stamp text-label-stamp px-2 py-0.5 border border-on-surface uppercase font-bold">EYES ONLY</span>
+<span class="font-label-stamp text-label-stamp uppercase tracking-widest text-on-surface font-bold">BABU'S CONFIDENTIAL FILES</span>
+</div>
+<button class="font-label-sm text-label-sm uppercase bg-surface-dim hover:bg-error hover:text-on-error px-2 py-1 border border-on-surface font-bold" onclick="sealSecretFiles()">
+          [X]
+        </button>
+</div>
+<!-- Dossier Items List -->
+<div class="flex flex-col gap-3">
+<!-- File 001 -->
+<div class="bg-surface-container-lowest p-3 border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-1">
+<div class="flex items-center justify-between">
+<span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 border border-on-surface uppercase font-bold">FILE 001</span>
+<span class="font-label-sm text-label-sm text-outline uppercase">PARK BENCH OPERATION</span>
+</div>
+<h4 class="font-headline-md text-headline-md uppercase text-on-surface mt-1">THE BLACK JACKET DEAL</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            "Babu barters with a suspicious man in a black jacket." Exchanged half a crushed pretzel for two high-grade German silicone orthodontic nipples.
+          </p>
+</div>
+<!-- File 002 -->
+<div class="bg-surface-container-lowest p-3 border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform rotate-1">
+<div class="flex items-center justify-between">
+<span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 border border-on-surface uppercase font-bold">FILE 002</span>
+<span class="font-label-sm text-label-sm text-outline uppercase">TARGET AISLE 4</span>
+</div>
+<h4 class="font-headline-md text-headline-md uppercase text-on-surface mt-1">FIVE-FINGER DISCOUNT</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            "He just steals it." Slipped directly under the diaper waistband while Mom was inspecting organic pureed carrots. Zero remorse detected.
+          </p>
+</div>
+<!-- File 003 -->
+<div class="bg-surface-container-lowest p-3 border-[2px] border-on-surface shadow-[3px_3px_0_0_#1d1b18] transform -rotate-1">
+<div class="flex items-center justify-between">
+<span class="font-label-stamp text-label-sm bg-secondary-fixed text-on-secondary-fixed px-1.5 border border-on-surface uppercase font-bold">FILE 003</span>
+<span class="font-label-sm text-label-sm text-outline uppercase">CANINE MULE NETWORK</span>
+</div>
+<h4 class="font-headline-md text-headline-md uppercase text-on-surface mt-1">OPERATION TOMMY</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            "Tommy steals pacifiers from stores." Trained the dog to snag baby dummies from low department store racks and bolt for the sliding automatic doors.
+          </p>
+</div>
+</div>
+<!-- Dossier Close/Seal Action Button -->
+<div class="pt-2">
+<button class="w-full py-3 bg-error text-on-error font-headline-md text-label-stamp uppercase border-[3px] border-on-surface shadow-[4px_4px_0_0_#1d1b18] hover:translate-x-0.5 hover:translate-y-0.5 active:translate-x-1 active:translate-y-1 transition-all flex items-center justify-center gap-2 font-black" onclick="sealSecretFiles()">
+<span class="material-symbols-outlined text-[20px]">lock</span> SEAL FILE &amp; SHRED EVIDENCE
+        </button>
+</div>
+<!-- GIGANTIC CROOKED RED RUBBER STAMP OVERLAY -->
+<div class="absolute inset-0 bg-surface/90 flex flex-col items-center justify-center p-6 border-[6px] border-error opacity-0 pointer-events-none transition-all duration-300 transform scale-150" id="rubberStampOverlay">
+<div class="border-[8px] border-error p-4 text-center transform -rotate-12 bg-surface-container-lowest shadow-[8px_8px_0_0_#ba1a1a]">
+<h2 class="font-display text-display uppercase text-error font-black tracking-tight leading-none">
+            YOU SAW NOTHING.
+          </h2>
+<p class="font-headline-md text-headline-md uppercase text-on-surface mt-2 font-black">
+            IF MOM ASKS, YOU WERE NEVER HERE.
+          </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Inline Micro-Interaction Scripting -->
+<script>
+    // Hero Babu Actions
+    function triggerBabuAction(action) {
+      const smokeRings = document.getElementById('smokeRings');
+      const scowlBadge = document.getElementById('scowlBadge');
+      const heroLog = document.getElementById('heroLog');
+      const paciCigar = document.getElementById('paciCigar');
+
+      if (action === 'smoke') {
+        smokeRings.classList.remove('opacity-0');
+        scowlBadge.classList.add('opacity-0');
+        paciCigar.style.transform = 'rotate(-10deg) scale(1.15)';
+        heroLog.innerText = 'STATUS: PUFFING POWDER RINGS. DEAL NEGOTIATED.';
+        setTimeout(() => {
+          smokeRings.classList.add('opacity-0');
+          paciCigar.style.transform = 'rotate(12deg) scale(1)';
+        }, 1800);
+      } else if (action === 'inspect') {
+        scowlBadge.classList.remove('opacity-0');
+        smokeRings.classList.add('opacity-0');
+        paciCigar.style.transform = 'rotate(0deg)';
+        heroLog.innerText = 'STATUS: EXECUTIVE SCOWL ENGAGED. BUDGET REJECTED.';
+        setTimeout(() => {
+          scowlBadge.classList.add('opacity-0');
+          paciCigar.style.transform = 'rotate(12deg)';
+        }, 2000);
+      }
+    }
+
+    // HQ Hotspot Intel Reader
+    function showHQDetail(detailText) {
+      const consoleMsg = document.getElementById('hqConsoleMsg');
+      consoleMsg.innerText = detailText;
+      consoleMsg.parentElement.parentElement.classList.add('bg-secondary-fixed/40');
+      setTimeout(() => {
+        consoleMsg.parentElement.parentElement.classList.remove('bg-secondary-fixed/40');
+      }, 500);
+    }
+
+    // Store Buy Modal Handlers
+    function openBuyModal(productName, price) {
+      document.getElementById('modalProductName').innerText = productName;
+      document.getElementById('modalProductPrice').innerText = price;
+      const modal = document.getElementById('buyModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBuyModal() {
+      const modal = document.getElementById('buyModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function playPacifierSound() {
+      // Audio cue simulation using Web Audio API synthesis
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch (e) {
+        // Fallback silent
+      }
+    }
+
+    // Confidential Files Modal & Rubber Stamp Slam
+    function openSecretFilesModal() {
+      const modal = document.getElementById('secretFilesModal');
+      const stamp = document.getElementById('rubberStampOverlay');
+      stamp.classList.add('opacity-0', 'pointer-events-none', 'scale-150');
+      stamp.classList.remove('opacity-100', 'scale-100');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function sealSecretFiles() {
+      const stamp = document.getElementById('rubberStampOverlay');
+      stamp.classList.remove('opacity-0', 'pointer-events-none', 'scale-150');
+      stamp.classList.add('opacity-100', 'scale-100');
+
+      // Rubber stamp sound burst
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+
+      setTimeout(() => {
+        const modal = document.getElementById('secretFilesModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        stamp.classList.add('opacity-0', 'pointer-events-none');
+        stamp.classList.remove('opacity-100');
+      }, 1800);
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low border-t-[3px] border-on-surface py-space-lg"><div class="max-w-7xl mx-auto px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-label-stamp text-label-stamp uppercase bg-on-surface text-surface px-space-xs py-0.5">SYNDICATE PROPERTY</span><p class="font-label-sm text-label-sm uppercase text-on-surface-variant tracking-wider">© THIS SUCKS.™ ALL RIGHTS RESERVED. PACIFIERS NOT FOR SQUARES.</p></div><div class="flex items-center gap-space-sm"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase border-b border-dashed border-on-surface">APPROVED NAPTIME COMPLIANT</span><span class="font-label-stamp text-label-stamp uppercase bg-error-container text-on-error-container border border-on-surface px-1.5 py-0.5 transform rotate-1">ZERO VEGGIES</span></div></div></footer>
+
+</body></html>

@@ -1,0 +1,126 @@
+/* Cardboard & Playful Custom Styles */
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  header, footer, nav, #easter-egg-btn, #paci-cart-drawer, #odometer-container {
+    display: none !important;
+  }
+  /* Show only the business license card */
+  section:has(#print-cert-btn), section:has(#print-cert-btn) * {
+    visibility: visible;
+  }
+  section:has(#print-cert-btn) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  #print-cert-btn {
+    display: none !important;
+  }
+}
+
+/* Wobbly sticker hover animations */
+@keyframes jiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.animate-jiggle:hover {
+  animation: jiggle 0.3s ease-in-out infinite;
+}
+
+/* Smooth selection color */
+::selection {
+  background-color: #FFD84D;
+  color: #292521;
+}
+
+/* Speech bubble transition */
+#speech-text, #speech-sub {
+  transition: opacity 0.15s ease-in-out;
+}
+
+/* ==========================================================================
+   PACIFIER CHASE SCENE ANIMATIONS & CURSOR CONTROLS
+   ========================================================================== */
+
+/* Mom Rocking in her Armchair */
+@keyframes mom-rocking {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+
+/* Knitting Needle Clicking */
+@keyframes mom-needle-l {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+@keyframes mom-needle-r {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.animate-mom-rocking {
+  transform-origin: 50% 90%;
+  animation: mom-rocking 3.5s ease-in-out infinite;
+}
+
+#mom-needle-left {
+  animation: mom-needle-l 0.8s ease-in-out infinite;
+}
+
+#mom-needle-right {
+  animation: mom-needle-r 0.8s ease-in-out infinite;
+}
+
+/* Tommy Idle Tail Wag */
+@keyframes tommy-idle-wag {
+  0%, 100% { transform: rotate(-12deg); }
+  50% { transform: rotate(18deg); }
+}
+
+.tommy-idle-tail {
+  animation: tommy-idle-wag 0.4s ease-in-out infinite;
+}
+
+/* Chase Arena Cursor States (Desktop pacifier cursor integration) */
+#chase-arena.chase-cursor-hide {
+  cursor: none !important;
+}
+
+#chase-arena.chase-cursor-hide * {
+  cursor: none !important;
+}
+
+body.chase-in-arena #originkit-cursor-root {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.1s ease-out;
+}
+
+/* Arena touch styling */
+#chase-arena {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#chase-arena.chase-active {
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mom-rocking,
+  #mom-needle-left,
+  #mom-needle-right,
+  .tommy-idle-tail {
+    animation: none !important;
+  }
+}

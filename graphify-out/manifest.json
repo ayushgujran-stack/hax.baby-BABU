@@ -1,0 +1,50 @@
+{
+  "package.json": {
+    "mtime": 1792295641.6198802,
+    "seen": 1792295938.619447,
+    "ast_hash": "67731f818d2b48c588b34a80ea7cb376",
+    "semantic_hash": "67731f818d2b48c588b34a80ea7cb376"
+  },
+  "src/audio.js": {
+    "mtime": 1792295735.4949214,
+    "seen": 1792295938.619456,
+    "ast_hash": "a7123f67cc31eed3f666dbd1b9f6834b",
+    "semantic_hash": "a7123f67cc31eed3f666dbd1b9f6834b"
+  },
+  "src/cart.js": {
+    "mtime": 1792295782.2505589,
+    "seen": 1792295938.619458,
+    "ast_hash": "b32718989a95e4c99451ff760bebbef9",
+    "semantic_hash": "b32718989a95e4c99451ff760bebbef9"
+  },
+  "src/certificate.js": {
+    "mtime": 1792295796.1726556,
+    "seen": 1792295938.619461,
+    "ast_hash": "7e4342970764d6b76d623d5582e0f35e",
+    "semantic_hash": "7e4342970764d6b76d623d5582e0f35e"
+  },
+  "src/easter-eggs.js": {
+    "mtime": 1792295827.174395,
+    "seen": 1792295938.619463,
+    "ast_hash": "09f196444716a8e3e0f8b512cfa6bcb5",
+    "semantic_hash": "09f196444716a8e3e0f8b512cfa6bcb5"
+  },
+  "src/main.js": {
+    "mtime": 1792295839.019348,
+    "seen": 1792295938.619466,
+    "ast_hash": "8c858282fa1ccec25f9da7927c35cb41",
+    "semantic_hash": "8c858282fa1ccec25f9da7927c35cb41"
+  },
+  "src/odometer.js": {
+    "mtime": 1792295748.6142452,
+    "seen": 1792295938.6194692,
+    "ast_hash": "3d269fc49fcffd26d7706f7d8aed0e58",
+    "semantic_hash": "3d269fc49fcffd26d7706f7d8aed0e58"
+  },
+  "vite.config.js": {
+    "mtime": 1792295712.8504684,
+    "seen": 1792295938.6194718,
+    "ast_hash": "eb22288443decd67aeaeb261b693019b",
+    "semantic_hash": "eb22288443decd67aeaeb261b693019b"
+  }
+}

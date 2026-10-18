@@ -1,0 +1,169 @@
+{
+  "communities": {
+    "0": [
+      "src_cart_cartmanager",
+      "src_cart_cartmanager_additem",
+      "src_cart_cartmanager_bindevents",
+      "src_cart_cartmanager_close",
+      "src_cart_cartmanager_completetrade",
+      "src_cart_cartmanager_constructor",
+      "src_cart_cartmanager_createdrawerdom",
+      "src_cart_cartmanager_init",
+      "src_cart_cartmanager_open",
+      "src_cart_cartmanager_removeitem",
+      "src_cart_cartmanager_showconfirmationmodal",
+      "src_cart_cartmanager_showtoast",
+      "src_cart_cartmanager_updateqty",
+      "src_cart_cartmanager_updateui"
+    ],
+    "1": [
+      "src_audio_soundengine",
+      "src_audio_soundengine_constructor",
+      "src_audio_soundengine_init",
+      "src_audio_soundengine_ismuted",
+      "src_audio_soundengine_playchaching",
+      "src_audio_soundengine_playpeel",
+      "src_audio_soundengine_playpop",
+      "src_audio_soundengine_playsqueak",
+      "src_audio_soundengine_playstamp",
+      "src_audio_soundengine_playtick",
+      "src_audio_soundengine_togglemute"
+    ],
+    "2": [
+      "ref_canvas_confetti",
+      "src_audio",
+      "src_audio_sound",
+      "src_cart",
+      "src_certificate",
+      "src_certificate_initcertificate",
+      "src_easter_eggs",
+      "src_main",
+      "src_odometer",
+      "src_style"
+    ],
+    "3": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_type",
+      "package_version"
+    ],
+    "4": [
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_preview"
+    ],
+    "5": [
+      "src_easter_eggs_initeastereggs",
+      "src_easter_eggs_initeastereggs_closesecretmodal",
+      "src_easter_eggs_initeastereggs_opensecretmodal",
+      "src_easter_eggs_initeastereggs_triggerspeech"
+    ],
+    "6": [
+      "src_odometer_initodometer",
+      "src_odometer_initodometer_increment",
+      "src_odometer_initodometer_renderdigits",
+      "src_odometer_initodometer_schedulenextautoincrement"
+    ],
+    "7": [
+      "package_dependencies",
+      "package_dependencies_canvas_confetti"
+    ],
+    "8": [
+      "package_devdependencies",
+      "package_devdependencies_vite"
+    ],
+    "9": [
+      "ref_vite",
+      "vite_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.3076923076923077,
+    "1": 0.2909090909090909,
+    "2": 0.4666666666666667,
+    "3": 0.4,
+    "4": 0.5,
+    "5": 0.5,
+    "6": 0.8333333333333334,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0
+  },
+  "gods": [
+    {
+      "id": "src_cart_cartmanager",
+      "label": "CartManager",
+      "degree": 15
+    },
+    {
+      "id": "src_audio_soundengine",
+      "label": "SoundEngine",
+      "degree": 11
+    },
+    {
+      "id": "src_audio_sound",
+      "label": "sound",
+      "degree": 6
+    },
+    {
+      "id": "src_easter_eggs_initeastereggs",
+      "label": "initEasterEggs()",
+      "degree": 5
+    },
+    {
+      "id": "src_odometer_initodometer",
+      "label": "initOdometer()",
+      "degree": 5
+    },
+    {
+      "id": "src_odometer_initodometer_schedulenextautoincrement",
+      "label": "scheduleNextAutoIncrement()",
+      "degree": 4
+    },
+    {
+      "id": "ref_canvas_confetti",
+      "label": "canvas-confetti",
+      "degree": 4
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 4
+    },
+    {
+      "id": "src_odometer_initodometer_increment",
+      "label": "increment()",
+      "degree": 3
+    },
+    {
+      "id": "src_certificate_initcertificate",
+      "label": "initCertificate()",
+      "degree": 2
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `canvas-confetti` connect `main.js` to `package.json`?",
+      "why": "High betweenness centrality (0.395) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 3 inferred relationships involving `initEasterEggs()` (e.g. with `closeSecretModal()` and `openSecretModal()`) actually correct?",
+      "why": "`initEasterEggs()` has 3 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `CartManager` connect `CartManager` to `main.js`?",
+      "why": "High betweenness centrality (0.390) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `SoundEngine` connect `SoundEngine` to `main.js`?",
+      "why": "High betweenness centrality (0.314) - this node is a cross-community bridge."
+    }
+  ]
+}
