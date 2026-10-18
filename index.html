@@ -236,186 +236,372 @@
     <div class="absolute -bottom-3.5 left-12 w-24 h-6 bg-marker-blue/85 border border-ink-black/30 rotate-1 z-30 pointer-events-none shadow-sm"></div>
     <div class="absolute -bottom-3.5 right-14 w-20 h-6 bg-sunshine-yellow/80 border border-ink-black/30 -rotate-2 z-30 pointer-events-none shadow-sm"></div>
 
-    <!-- Minimalist Cardboard Playing Arena -->
-    <div class="relative w-full rounded-2xl bg-[#FFFBF0] border-[3px] border-ink-black shadow-[8px_8px_0_#292521] overflow-hidden min-h-[440px] md:min-h-[500px]" id="chase-arena">
+    <!-- Garden Cardboard Playing Arena -->
+    <div class="relative w-full rounded-2xl bg-[#EAF7D8] border-[3px] border-ink-black shadow-[8px_8px_0_#292521] overflow-hidden min-h-[520px] md:min-h-[580px]" id="chase-arena">
       
-      <!-- Subtle Playpen Grid Texture (paper cream minimal space) -->
-      <div class="absolute inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(#292521 0.75px, transparent 0.75px); background-size: 24px 24px;"></div>
-
-    <!-- MOM: Sits quietly in top-right corner knitting her pastel sweater -->
-    <div id="chase-mom" class="absolute top-4 right-4 md:top-8 md:right-8 w-28 md:w-36 h-auto pointer-events-none z-10 select-none animate-mom-rocking" aria-label="Mom quietly knitting a sweater">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%">
+      <!-- GARDEN ENVIRONMENT BACKGROUND SVG -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none select-none z-0" preserveAspectRatio="none" viewBox="0 0 1200 600" fill="none">
         <defs>
-          <filter id="mom-shadow" x="-10%" y="-10%" width="130%" height="130%">
-            <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#292521" />
+          <linearGradient id="garden-sky-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D5EFFE" />
+            <stop offset="38%" stop-color="#EAF5FD" />
+            <stop offset="50%" stop-color="#E1F7D4" />
+            <stop offset="100%" stop-color="#ACDF6C" />
+          </linearGradient>
+          <linearGradient id="hill-grad-1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#C2F08A" />
+            <stop offset="100%" stop-color="#98D94F" />
+          </linearGradient>
+          <linearGradient id="hill-grad-2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ADE86D" />
+            <stop offset="100%" stop-color="#7AC634" />
+          </linearGradient>
+          <filter id="garden-shadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feDropShadow dx="2" dy="2" stdDeviation="0" flood-color="#292521" />
           </filter>
         </defs>
-        <!-- Cozy Wooden Armchair / Rocking Chair Back -->
-        <g id="mom-chair">
-          <path d="M 40 110 L 40 220 M 55 90 L 55 220 M 70 85 L 70 220" stroke="#C89B68" stroke-width="4" stroke-linecap="round"/>
-          <path d="M 35 100 Q 55 70 75 95 L 75 210 Q 55 215 35 210 Z" fill="#F5ECE6" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
-          <path d="M 30 225 Q 75 235 120 225" fill="none" stroke="#C89B68" stroke-width="4.5" stroke-linecap="round"/>
+
+        <!-- Sky Base -->
+        <rect width="1200" height="600" fill="url(#garden-sky-grad)" />
+
+        <!-- Cartoon Sunshine Sticker in top-left -->
+        <g transform="translate(85, 75)">
+          <!-- Sun Rays -->
+          <path d="M 0 -42 L 5 -26 L -5 -26 Z M 30 -30 L 18 -18 L 26 -10 Z M 42 0 L 26 5 L 26 -5 Z M 30 30 L 18 18 L 10 26 Z M 0 42 L -5 26 L 5 26 Z M -30 30 L -18 18 L -26 10 Z M -42 0 L -26 -5 L -26 5 Z M -30 -30 L -18 -18 L -10 -26 Z" fill="#FFD84D" stroke="#292521" stroke-width="2"/>
+          <!-- Sun Core -->
+          <circle cx="0" cy="0" r="25" fill="#FFD84D" stroke="#292521" stroke-width="2.8" filter="url(#garden-shadow)"/>
+          <!-- Cute Smiley Face -->
+          <ellipse cx="-7" cy="-4" rx="2.5" ry="3.5" fill="#292521"/>
+          <ellipse cx="7" cy="-4" rx="2.5" ry="3.5" fill="#292521"/>
+          <path d="M -8 5 Q 0 13 8 5" fill="none" stroke="#292521" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="-13" cy="4" r="3.5" fill="#FF719A" opacity="0.6"/>
+          <circle cx="13" cy="4" r="3.5" fill="#FF719A" opacity="0.6"/>
+          <!-- Washi tape on sun corner -->
+          <rect x="-14" y="-34" width="28" height="9" fill="rgba(255, 113, 154, 0.85)" stroke="#292521" stroke-width="1.2" transform="rotate(-6)"/>
         </g>
-        <!-- Mom Body / Cozy Oversized Hoodie (Default Worker #001) -->
-        <g id="mom-body">
-          <path d="M 50 145 C 50 115 80 110 115 110 C 145 110 155 135 150 185 C 148 210 135 220 95 220 C 60 220 50 190 50 145 Z" fill="#9E9E9E" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#mom-shadow)"/>
-          <path d="M 70 215 L 70 232 Q 85 236 95 232 L 95 215 Z" fill="#574145" stroke="#292521" stroke-width="2.5"/>
-          <path d="M 105 215 L 105 232 Q 120 236 130 232 L 130 215 Z" fill="#574145" stroke="#292521" stroke-width="2.5"/>
-          <ellipse cx="82" cy="234" rx="14" ry="6" fill="#FFF8E8" stroke="#292521" stroke-width="2"/>
-          <ellipse cx="118" cy="234" rx="14" ry="6" fill="#FFF8E8" stroke="#292521" stroke-width="2"/>
-          <g transform="translate(85, 150) rotate(-4)">
-            <rect x="-18" y="-12" width="36" height="24" fill="#FFD84D" stroke="#292521" stroke-width="1.8" filter="url(#mom-shadow)"/>
-            <rect x="-10" y="-15" width="20" height="5" fill="rgba(255, 248, 232, 0.8)" stroke="#292521" stroke-width="1" transform="rotate(3)"/>
-            <text x="0" y="-2" font-family="sans-serif" font-size="4.5" font-weight="800" text-anchor="middle" fill="#292521">DEFAULT</text>
-            <text x="0" y="4" font-family="sans-serif" font-size="4.5" font-weight="800" text-anchor="middle" fill="#292521">WORKER</text>
-            <text x="0" y="9" font-family="sans-serif" font-size="4" font-weight="900" text-anchor="middle" fill="#FF5B55">#001</text>
+
+        <!-- Drifting Cartoon Paper Clouds -->
+        <g opacity="0.92">
+          <!-- Cloud 1 -->
+          <g transform="translate(260, 45)">
+            <path d="M 18 36 Q 4 36 4 25 Q 4 14 20 14 Q 28 0 48 0 Q 70 0 78 12 Q 92 12 92 25 Q 92 36 75 36 Z" fill="#FFF8E8" stroke="#292521" stroke-width="2.5" filter="url(#garden-shadow)"/>
           </g>
-        </g>
-        <!-- Mom Head & Messy Bun -->
-        <g id="mom-head">
-          <rect x="92" y="92" width="16" height="22" fill="#FAD2B8" stroke="#292521" stroke-width="2"/>
-          <path d="M 82 82 C 78 55 98 42 112 45 C 126 48 132 65 128 85 C 124 100 110 105 95 102 C 86 100 82 92 82 82 Z" fill="#FAD2B8" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#mom-shadow)"/>
-          <circle cx="112" cy="28" r="16" fill="#6D4C3D" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
-          <circle cx="118" cy="22" r="10" fill="#7D5846" stroke="#292521" stroke-width="2"/>
-          <line x1="92" y1="35" x2="135" y2="16" stroke="#FF719A" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="92" cy="35" r="2" fill="#FFD84D"/>
-          <path d="M 80 75 C 72 50 90 35 110 38 C 126 40 134 55 132 75 C 128 65 125 55 110 52 C 95 50 85 62 80 75 Z" fill="#6D4C3D" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M 78 72 Q 74 88 80 94" fill="none" stroke="#6D4C3D" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M 128 72 Q 134 86 128 92" fill="none" stroke="#6D4C3D" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M 90 74 Q 96 79 101 74" fill="none" stroke="#292521" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M 108 74 Q 114 79 119 74" fill="none" stroke="#292521" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M 89 79 Q 95 83 100 79" fill="none" stroke="#C89B68" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M 108 79 Q 114 83 118 79" fill="none" stroke="#C89B68" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M 100 89 Q 106 93 111 89" fill="none" stroke="#292521" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="88" cy="83" r="4" fill="#FF719A" opacity="0.4"/>
-          <circle cx="121" cy="83" r="4" fill="#FF719A" opacity="0.4"/>
-        </g>
-        <!-- Mom Arms & Animated Knitting Action -->
-        <g id="mom-knitting-arms">
-          <g id="mom-needle-left" style="transform-origin: 90px 145px;">
-            <path d="M 72 135 Q 85 155 98 148" fill="none" stroke="#9E9E9E" stroke-width="12" stroke-linecap="round"/>
-            <circle cx="100" cy="148" r="6" fill="#FAD2B8" stroke="#292521" stroke-width="1.5"/>
-            <line x1="85" y1="160" x2="130" y2="130" stroke="#55B9F5" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="84" cy="161" r="3" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
-          </g>
-          <g id="mom-needle-right" style="transform-origin: 125px 145px;">
-            <path d="M 135 135 Q 125 155 115 148" fill="none" stroke="#9E9E9E" stroke-width="12" stroke-linecap="round"/>
-            <circle cx="113" cy="148" r="6" fill="#FAD2B8" stroke="#292521" stroke-width="1.5"/>
-            <line x1="130" y1="160" x2="85" y2="130" stroke="#55B9F5" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="131" cy="161" r="3" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
-          </g>
-          <g id="mom-knitted-piece" transform="translate(95, 145)">
-            <path d="M -8 2 Q 10 -4 28 2 L 25 36 Q 10 40 -5 36 Z" fill="#FF719A" stroke="#292521" stroke-width="2" filter="url(#mom-shadow)"/>
-            <line x1="-6" y1="10" x2="26" y2="10" stroke="#FFF8E8" stroke-width="2" stroke-dasharray="3 2"/>
-            <line x1="-5" y1="18" x2="25" y2="18" stroke="#B8E986" stroke-width="2" stroke-dasharray="3 2"/>
-            <line x1="-4" y1="26" x2="24" y2="26" stroke="#FFD84D" stroke-width="2" stroke-dasharray="3 2"/>
-          </g>
-          <g id="mom-yarn-basket" transform="translate(150, 195)">
-            <circle cx="16" cy="16" r="15" fill="#FF719A" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
-            <path d="M 5 12 Q 16 7 27 12 M 7 20 Q 16 15 25 20 M 10 26 Q 16 22 22 26" fill="none" stroke="#FFA5C0" stroke-width="2" stroke-linecap="round"/>
-            <path d="M 12 5 Q 0 -15 -35 -40" fill="none" stroke="#FF719A" stroke-width="2" stroke-dasharray="2 2"/>
+          <!-- Cloud 2 -->
+          <g transform="translate(620, 35)">
+            <path d="M 16 32 Q 4 32 4 22 Q 4 12 16 12 Q 24 0 42 0 Q 60 0 68 10 Q 82 10 82 22 Q 82 32 66 32 Z" fill="#FFF8E8" stroke="#292521" stroke-width="2.5" filter="url(#garden-shadow)"/>
           </g>
         </g>
+
+        <!-- Distant Cardboard Rolling Hills -->
+        <path d="M -20 250 Q 220 170 500 220 T 1000 200 Q 1120 220 1220 190 L 1220 600 L -20 600 Z" fill="url(#hill-grad-1)" stroke="#292521" stroke-width="2.5"/>
+
+        <!-- Wooden Picket Garden Fence along Horizon -->
+        <g transform="translate(0, 160)">
+          <rect x="0" y="45" width="1200" height="8" fill="#FFF8E8" stroke="#292521" stroke-width="2" filter="url(#garden-shadow)"/>
+          <rect x="0" y="65" width="1200" height="8" fill="#FFF8E8" stroke="#292521" stroke-width="2"/>
+          <path d="
+            M 30,35 L 37,20 L 44,35 L 44,85 L 30,85 Z
+            M 75,32 L 82,17 L 89,32 L 89,85 L 75,85 Z
+            M 120,30 L 127,15 L 134,30 L 134,85 L 120,85 Z
+            M 165,28 L 172,13 L 179,28 L 179,85 L 165,85 Z
+            M 210,30 L 217,15 L 224,30 L 224,85 L 210,85 Z
+            M 255,34 L 262,19 L 269,34 L 269,85 L 255,85 Z
+            M 300,38 L 307,23 L 314,38 L 314,85 L 300,85 Z
+            M 345,41 L 352,26 L 359,41 L 359,85 L 345,85 Z
+            M 390,43 L 397,28 L 404,43 L 404,85 L 390,85 Z
+            M 435,42 L 442,27 L 449,42 L 449,85 L 435,85 Z
+            M 480,40 L 487,25 L 494,40 L 494,85 L 480,85 Z
+            M 525,37 L 532,22 L 539,37 L 539,85 L 525,85 Z
+            M 570,35 L 577,20 L 584,35 L 584,85 L 570,85 Z
+            M 615,34 L 622,19 L 629,34 L 629,85 L 615,85 Z
+            M 660,35 L 667,20 L 674,35 L 674,85 L 660,85 Z
+            M 705,37 L 712,22 L 719,37 L 719,85 L 705,85 Z
+            M 750,39 L 757,24 L 764,39 L 764,85 L 750,85 Z
+            M 795,40 L 802,25 L 809,40 L 809,85 L 795,85 Z
+            M 840,38 L 847,23 L 854,38 L 854,85 L 840,85 Z
+            M 885,36 L 892,21 L 899,36 L 899,85 L 885,85 Z
+            M 930,34 L 937,19 L 944,34 L 944,85 L 930,85 Z
+            M 975,32 L 982,17 L 989,32 L 989,85 L 975,85 Z
+            M 1020,30 L 1027,15 L 1034,30 L 1034,85 L 1020,85 Z
+            M 1065,32 L 1072,17 L 1079,32 L 1079,85 L 1065,85 Z
+            M 1110,35 L 1117,20 L 1124,35 L 1124,85 L 1110,85 Z
+            M 1155,38 L 1162,23 L 1169,38 L 1169,85 L 1155,85 Z
+          " fill="#FFF8E8" stroke="#292521" stroke-width="2" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Left Leafy Apple Garden Tree -->
+        <g transform="translate(15, 100)">
+          <!-- Tree Trunk -->
+          <path d="M 85 140 C 80 190 68 220 48 260 L 122 260 C 105 220 100 190 98 140 Z" fill="#C89B68" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#garden-shadow)"/>
+          <path d="M 75 190 Q 92 205 85 240" fill="none" stroke="#292521" stroke-width="2" stroke-linecap="round"/>
+          <!-- Tree Foliage Canopy -->
+          <path d="M 40 120 C 10 120 5 80 30 60 C 15 30 50 10 80 25 C 105 5 145 15 150 45 C 180 40 195 80 175 105 C 190 135 155 160 125 150 C 95 165 55 150 40 120 Z" fill="#75C230" stroke="#292521" stroke-width="3.5" stroke-linejoin="round" filter="url(#garden-shadow)"/>
+          <path d="M 55 105 C 35 105 30 75 50 60 C 40 40 65 25 88 38 C 105 22 135 30 140 52 C 160 50 170 80 155 100 C 165 120 140 140 118 132 C 95 142 65 130 55 105 Z" fill="#96DC48" stroke="#292521" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Red Apples -->
+          <circle cx="65" cy="80" r="7.5" fill="#FF5B55" stroke="#292521" stroke-width="1.8"/>
+          <circle cx="120" cy="65" r="7.5" fill="#FF5B55" stroke="#292521" stroke-width="1.8"/>
+          <circle cx="145" cy="110" r="7.5" fill="#FF5B55" stroke="#292521" stroke-width="1.8"/>
+          <circle cx="95" cy="125" r="7.5" fill="#FF5B55" stroke="#292521" stroke-width="1.8"/>
+        </g>
+
+        <!-- Foreground Lush Play Meadow / Lawn -->
+        <path d="M -20 270 Q 250 240 550 265 T 1220 250 L 1220 600 L -20 600 Z" fill="url(#hill-grad-2)" stroke="#292521" stroke-width="3"/>
+
+        <!-- Garden Stepping Stones Path Curved across Meadow -->
+        <g opacity="0.95">
+          <ellipse cx="140" cy="460" rx="30" ry="15" fill="#FFF8E8" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="230" cy="435" rx="34" ry="16" fill="#F5ECE6" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="330" cy="410" rx="32" ry="15" fill="#FFF8E8" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="440" cy="385" rx="36" ry="17" fill="#F5ECE6" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="560" cy="365" rx="34" ry="16" fill="#FFF8E8" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="680" cy="345" rx="36" ry="16" fill="#F5ECE6" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="800" cy="330" rx="32" ry="15" fill="#FFF8E8" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+          <ellipse cx="910" cy="315" rx="30" ry="14" fill="#F5ECE6" stroke="#292521" stroke-width="2.2" stroke-dasharray="4 2" filter="url(#garden-shadow)"/>
+        </g>
+
+        <!-- Flowering Garden Rose Bush along Middle -->
+        <g transform="translate(680, 230)">
+          <path d="M 0 40 Q 25 15 50 40 Q 75 10 100 35 Q 125 15 150 40 L 150 65 L 0 65 Z" fill="#589F24" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="25" cy="32" r="5.5" fill="#FF719A" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="25" cy="32" r="2" fill="#FFD84D"/>
+          <circle cx="65" cy="22" r="6" fill="#FFD84D" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="65" cy="22" r="2" fill="#AA2F59"/>
+          <circle cx="110" cy="28" r="5.5" fill="#FF719A" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="110" cy="28" r="2" fill="#FFF8E8"/>
+          <circle cx="138" cy="34" r="5.5" fill="#55B9F5" stroke="#292521" stroke-width="1.5"/>
+        </g>
+
+        <!-- Wildflowers Dotted on Grass -->
+        <g transform="translate(200, 520)">
+          <circle cx="0" cy="0" r="4.5" fill="#FFD84D" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="-6" cy="0" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="6" cy="0" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="-6" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="6" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+        </g>
+        <g transform="translate(480, 480)">
+          <circle cx="0" cy="0" r="4.5" fill="#FFD84D" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="-5.5" cy="0" r="3.2" fill="#FF719A" stroke="#292521" stroke-width="1"/>
+          <circle cx="5.5" cy="0" r="3.2" fill="#FF719A" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="-5.5" r="3.2" fill="#FF719A" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="5.5" r="3.2" fill="#FF719A" stroke="#292521" stroke-width="1"/>
+        </g>
+        <g transform="translate(740, 500)">
+          <circle cx="0" cy="0" r="4.5" fill="#FFD84D" stroke="#292521" stroke-width="1.5"/>
+          <circle cx="-6" cy="0" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="6" cy="0" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="-6" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="6" r="3.2" fill="#FFF8E8" stroke="#292521" stroke-width="1"/>
+        </g>
+        <g transform="translate(360, 540)">
+          <circle cx="0" cy="0" r="4" fill="#FF719A" stroke="#292521" stroke-width="1.2"/>
+          <circle cx="-5" cy="0" r="2.8" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+          <circle cx="5" cy="0" r="2.8" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="-5" r="2.8" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+          <circle cx="0" cy="5" r="2.8" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+        </g>
+
+        <!-- Grass Blade Tufts on Lawn -->
+        <path d="M 170 360 Q 165 346 158 344 M 172 360 Q 174 344 178 342 M 173 360 Q 180 348 185 346" stroke="#4C8C1F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 620 420 Q 615 406 608 404 M 622 420 Q 624 404 628 402 M 623 420 Q 630 408 635 406" stroke="#4C8C1F" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 880 440 Q 875 426 868 424 M 882 440 Q 884 424 888 422 M 883 440 Q 890 428 895 426" stroke="#4C8C1F" stroke-width="2" stroke-linecap="round"/>
       </svg>
-    </div>
 
-    <!-- BABU: The CEO running in tuxedo and crown (Reusing Original Babu Asset) -->
-    <div id="chase-babu" class="absolute left-0 top-0 will-change-transform z-20 pointer-events-none select-none" aria-label="Babu chasing pacifier">
-      <img src="/assets/babu_transparent.png" alt="Babu running" class="w-[72px] md:w-[84px] h-auto object-contain filter drop-shadow-[0_4px_8px_rgba(41,37,33,0.25)] select-none pointer-events-none">
-    </div>
-
-    <!-- TOMMY: Chief Security Officer Dog -->
-    <div id="chase-tommy" class="absolute left-0 top-0 will-change-transform z-20 pointer-events-none select-none w-24 md:w-28 h-auto" aria-label="Tommy the dog chasing pacifier">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%">
-        <defs>
-          <filter id="tommy-shadow" x="-10%" y="-10%" width="130%" height="130%">
-            <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#292521" />
-          </filter>
-        </defs>
-        <!-- Tail -->
-        <g id="tommy-tail" class="tommy-idle-tail" style="transform-origin: 45px 125px;">
-          <path d="M 48 125 C 30 115 15 90 28 65 C 38 75 42 95 56 115 Z" fill="#E5B263" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
-          <path d="M 32 80 C 22 72 25 60 30 55 C 38 68 40 80 48 95 Z" fill="#F3CA8A" stroke="#292521" stroke-width="2" stroke-linejoin="round"/>
-        </g>
-        <!-- Back Left Leg & Paw -->
-        <g id="tommy-leg-bl" style="transform-origin: 70px 140px;">
-          <ellipse cx="72" cy="155" rx="16" ry="22" fill="#D99E4B" stroke="#292521" stroke-width="2.5"/>
-          <path d="M 62 172 Q 72 182 82 172" fill="#E5B263" stroke="#292521" stroke-width="2.5"/>
-          <line x1="68" y1="170" x2="68" y2="177" stroke="#292521" stroke-width="2"/>
-          <line x1="76" y1="170" x2="76" y2="177" stroke="#292521" stroke-width="2"/>
-        </g>
-        <!-- Main Fluffy Body -->
-        <g id="tommy-body">
-          <path d="M 65 145 C 55 110 75 90 105 85 C 135 80 160 95 165 130 C 170 150 155 165 125 165 C 90 165 72 160 65 145 Z" fill="#E5B263" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
-          <path d="M 130 95 C 150 110 160 130 145 150 C 138 140 140 125 130 115 Z" fill="#F9DCAD" stroke="#292521" stroke-width="2"/>
-          <path d="M 115 105 C 130 120 135 140 125 155 C 118 145 120 130 112 120 Z" fill="#FFF1D6" stroke="#292521" stroke-width="1.8"/>
-          <!-- Sheriff Star Badge (CSO) -->
-          <g transform="translate(122, 126) rotate(6)">
-            <rect x="-14" y="-8" width="28" height="8" fill="rgba(255, 248, 232, 0.85)" stroke="#292521" stroke-width="1.2" transform="rotate(-4)"/>
-            <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="#C89B68" stroke="#292521" stroke-width="1.8"/>
-            <text x="0" y="2" font-family="sans-serif" font-size="4" font-weight="900" text-anchor="middle" fill="#292521">CSO</text>
+      <!-- MOM: Sits peacefully on her wooden garden chair / bench in the top-right corner knitting -->
+      <div id="chase-mom" class="absolute top-6 right-4 md:top-8 md:right-8 w-36 md:w-44 h-auto pointer-events-none z-10 select-none animate-mom-rocking" aria-label="Mom quietly knitting on garden chair">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="100%" height="100%">
+          <defs>
+            <filter id="mom-shadow" x="-10%" y="-10%" width="130%" height="130%">
+              <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#292521" />
+            </filter>
+          </defs>
+          
+          <!-- Cozy Wooden Garden Bench / Rocking Chair Back -->
+          <g id="mom-chair">
+            <!-- Wood slats -->
+            <path d="M 38 105 L 38 220 M 52 85 L 52 220 M 68 80 L 68 220 M 82 85 L 82 220" stroke="#C89B68" stroke-width="4.5" stroke-linecap="round"/>
+            <!-- Garden Bench backrest cushion -->
+            <path d="M 32 95 Q 55 65 80 90 L 80 210 Q 55 215 32 210 Z" fill="#F5ECE6" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
+            <!-- Wooden armrest curved -->
+            <path d="M 28 145 Q 60 140 85 145" fill="none" stroke="#A67845" stroke-width="5" stroke-linecap="round"/>
+            <!-- Chair leg & runner -->
+            <path d="M 25 225 Q 75 235 125 225" fill="none" stroke="#C89B68" stroke-width="5" stroke-linecap="round"/>
           </g>
-        </g>
-        <!-- Front Left Leg -->
-        <g id="tommy-leg-fl" style="transform-origin: 110px 135px;">
-          <path d="M 102 135 L 98 175 Q 106 182 114 175 L 118 135 Z" fill="#E5B263" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
-          <line x1="103" y1="170" x2="103" y2="178" stroke="#292521" stroke-width="1.8"/>
-          <line x1="109" y1="170" x2="109" y2="178" stroke="#292521" stroke-width="1.8"/>
-        </g>
-        <!-- Front Right Running Leg -->
-        <g id="tommy-leg-fr" style="transform-origin: 145px 135px;">
-          <path d="M 138 135 L 144 176 Q 152 183 160 176 L 154 135 Z" fill="#F3CA8A" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
-          <line x1="148" y1="171" x2="148" y2="179" stroke="#292521" stroke-width="1.8"/>
-          <line x1="155" y1="171" x2="155" y2="179" stroke="#292521" stroke-width="1.8"/>
-        </g>
-        <!-- Head & Puppy Face -->
-        <g id="tommy-head" style="transform-origin: 155px 75px;">
-          <path d="M 140 45 C 130 30 115 45 120 75 C 122 88 132 92 136 85 C 140 75 142 55 140 45 Z" fill="#C28732" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M 140 55 C 145 35 170 32 185 45 C 198 55 205 75 198 95 C 192 110 175 115 155 110 C 140 105 135 85 138 65 Z" fill="#E5B263" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
-          <path d="M 155 45 C 165 40 178 42 185 52 C 180 58 168 55 155 45 Z" fill="#F9DCAD" stroke="#292521" stroke-width="1.5"/>
-          <path d="M 182 45 C 198 42 215 55 210 88 C 205 105 190 108 185 95 C 180 82 182 60 182 45 Z" fill="#D99E4B" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
-          <path d="M 188 55 C 198 56 204 70 200 88 C 194 80 190 70 188 55 Z" fill="#F3CA8A"/>
-          <ellipse cx="188" cy="85" rx="20" ry="16" fill="#F9DCAD" stroke="#292521" stroke-width="2.5"/>
-          <path d="M 186 73 C 180 73 178 80 184 84 C 188 87 196 87 200 84 C 204 80 200 73 194 73 Z" fill="#292521"/>
-          <circle cx="188" cy="76" r="2" fill="#FFFFFF"/>
-          <path id="tommy-tongue" d="M 184 94 C 184 106 198 106 198 94 Z" fill="#FF719A" stroke="#292521" stroke-width="2"/>
-          <circle cx="162" cy="65" r="7" fill="#292521"/>
-          <circle cx="160" cy="63" r="2.5" fill="#FFFFFF"/>
-          <circle cx="164" cy="67" r="1.2" fill="#FFFFFF"/>
-          <circle cx="182" cy="66" r="7.5" fill="#292521"/>
-          <circle cx="180" cy="64" r="2.8" fill="#FFFFFF"/>
-          <circle cx="184" cy="68" r="1.3" fill="#FFFFFF"/>
-          <path d="M 156 55 Q 163 50 169 54" fill="none" stroke="#8F5B1E" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 177 55 Q 183 50 189 55" fill="none" stroke="#8F5B1E" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="177" cy="86" r="1" fill="#8F5B1E"/>
-          <circle cx="180" cy="89" r="1" fill="#8F5B1E"/>
-          <circle cx="198" cy="86" r="1" fill="#8F5B1E"/>
-          <circle cx="195" cy="89" r="1" fill="#8F5B1E"/>
-        </g>
-      </svg>
-    </div>
 
-    <!-- THE PACIFIER: Sits in center with TAP label initially, controlled by visitor cursor/touch during chase -->
-    <div id="chase-pacifier" class="absolute left-0 top-0 will-change-transform z-30 pointer-events-none select-none" aria-label="Golden star pacifier">
-      <div class="relative w-14 h-14 md:w-16 md:h-16 flex items-center justify-center filter drop-shadow-[0_4px_8px_rgba(41,37,33,0.3)] pointer-events-auto">
-        <svg class="w-full h-full pointer-events-none select-none" viewBox="0 0 80 80" fill="none">
-          <path d="M 40 28 C 30 12 50 12 40 28 Z" fill="#FFF1D6" stroke="#292521" stroke-width="2.5" opacity="0.95"></path>
-          <path d="M 18 42 C 14 26 30 24 40 28 C 50 24 66 26 62 42 C 60 52 48 56 40 52 C 32 56 20 52 18 42 Z" fill="#55B9F5" stroke="#292521" stroke-width="3.5" stroke-linejoin="round"></path>
-          <ellipse cx="28" cy="40" rx="3.5" ry="4.5" fill="#FFF8E8" stroke="#292521" stroke-width="2"></ellipse>
-          <ellipse cx="52" cy="40" rx="3.5" ry="4.5" fill="#FFF8E8" stroke="#292521" stroke-width="2"></ellipse>
-          <circle cx="40" cy="40" r="10" fill="#FFD84D" stroke="#292521" stroke-width="2.5"></circle>
-          <polygon points="40,33 42,38 47,38 43,41 45,46 40,43 35,46 37,41 33,38 38,38" fill="#AA2F59" stroke="#292521" stroke-width="1"></polygon>
-          <path d="M 32 48 C 32 62 48 62 48 48" fill="none" stroke="#292521" stroke-width="4" stroke-linecap="round"></path>
-          <path d="M 32 48 C 32 62 48 62 48 48" fill="none" stroke="#FF719A" stroke-width="2.2" stroke-linecap="round"></path>
+          <!-- Terracotta Flower Pot next to Garden Bench -->
+          <g id="garden-flowerpot" transform="translate(18, 175)">
+            <polygon points="0,15 5,45 35,45 40,15" fill="#D67048" stroke="#292521" stroke-width="2" filter="url(#mom-shadow)"/>
+            <rect x="-3" y="10" width="46" height="7" rx="2" fill="#E2825C" stroke="#292521" stroke-width="2"/>
+            <!-- Plant stems & flowers -->
+            <path d="M 15 10 Q 10 -5 18 -15 M 25 10 Q 30 -8 24 -18" fill="none" stroke="#4C8C1F" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="18" cy="-15" r="4.5" fill="#FF719A" stroke="#292521" stroke-width="1.2"/>
+            <circle cx="18" cy="-15" r="1.8" fill="#FFD84D"/>
+            <circle cx="24" cy="-18" r="4.5" fill="#FFD84D" stroke="#292521" stroke-width="1.2"/>
+            <circle cx="24" cy="-18" r="1.8" fill="#AA2F59"/>
+          </g>
+
+          <!-- Mom Body / Cozy Oversized Hoodie (Default Worker #001) -->
+          <g id="mom-body">
+            <path d="M 50 145 C 50 115 80 110 115 110 C 145 110 155 135 150 185 C 148 210 135 220 95 220 C 60 220 50 190 50 145 Z" fill="#9E9E9E" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#mom-shadow)"/>
+            <path d="M 70 215 L 70 232 Q 85 236 95 232 L 95 215 Z" fill="#574145" stroke="#292521" stroke-width="2.5"/>
+            <path d="M 105 215 L 105 232 Q 120 236 130 232 L 130 215 Z" fill="#574145" stroke="#292521" stroke-width="2.5"/>
+            <ellipse cx="82" cy="234" rx="14" ry="6" fill="#FFF8E8" stroke="#292521" stroke-width="2"/>
+            <ellipse cx="118" cy="234" rx="14" ry="6" fill="#FFF8E8" stroke="#292521" stroke-width="2"/>
+            <g transform="translate(85, 150) rotate(-4)">
+              <rect x="-18" y="-12" width="36" height="24" fill="#FFD84D" stroke="#292521" stroke-width="1.8" filter="url(#mom-shadow)"/>
+              <rect x="-10" y="-15" width="20" height="5" fill="rgba(255, 248, 232, 0.8)" stroke="#292521" stroke-width="1" transform="rotate(3)"/>
+              <text x="0" y="-2" font-family="sans-serif" font-size="4.5" font-weight="800" text-anchor="middle" fill="#292521">DEFAULT</text>
+              <text x="0" y="4" font-family="sans-serif" font-size="4.5" font-weight="800" text-anchor="middle" fill="#292521">WORKER</text>
+              <text x="0" y="9" font-family="sans-serif" font-size="4" font-weight="900" text-anchor="middle" fill="#FF5B55">#001</text>
+            </g>
+          </g>
+
+          <!-- Mom Head & Messy Bun -->
+          <g id="mom-head">
+            <rect x="92" y="92" width="16" height="22" fill="#FAD2B8" stroke="#292521" stroke-width="2"/>
+            <path d="M 82 82 C 78 55 98 42 112 45 C 126 48 132 65 128 85 C 124 100 110 105 95 102 C 86 100 82 92 82 82 Z" fill="#FAD2B8" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#mom-shadow)"/>
+            <circle cx="112" cy="28" r="16" fill="#6D4C3D" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
+            <circle cx="118" cy="22" r="10" fill="#7D5846" stroke="#292521" stroke-width="2"/>
+            <line x1="92" y1="35" x2="135" y2="16" stroke="#FF719A" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="92" cy="35" r="2" fill="#FFD84D"/>
+            <path d="M 80 75 C 72 50 90 35 110 38 C 126 40 134 55 132 75 C 128 65 125 55 110 52 C 95 50 85 62 80 75 Z" fill="#6D4C3D" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M 78 72 Q 74 88 80 94" fill="none" stroke="#6D4C3D" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 128 72 Q 134 86 128 92" fill="none" stroke="#6D4C3D" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 90 74 Q 96 79 101 74" fill="none" stroke="#292521" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M 108 74 Q 114 79 119 74" fill="none" stroke="#292521" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M 89 79 Q 95 83 100 79" fill="none" stroke="#C89B68" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M 108 79 Q 114 83 118 79" fill="none" stroke="#C89B68" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M 100 89 Q 106 93 111 89" fill="none" stroke="#292521" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="88" cy="83" r="4" fill="#FF719A" opacity="0.4"/>
+            <circle cx="121" cy="83" r="4" fill="#FF719A" opacity="0.4"/>
+          </g>
+
+          <!-- Mom Arms & Animated Knitting Action -->
+          <g id="mom-knitting-arms">
+            <g id="mom-needle-left" style="transform-origin: 90px 145px;">
+              <path d="M 72 135 Q 85 155 98 148" fill="none" stroke="#9E9E9E" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="100" cy="148" r="6" fill="#FAD2B8" stroke="#292521" stroke-width="1.5"/>
+              <line x1="85" y1="160" x2="130" y2="130" stroke="#55B9F5" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="84" cy="161" r="3" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+            </g>
+            <g id="mom-needle-right" style="transform-origin: 125px 145px;">
+              <path d="M 135 135 Q 125 155 115 148" fill="none" stroke="#9E9E9E" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="113" cy="148" r="6" fill="#FAD2B8" stroke="#292521" stroke-width="1.5"/>
+              <line x1="130" y1="160" x2="85" y2="130" stroke="#55B9F5" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="131" cy="161" r="3" fill="#FFD84D" stroke="#292521" stroke-width="1"/>
+            </g>
+            <g id="mom-knitted-piece" transform="translate(95, 145)">
+              <path d="M -8 2 Q 10 -4 28 2 L 25 36 Q 10 40 -5 36 Z" fill="#FF719A" stroke="#292521" stroke-width="2" filter="url(#mom-shadow)"/>
+              <line x1="-6" y1="10" x2="26" y2="10" stroke="#FFF8E8" stroke-width="2" stroke-dasharray="3 2"/>
+              <line x1="-5" y1="18" x2="25" y2="18" stroke="#B8E986" stroke-width="2" stroke-dasharray="3 2"/>
+              <line x1="-4" y1="26" x2="24" y2="26" stroke="#FFD84D" stroke-width="2" stroke-dasharray="3 2"/>
+            </g>
+            <g id="mom-yarn-basket" transform="translate(150, 195)">
+              <circle cx="16" cy="16" r="15" fill="#FF719A" stroke="#292521" stroke-width="2.5" filter="url(#mom-shadow)"/>
+              <path d="M 5 12 Q 16 7 27 12 M 7 20 Q 16 15 25 20 M 10 26 Q 16 22 22 26" fill="none" stroke="#FFA5C0" stroke-width="2" stroke-linecap="round"/>
+              <path d="M 12 5 Q 0 -15 -35 -40" fill="none" stroke="#FF719A" stroke-width="2" stroke-dasharray="2 2"/>
+            </g>
+          </g>
         </svg>
+      </div>
 
-        <!-- Attached TAP Badge (Disappears when chase starts) -->
-        <div id="chase-tap-prompt" class="absolute -top-7 left-1/2 -translate-x-1/2 bg-sunshine-yellow text-ink-black border-2 border-ink-black shadow-[2px_2px_0_#292521] px-2.5 py-0.5 rounded-full font-label-stamp text-xs tracking-wider uppercase font-black pointer-events-auto cursor-pointer animate-bounce hover:scale-110 active:scale-95 transition-transform flex items-center gap-1 z-40">
-          <span>TAP</span>
-          <span class="text-crayon-red">★</span>
+      <!-- BABU: The CEO running in tuxedo and crown (Enlarged size, source of truth preserved) -->
+      <div id="chase-babu" class="absolute left-0 top-0 will-change-transform z-20 pointer-events-none select-none" aria-label="Babu chasing pacifier">
+        <img src="/assets/babu_transparent.png" alt="Babu running" class="w-[110px] md:w-[130px] h-auto object-contain filter drop-shadow-[0_6px_14px_rgba(41,37,33,0.35)] select-none pointer-events-none">
+      </div>
+
+      <!-- TOMMY: Chief Security Officer Dog (Enlarged size, animated legs & tail) -->
+      <div id="chase-tommy" class="absolute left-0 top-0 will-change-transform z-20 pointer-events-none select-none w-36 md:w-44 h-auto" aria-label="Tommy the dog chasing pacifier">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" width="100%" height="100%">
+          <defs>
+            <filter id="tommy-shadow" x="-10%" y="-10%" width="130%" height="130%">
+              <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#292521" />
+            </filter>
+          </defs>
+          <!-- Tail -->
+          <g id="tommy-tail" class="tommy-idle-tail" style="transform-origin: 45px 125px;">
+            <path d="M 48 125 C 30 115 15 90 28 65 C 38 75 42 95 56 115 Z" fill="#E5B263" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
+            <path d="M 32 80 C 22 72 25 60 30 55 C 38 68 40 80 48 95 Z" fill="#F3CA8A" stroke="#292521" stroke-width="2" stroke-linejoin="round"/>
+          </g>
+          <!-- Back Left Leg & Paw -->
+          <g id="tommy-leg-bl" style="transform-origin: 70px 140px;">
+            <ellipse cx="72" cy="155" rx="16" ry="22" fill="#D99E4B" stroke="#292521" stroke-width="2.5"/>
+            <path d="M 62 172 Q 72 182 82 172" fill="#E5B263" stroke="#292521" stroke-width="2.5"/>
+            <line x1="68" y1="170" x2="68" y2="177" stroke="#292521" stroke-width="2"/>
+            <line x1="76" y1="170" x2="76" y2="177" stroke="#292521" stroke-width="2"/>
+          </g>
+          <!-- Main Fluffy Body -->
+          <g id="tommy-body">
+            <path d="M 65 145 C 55 110 75 90 105 85 C 135 80 160 95 165 130 C 170 150 155 165 125 165 C 90 165 72 160 65 145 Z" fill="#E5B263" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
+            <path d="M 130 95 C 150 110 160 130 145 150 C 138 140 140 125 130 115 Z" fill="#F9DCAD" stroke="#292521" stroke-width="2"/>
+            <path d="M 115 105 C 130 120 135 140 125 155 C 118 145 120 130 112 120 Z" fill="#FFF1D6" stroke="#292521" stroke-width="1.8"/>
+            <!-- Sheriff Star Badge (CSO) -->
+            <g transform="translate(122, 126) rotate(6)">
+              <rect x="-14" y="-8" width="28" height="8" fill="rgba(255, 248, 232, 0.85)" stroke="#292521" stroke-width="1.2" transform="rotate(-4)"/>
+              <polygon points="0,-14 4,-4 14,-4 6,3 9,13 0,7 -9,13 -6,3 -14,-4 -4,-4" fill="#C89B68" stroke="#292521" stroke-width="1.8"/>
+              <text x="0" y="2" font-family="sans-serif" font-size="4" font-weight="900" text-anchor="middle" fill="#292521">CSO</text>
+            </g>
+          </g>
+          <!-- Front Left Leg -->
+          <g id="tommy-leg-fl" style="transform-origin: 110px 135px;">
+            <path d="M 102 135 L 98 175 Q 106 182 114 175 L 118 135 Z" fill="#E5B263" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
+            <line x1="103" y1="170" x2="103" y2="178" stroke="#292521" stroke-width="1.8"/>
+            <line x1="109" y1="170" x2="109" y2="178" stroke="#292521" stroke-width="1.8"/>
+          </g>
+          <!-- Front Right Running Leg -->
+          <g id="tommy-leg-fr" style="transform-origin: 145px 135px;">
+            <path d="M 138 135 L 144 176 Q 152 183 160 176 L 154 135 Z" fill="#F3CA8A" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
+            <line x1="148" y1="171" x2="148" y2="179" stroke="#292521" stroke-width="1.8"/>
+            <line x1="155" y1="171" x2="155" y2="179" stroke="#292521" stroke-width="1.8"/>
+          </g>
+          <!-- Head & Puppy Face -->
+          <g id="tommy-head" style="transform-origin: 155px 75px;">
+            <path d="M 140 45 C 130 30 115 45 120 75 C 122 88 132 92 136 85 C 140 75 142 55 140 45 Z" fill="#C28732" stroke="#292521" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M 140 55 C 145 35 170 32 185 45 C 198 55 205 75 198 95 C 192 110 175 115 155 110 C 140 105 135 85 138 65 Z" fill="#E5B263" stroke="#292521" stroke-width="3" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
+            <path d="M 155 45 C 165 40 178 42 185 52 C 180 58 168 55 155 45 Z" fill="#F9DCAD" stroke="#292521" stroke-width="1.5"/>
+            <path d="M 182 45 C 198 42 215 55 210 88 C 205 105 190 108 185 95 C 180 82 182 60 182 45 Z" fill="#D99E4B" stroke="#292521" stroke-width="2.5" stroke-linejoin="round" filter="url(#tommy-shadow)"/>
+            <path d="M 188 55 C 198 56 204 70 200 88 C 194 80 190 70 188 55 Z" fill="#F3CA8A"/>
+            <ellipse cx="188" cy="85" rx="20" ry="16" fill="#F9DCAD" stroke="#292521" stroke-width="2.5"/>
+            <path d="M 186 73 C 180 73 178 80 184 84 C 188 87 196 87 200 84 C 204 80 200 73 194 73 Z" fill="#292521"/>
+            <circle cx="188" cy="76" r="2" fill="#FFFFFF"/>
+            <path id="tommy-tongue" d="M 184 94 C 184 106 198 106 198 94 Z" fill="#FF719A" stroke="#292521" stroke-width="2"/>
+            <circle cx="162" cy="65" r="7" fill="#292521"/>
+            <circle cx="160" cy="63" r="2.5" fill="#FFFFFF"/>
+            <circle cx="164" cy="67" r="1.2" fill="#FFFFFF"/>
+            <circle cx="182" cy="66" r="7.5" fill="#292521"/>
+            <circle cx="180" cy="64" r="2.8" fill="#FFFFFF"/>
+            <circle cx="184" cy="68" r="1.3" fill="#FFFFFF"/>
+            <path d="M 156 55 Q 163 50 169 54" fill="none" stroke="#8F5B1E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 177 55 Q 183 50 189 55" fill="none" stroke="#8F5B1E" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="177" cy="86" r="1" fill="#8F5B1E"/>
+            <circle cx="180" cy="89" r="1" fill="#8F5B1E"/>
+            <circle cx="198" cy="86" r="1" fill="#8F5B1E"/>
+            <circle cx="195" cy="89" r="1" fill="#8F5B1E"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- THE PACIFIER: Sits in center with TAP label initially, controlled by visitor cursor/touch during chase -->
+      <div id="chase-pacifier" class="absolute left-0 top-0 will-change-transform z-30 pointer-events-none select-none" aria-label="Golden star pacifier">
+        <div class="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center filter drop-shadow-[0_6px_12px_rgba(41,37,33,0.35)] pointer-events-auto">
+          <svg class="w-full h-full pointer-events-none select-none" viewBox="0 0 80 80" fill="none">
+            <path d="M 40 28 C 30 12 50 12 40 28 Z" fill="#FFF1D6" stroke="#292521" stroke-width="2.5" opacity="0.95"></path>
+            <path d="M 18 42 C 14 26 30 24 40 28 C 50 24 66 26 62 42 C 60 52 48 56 40 52 C 32 56 20 52 18 42 Z" fill="#55B9F5" stroke="#292521" stroke-width="3.5" stroke-linejoin="round"></path>
+            <ellipse cx="28" cy="40" rx="3.5" ry="4.5" fill="#FFF8E8" stroke="#292521" stroke-width="2"></ellipse>
+            <ellipse cx="52" cy="40" rx="3.5" ry="4.5" fill="#FFF8E8" stroke="#292521" stroke-width="2"></ellipse>
+            <circle cx="40" cy="40" r="10" fill="#FFD84D" stroke="#292521" stroke-width="2.5"></circle>
+            <polygon points="40,33 42,38 47,38 43,41 45,46 40,43 35,46 37,41 33,38 38,38" fill="#AA2F59" stroke="#292521" stroke-width="1"></polygon>
+            <path d="M 32 48 C 32 62 48 62 48 48" fill="none" stroke="#292521" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M 32 48 C 32 62 48 62 48 48" fill="none" stroke="#FF719A" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+
+          <!-- Attached TAP Badge (Disappears when chase starts, restores when stopped) -->
+          <div id="chase-tap-prompt" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-sunshine-yellow text-ink-black border-2 border-ink-black shadow-[2px_2px_0_#292521] px-3 py-1 rounded-full font-label-stamp text-xs md:text-sm tracking-wider uppercase font-black pointer-events-auto cursor-pointer animate-bounce hover:scale-110 active:scale-95 transition-all flex items-center gap-1 z-40">
+            <span>TAP</span>
+            <span class="text-crayon-red">★</span>
+          </div>
         </div>
       </div>
-    </div>
 
     </div>
   </div>

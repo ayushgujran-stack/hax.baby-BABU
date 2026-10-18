@@ -1,6 +1,7 @@
 // ============================================================================
 // THE PACIFIER CHASE - Interactive Scene Controller
-// Babu (CEO) & Tommy (CSO) chase the irresistible pacifier while Mom knits quietly.
+// Babu (CEO) & Tommy (CSO) chase the irresistible pacifier in the garden while Mom knits.
+// Features: Cursor leave auto-stop & reset, dog barking, comic jump boing, enlarged sizes.
 // ============================================================================
 
 import { sound } from './audio.js';
@@ -21,7 +22,7 @@ export function initChaseScene() {
   // Track reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // SVG limb references for Tommy puppy animation
+  // SVG limb references for Tommy puppy running animation
   const tommyTail = tommyEl.querySelector('#tommy-tail');
   const tommyLegFl = tommyEl.querySelector('#tommy-leg-fl');
   const tommyLegFr = tommyEl.querySelector('#tommy-leg-fr');
@@ -33,8 +34,27 @@ export function initChaseScene() {
   let isDragging = false;
   let arenaRect = arena.getBoundingClientRect();
 
+  // Reset & Revert animation state
+  let isResetting = false;
+  let resetProgress = 0;
+  let resetFrom = {
+    paci: { x: 0, y: 0 },
+    babu: { x: 0, y: 0 },
+    tommy: { x: 0, y: 0 }
+  };
+
+  // Barking timer
+  let barkTimer = 1.2;
+
+  // Enlarged character dimensions
+  const PADDING = 30;
+  const PACI_SIZE = 70;
+  const BABU_WIDTH = 120;
+  const BABU_HEIGHT = 160;
+  const TOMMY_WIDTH = 170;
+  const TOMMY_HEIGHT = 138;
+
   // Positions and velocities (arena coordinates)
-  // Pacifier
   const paci = {
     x: 0,
     y: 0,
@@ -48,28 +68,26 @@ export function initChaseScene() {
     rotation: 0
   };
 
-  // Babu
   const babu = {
-    x: 60,
+    x: 70,
     y: 0,
     vx: 0,
     vy: 0,
     facing: 1, // 1 for right, -1 for left
     waddlePhase: 0,
-    speed: prefersReducedMotion ? 90 : 170, // toddler run speed
+    speed: prefersReducedMotion ? 100 : 180, // toddler run speed
     isMoving: false
   };
 
-  // Tommy the Dog
   const tommy = {
-    x: 160,
+    x: 200,
     y: 0,
     vx: 0,
     vy: 0,
     facing: 1,
     runPhase: 0,
     tailPhase: 0,
-    speed: prefersReducedMotion ? 130 : 260, // energetic dog run speed
+    speed: prefersReducedMotion ? 140 : 280, // energetic dog run speed
     state: 'CHASE', // 'CHASE' | 'CROUCH' | 'LEAP' | 'LAND'
     stateTimer: 0,
     jumpCooldown: 1.5,
@@ -81,38 +99,41 @@ export function initChaseScene() {
     hasDodgedThisLeap: false
   };
 
-  // Dimensions & bounds
-  const PADDING = 28;
-  const PACI_SIZE = 54;
-  const BABU_WIDTH = 75;
-  const BABU_HEIGHT = 100;
-  const TOMMY_WIDTH = 105;
-  const TOMMY_HEIGHT = 85;
-
-  // Setup initial coordinates based on arena size
-  function resetPositions() {
+  function getHomePositions() {
     arenaRect = arena.getBoundingClientRect();
     const w = arenaRect.width;
     const h = arenaRect.height;
+    return {
+      paciX: w * 0.5,
+      paciY: h * 0.48,
+      babuX: Math.max(PADDING + 45, w * 0.13),
+      babuY: h - BABU_HEIGHT / 2 - PADDING - 15,
+      tommyX: Math.max(PADDING + 45, w * 0.13) + 130,
+      tommyY: h - TOMMY_HEIGHT / 2 - PADDING - 12
+    };
+  }
 
-    // Pacifier starts in center
-    paci.x = w * 0.5;
-    paci.y = h * 0.48;
+  // Setup initial coordinates based on arena size
+  function resetPositions() {
+    const home = getHomePositions();
+
+    paci.x = home.paciX;
+    paci.y = home.paciY;
     paci.targetX = paci.x;
     paci.targetY = paci.y;
     paci.vx = 0;
     paci.vy = 0;
     paci.dodgeVx = 0;
     paci.dodgeVy = 0;
+    paci.rotation = 0;
 
-    // Babu starts in bottom-left corner
-    babu.x = Math.max(PADDING + 30, w * 0.12);
-    babu.y = h - BABU_HEIGHT / 2 - PADDING - 10;
+    babu.x = home.babuX;
+    babu.y = home.babuY;
     babu.facing = 1;
+    babu.isMoving = false;
 
-    // Tommy sits next to Babu in bottom-left corner
-    tommy.x = babu.x + 90;
-    tommy.y = h - TOMMY_HEIGHT / 2 - PADDING - 10;
+    tommy.x = home.tommyX;
+    tommy.y = home.tommyY;
     tommy.facing = 1;
     tommy.state = 'CHASE';
     tommy.jumpCooldown = 1.2;
@@ -131,22 +152,25 @@ export function initChaseScene() {
   // Resize listener
   const handleResize = () => {
     arenaRect = arena.getBoundingClientRect();
-    // Clamp inside new bounds
-    paci.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, paci.x));
-    paci.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, paci.y));
-    paci.targetX = paci.x;
-    paci.targetY = paci.y;
+    if (!hasStarted) {
+      resetPositions();
+    } else {
+      paci.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, paci.x));
+      paci.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, paci.y));
+      paci.targetX = paci.x;
+      paci.targetY = paci.y;
 
-    babu.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, babu.x));
-    babu.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, babu.y));
+      babu.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, babu.x));
+      babu.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, babu.y));
 
-    tommy.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, tommy.x));
-    tommy.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, tommy.y));
+      tommy.x = Math.max(PADDING, Math.min(arenaRect.width - PADDING, tommy.x));
+      tommy.y = Math.max(PADDING, Math.min(arenaRect.height - PADDING, tommy.y));
+    }
   };
   window.addEventListener('resize', handleResize, { passive: true });
 
   // --------------------------------------------------------------------------
-  // INPUT HANDLING: Pointer Events (unified mouse & touch)
+  // GAME START / STOP & REVERT SYSTEM
   // --------------------------------------------------------------------------
 
   function updatePointerTarget(clientX, clientY) {
@@ -157,20 +181,20 @@ export function initChaseScene() {
     paci.targetY = clampedY;
   }
 
-  // Handle TAP trigger
+  // Start chase
   function startChase(e) {
     if (hasStarted) return;
     hasStarted = true;
+    isResetting = false;
 
-    // Remove the TAP label smoothly
+    // Hide TAP prompt smoothly
     if (tapPrompt) {
       tapPrompt.style.opacity = '0';
-      tapPrompt.style.transform = 'scale(0.5) rotate(-20deg)';
+      tapPrompt.style.transform = 'scale(0.4) rotate(-20deg)';
       tapPrompt.style.pointerEvents = 'none';
-      setTimeout(() => tapPrompt.remove(), 250);
     }
 
-    // Remove idle CSS tail wag so JS controls Tommy's running animation
+    // Tommy tail active
     if (tommyTail) {
       tommyTail.classList.remove('tommy-idle-tail');
     }
@@ -179,6 +203,12 @@ export function initChaseScene() {
 
     sound.init();
     sound.playPop();
+    // Dog gives enthusiastic start bark!
+    setTimeout(() => {
+      if (hasStarted) sound.playDogBark(1.15);
+    }, 180);
+
+    barkTimer = 1.8 + Math.random() * 1.0;
 
     if (e && typeof e.clientX === 'number') {
       updatePointerTarget(e.clientX, e.clientY);
@@ -190,7 +220,57 @@ export function initChaseScene() {
     }
   }
 
-  // Clicking pacifier or TAP prompt starts chase
+  // Stop chase & revert back to initial set section
+  function stopChase() {
+    if (!hasStarted && !isResetting) return;
+    hasStarted = false;
+    isPointerInside = false;
+    isDragging = false;
+
+    // Restore desktop cursor
+    document.body.classList.remove('chase-in-arena');
+    arena.classList.remove('chase-active', 'chase-cursor-hide');
+    arena.style.touchAction = 'pan-y';
+
+    // Restore idle tail wagging on Tommy
+    if (tommyTail) {
+      tommyTail.classList.add('tommy-idle-tail');
+    }
+
+    // Reset leg positions
+    if (tommyLegFl) tommyLegFl.style.transform = 'none';
+    if (tommyLegFr) tommyLegFr.style.transform = 'none';
+    if (tommyLegBl) tommyLegBl.style.transform = 'none';
+
+    // Restore TAP prompt badge smoothly
+    if (tapPrompt) {
+      tapPrompt.style.opacity = '1';
+      tapPrompt.style.transform = 'scale(1) rotate(0deg)';
+      tapPrompt.style.pointerEvents = 'auto';
+    }
+
+    // Reset Tommy state
+    tommy.state = 'CHASE';
+    tommy.stateTimer = 0;
+    tommy.leapHeight = 0;
+    tommy.hasDodgedThisLeap = false;
+    tommy.jumpCooldown = 1.2;
+
+    // Begin smooth glide revert back to home positions
+    isResetting = true;
+    resetProgress = 0;
+    resetFrom = {
+      paci: { x: paci.x, y: paci.y },
+      babu: { x: babu.x, y: babu.y },
+      tommy: { x: tommy.x, y: tommy.y }
+    };
+  }
+
+  // --------------------------------------------------------------------------
+  // EVENT LISTENERS: Mouse, Touch, and Pointer Leave
+  // --------------------------------------------------------------------------
+
+  // Clicking TAP or Pacifier starts chase
   if (tapPrompt) {
     tapPrompt.addEventListener('pointerdown', (e) => {
       e.stopPropagation();
@@ -219,7 +299,7 @@ export function initChaseScene() {
     }
   });
 
-  // Arena pointer events
+  // Arena enter
   arena.addEventListener('pointerenter', (e) => {
     if (!hasStarted) return;
     if (e.pointerType === 'mouse') {
@@ -230,14 +310,26 @@ export function initChaseScene() {
     }
   });
 
+  // Arena leave: STOP THE GAME AND REVERT BACK!
   arena.addEventListener('pointerleave', (e) => {
-    if (e.pointerType === 'mouse') {
-      isPointerInside = false;
-      document.body.classList.remove('chase-in-arena');
-      arena.classList.remove('chase-cursor-hide');
+    if (e.pointerType === 'mouse' && hasStarted) {
+      stopChase();
     }
   });
 
+  section.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'mouse' && hasStarted) {
+      stopChase();
+    }
+  });
+
+  window.addEventListener('mouseout', (e) => {
+    if (!e.relatedTarget && hasStarted) {
+      stopChase();
+    }
+  });
+
+  // Arena pointermove
   arena.addEventListener('pointermove', (e) => {
     if (!hasStarted) return;
 
@@ -247,7 +339,18 @@ export function initChaseScene() {
       arena.classList.add('chase-cursor-hide');
       updatePointerTarget(e.clientX, e.clientY);
     } else if (e.pointerType === 'touch' && isDragging) {
-      updatePointerTarget(e.clientX, e.clientY);
+      // Check if touch moved out of arena
+      arenaRect = arena.getBoundingClientRect();
+      if (
+        e.clientX < arenaRect.left - 20 ||
+        e.clientX > arenaRect.right + 20 ||
+        e.clientY < arenaRect.top - 20 ||
+        e.clientY > arenaRect.bottom + 20
+      ) {
+        stopChase();
+      } else {
+        updatePointerTarget(e.clientX, e.clientY);
+      }
     }
   });
 
@@ -280,7 +383,7 @@ export function initChaseScene() {
   });
 
   // --------------------------------------------------------------------------
-  // ANIMATION LOOP (Physics, AI, Tommy Jump & Dodge)
+  // ANIMATION LOOP (Physics, AI, Tommy Jump & Dodge, Garden Revert)
   // --------------------------------------------------------------------------
 
   let lastTime = performance.now();
@@ -294,6 +397,8 @@ export function initChaseScene() {
       updatePacifier(dt);
       updateBabu(dt);
       updateTommy(dt);
+    } else if (isResetting) {
+      updateRevertGlide(dt);
     } else {
       updateIdleAnimations(now);
     }
@@ -302,17 +407,48 @@ export function initChaseScene() {
     animationFrameId = requestAnimationFrame(tick);
   }
 
+  // --- REVERT GLIDE ANIMATION (Smooth return to home positions) ---
+  function updateRevertGlide(dt) {
+    resetProgress += dt * 2.4; // ~420ms smooth ease-out return
+    const t = Math.min(1, resetProgress);
+    const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+
+    const home = getHomePositions();
+
+    paci.x = resetFrom.paci.x + (home.paciX - resetFrom.paci.x) * ease;
+    paci.y = resetFrom.paci.y + (home.paciY - resetFrom.paci.y) * ease;
+    paci.targetX = paci.x;
+    paci.targetY = paci.y;
+    paci.rotation *= (1 - ease);
+
+    babu.x = resetFrom.babu.x + (home.babuX - resetFrom.babu.x) * ease;
+    babu.y = resetFrom.babu.y + (home.babuY - resetFrom.babu.y) * ease;
+    babu.facing = 1;
+    babu.isMoving = false;
+
+    tommy.x = resetFrom.tommy.x + (home.tommyX - resetFrom.tommy.x) * ease;
+    tommy.y = resetFrom.tommy.y + (home.tommyY - resetFrom.tommy.y) * ease;
+    tommy.facing = 1;
+
+    if (t >= 1) {
+      isResetting = false;
+      paci.x = home.paciX;
+      paci.y = home.paciY;
+      babu.x = home.babuX;
+      babu.y = home.babuY;
+      tommy.x = home.tommyX;
+      tommy.y = home.tommyY;
+    }
+  }
+
   // --- PACIFIER PHYSICS ---
   function updatePacifier(dt) {
-    // Decay dodge velocity
-    paci.dodgeVx *= Math.pow(0.03, dt);
-    paci.dodgeVy *= Math.pow(0.03, dt);
+    paci.dodgeVx *= Math.pow(0.025, dt);
+    paci.dodgeVy *= Math.pow(0.025, dt);
 
-    // Apply dodge velocity
     paci.x += paci.dodgeVx * dt;
     paci.y += paci.dodgeVy * dt;
 
-    // Follow target smoothly with snappy tracking
     const springFactor = isPointerInside || isDragging ? 26 : 5;
     const dx = paci.targetX - paci.x;
     const dy = paci.targetY - paci.y;
@@ -326,17 +462,16 @@ export function initChaseScene() {
     const minY = PADDING + PACI_SIZE / 2;
     const maxY = arenaRect.height - PADDING - PACI_SIZE / 2;
 
-    // Avoid pacifier getting stuck behind Mom's chair
-    const momZoneLeft = arenaRect.width - 150;
-    const momZoneBottom = 150;
+    // Avoid Mom's cozy garden chair corner in top-right
+    const momZoneLeft = arenaRect.width - 200;
+    const momZoneBottom = 195;
     if (paci.x > momZoneLeft && paci.y < momZoneBottom) {
-      paci.y = momZoneBottom + 10;
+      paci.y = momZoneBottom + 12;
     }
 
     paci.x = Math.max(minX, Math.min(maxX, paci.x));
     paci.y = Math.max(minY, Math.min(maxY, paci.y));
 
-    // Slight playful wobble when moving
     const speed = Math.hypot(dx, dy);
     paci.rotation = Math.sin(lastTime * 0.015) * Math.min(16, speed * 0.1);
     paci.scale = 1 + Math.sin(lastTime * 0.008) * 0.05;
@@ -348,8 +483,7 @@ export function initChaseScene() {
     const dy = paci.y - babu.y;
     const dist = Math.hypot(dx, dy);
 
-    // Babu wants the pacifier!
-    if (dist > 35) {
+    if (dist > 42) {
       babu.isMoving = true;
       const dirX = dx / dist;
       const dirY = dy / dist;
@@ -357,8 +491,7 @@ export function initChaseScene() {
       babu.x += dirX * babu.speed * dt;
       babu.y += dirY * babu.speed * dt;
 
-      // Update facing direction with slight hysteresis
-      if (Math.abs(dx) > 12) {
+      if (Math.abs(dx) > 14) {
         babu.facing = dx > 0 ? 1 : -1;
       }
 
@@ -374,21 +507,30 @@ export function initChaseScene() {
     const minY = PADDING + BABU_HEIGHT / 2;
     const maxY = arenaRect.height - PADDING - BABU_HEIGHT / 2;
 
-    // Avoid running through Mom's quiet chair zone in top-right
-    const momZoneLeft = arenaRect.width - 160;
-    const momZoneBottom = 165;
+    // Avoid Mom's garden bench in top-right
+    const momZoneLeft = arenaRect.width - 205;
+    const momZoneBottom = 200;
     if (babu.x > momZoneLeft && babu.y < momZoneBottom) {
-      babu.y = momZoneBottom + 6;
+      babu.y = momZoneBottom + 8;
     }
 
     babu.x = Math.max(minX, Math.min(maxX, babu.x));
     babu.y = Math.max(minY, Math.min(maxY, babu.y));
   }
 
-  // --- TOMMY AI, JUMP SEQUENCE & DODGE LOGIC ---
+  // --- TOMMY AI, BARKING, JUMP SEQUENCE & DODGE LOGIC ---
   function updateTommy(dt) {
     tommy.jumpCooldown -= dt;
     tommy.tailPhase += dt * 22;
+
+    // Periodic energetic dog bark while chasing!
+    if (hasStarted && tommy.state === 'CHASE') {
+      barkTimer -= dt;
+      if (barkTimer <= 0) {
+        sound.playDogBark(0.95 + Math.random() * 0.25);
+        barkTimer = 2.0 + Math.random() * 1.8; // Bark every 2 to 3.8s
+      }
+    }
 
     const dx = paci.x - tommy.x;
     const dy = paci.y - tommy.y;
@@ -396,12 +538,11 @@ export function initChaseScene() {
 
     switch (tommy.state) {
       case 'CHASE': {
-        // Runs towards pacifier
-        if (Math.abs(dx) > 12) {
+        if (Math.abs(dx) > 14) {
           tommy.facing = dx > 0 ? 1 : -1;
         }
 
-        if (dist > 38) {
+        if (dist > 45) {
           const dirX = dx / dist;
           const dirY = dy / dist;
           tommy.x += dirX * tommy.speed * dt;
@@ -410,8 +551,8 @@ export function initChaseScene() {
         }
 
         // TRIGGER JUMP CHECK:
-        // When Tommy is within catching range (< 105px) and jump cooldown is expired
-        if (dist < 105 && tommy.jumpCooldown <= 0) {
+        // When Tommy is within catching distance (< 140px) and cooldown is expired
+        if (dist < 140 && tommy.jumpCooldown <= 0) {
           tommy.state = 'CROUCH';
           tommy.stateTimer = 0.18; // 180ms crouch
         }
@@ -419,33 +560,35 @@ export function initChaseScene() {
       }
 
       case 'CROUCH': {
-        // Tommy stops and squashes down into an alert spring pose
+        // Tommy crouches down into alert pounce pose
         tommy.stateTimer -= dt;
         if (tommy.stateTimer <= 0) {
-          // Launch into leap!
+          // Launch into leap with cartoon boing jump sound!
           tommy.state = 'LEAP';
-          tommy.stateTimer = 0.36; // 360ms leap duration
+          tommy.stateTimer = 0.38; // 380ms leap duration
           tommy.leapStartX = tommy.x;
           tommy.leapStartY = tommy.y;
           tommy.leapTargetX = paci.x;
           tommy.leapTargetY = paci.y;
           tommy.hasDodgedThisLeap = false;
+
+          // PLAY JUMP BOING SOUND!
+          sound.playJumpBoing();
         }
         break;
       }
 
       case 'LEAP': {
         tommy.stateTimer -= dt;
-        const totalDuration = 0.36;
+        const totalDuration = 0.38;
         const progress = Math.max(0, Math.min(1, 1 - (tommy.stateTimer / totalDuration)));
 
         // Parabolic jump trajectory
         tommy.x = tommy.leapStartX + (tommy.leapTargetX - tommy.leapStartX) * progress;
         tommy.y = tommy.leapStartY + (tommy.leapTargetY - tommy.leapStartY) * progress;
-        tommy.leapHeight = -Math.sin(progress * Math.PI) * 48; // 48px upward leap arc
+        tommy.leapHeight = -Math.sin(progress * Math.PI) * 62; // 62px upward leap arc
 
-        // DODGE TRIGGER AT THE LAST POSSIBLE MOMENT!
-        // When Tommy reaches ~62% of his leap, the pacifier escapes!
+        // DODGE TRIGGER AT LAST POSSIBLE MOMENT (~62% of leap)
         if (progress > 0.62 && !tommy.hasDodgedThisLeap) {
           tommy.hasDodgedThisLeap = true;
           triggerPacifierDodge(tommy.x, tommy.y);
@@ -454,10 +597,10 @@ export function initChaseScene() {
         if (tommy.stateTimer <= 0) {
           // Tommy lands!
           tommy.state = 'LAND';
-          tommy.stateTimer = 0.22; // 220ms landing recovery
+          tommy.stateTimer = 0.22;
           tommy.leapHeight = 0;
 
-          // Play funny landing dog-toy squeak!
+          // Landing dog-toy miss squeak!
           sound.playSqueak();
         }
         break;
@@ -467,8 +610,7 @@ export function initChaseScene() {
         tommy.stateTimer -= dt;
         if (tommy.stateTimer <= 0) {
           tommy.state = 'CHASE';
-          // Cooldown between jumps (2.3s to 3.3s with randomness)
-          tommy.jumpCooldown = 2.3 + Math.random() * 1.0;
+          tommy.jumpCooldown = 2.4 + Math.random() * 1.0;
         }
         break;
       }
@@ -480,11 +622,11 @@ export function initChaseScene() {
     const minY = PADDING + TOMMY_HEIGHT / 2;
     const maxY = arenaRect.height - PADDING - TOMMY_HEIGHT / 2;
 
-    // Avoid running through Mom's quiet chair zone in top-right
-    const momZoneLeft = arenaRect.width - 160;
-    const momZoneBottom = 165;
+    // Avoid Mom's garden bench in top-right
+    const momZoneLeft = arenaRect.width - 205;
+    const momZoneBottom = 200;
     if (tommy.x > momZoneLeft && tommy.y < momZoneBottom) {
-      tommy.y = momZoneBottom + 6;
+      tommy.y = momZoneBottom + 8;
     }
 
     tommy.x = Math.max(minX, Math.min(maxX, tommy.x));
@@ -493,7 +635,6 @@ export function initChaseScene() {
 
   // --- PACIFIER ESCAPE / DODGE MECHANIC ---
   function triggerPacifierDodge(attackerX, attackerY) {
-    // Vector pointing away from Tommy
     let awayX = paci.x - attackerX;
     let awayY = paci.y - attackerY;
     let dist = Math.hypot(awayX, awayY);
@@ -507,7 +648,7 @@ export function initChaseScene() {
     awayX /= dist;
     awayY /= dist;
 
-    // Add slight random deflection angle (-45 deg to +45 deg)
+    // Random deflection angle (-45 deg to +45 deg)
     const angleOffset = (Math.random() - 0.5) * (Math.PI * 0.45);
     const cosA = Math.cos(angleOffset);
     const sinA = Math.sin(angleOffset);
@@ -515,28 +656,21 @@ export function initChaseScene() {
     const dodgedDirY = awayX * sinA + awayY * cosA;
 
     // Dodge impulse velocity
-    const dodgeSpeed = 520 + Math.random() * 140;
+    const dodgeSpeed = 580 + Math.random() * 150;
     paci.dodgeVx = dodgedDirX * dodgeSpeed;
     paci.dodgeVy = dodgedDirY * dodgeSpeed;
 
-    // Update target point so pacifier smoothly coasts
-    paci.targetX = Math.max(PADDING + PACI_SIZE, Math.min(arenaRect.width - PADDING - PACI_SIZE, paci.x + dodgedDirX * 130));
-    paci.targetY = Math.max(PADDING + PACI_SIZE, Math.min(arenaRect.height - PADDING - PACI_SIZE, paci.y + dodgedDirY * 130));
+    paci.targetX = Math.max(PADDING + PACI_SIZE, Math.min(arenaRect.width - PADDING - PACI_SIZE, paci.x + dodgedDirX * 160));
+    paci.targetY = Math.max(PADDING + PACI_SIZE, Math.min(arenaRect.height - PADDING - PACI_SIZE, paci.y + dodgedDirY * 160));
 
-    // Play escape pop sound
     sound.playPop();
   }
 
   // --- IDLE ANIMATIONS BEFORE TAP ---
   function updateIdleAnimations(time) {
-    // Gentle floating pacifier
     paci.scale = 1 + Math.sin(time * 0.004) * 0.05;
     paci.rotation = Math.sin(time * 0.003) * 5;
-
-    // Babu idle breathing
     babu.waddlePhase = time * 0.002;
-
-    // Tommy idle tail wag
     tommy.tailPhase = time * 0.008;
   }
 
@@ -554,12 +688,10 @@ export function initChaseScene() {
     let babuSquash = 1;
 
     if (babu.isMoving && !prefersReducedMotion) {
-      // Waddling toddler run
       babuRotate = Math.sin(babu.waddlePhase) * 7.5;
-      babuBob = -Math.abs(Math.sin(babu.waddlePhase)) * 8.5;
+      babuBob = -Math.abs(Math.sin(babu.waddlePhase)) * 9;
       babuSquash = 1 + Math.sin(babu.waddlePhase * 2) * 0.04;
     } else {
-      // Idle breathing
       babuSquash = 1 + Math.sin(babu.waddlePhase * 2) * 0.02;
     }
 
@@ -574,7 +706,7 @@ export function initChaseScene() {
     if (tommy.state === 'CROUCH') {
       tommyScaleY = 0.72;
       tommyScaleX = tommy.facing * 1.18;
-      tommyYOffset = 8;
+      tommyYOffset = 10;
     } else if (tommy.state === 'LEAP') {
       tommyYOffset = tommy.leapHeight;
       tommyRotate = tommy.facing * -16;
@@ -582,14 +714,12 @@ export function initChaseScene() {
     } else if (tommy.state === 'LAND') {
       tommyScaleY = 0.76;
       tommyScaleX = tommy.facing * 1.2;
-      tommyYOffset = 6;
+      tommyYOffset = 8;
     } else if (tommy.state === 'CHASE' && !prefersReducedMotion) {
-      // Running trot
       tommyRotate = Math.sin(tommy.runPhase) * 6;
-      tommyYOffset = -Math.abs(Math.sin(tommy.runPhase)) * 6.5;
+      tommyYOffset = -Math.abs(Math.sin(tommy.runPhase)) * 7;
       tommyScaleY = 1 + Math.sin(tommy.runPhase * 2) * 0.05;
 
-      // Animate Tommy's paws running
       if (tommyLegFl) {
         tommyLegFl.style.transform = `rotate(${Math.sin(tommy.runPhase) * 22}deg)`;
       }
@@ -603,17 +733,17 @@ export function initChaseScene() {
 
     tommyEl.style.transform = `translate3d(${tommy.x - TOMMY_WIDTH / 2}px, ${tommy.y - TOMMY_HEIGHT / 2 + tommyYOffset}px, 0) scaleX(${tommyScaleX}) scaleY(${tommyScaleY}) rotate(${tommyRotate}deg)`;
 
-    // Wag Tommy's tail inside the SVG
+    // Wag Tommy's tail inside SVG
     if (tommyTail && hasStarted) {
       const tailAngle = Math.sin(tommy.tailPhase) * (tommy.state === 'LEAP' ? 35 : 22);
       tommyTail.style.transform = `rotate(${tailAngle}deg)`;
     }
   }
 
-  // Start the animation frame loop
+  // Start animation loop
   animationFrameId = requestAnimationFrame(tick);
 
-  // Return teardown function for clean cleanup
+  // Return teardown function
   return () => {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     window.removeEventListener('resize', handleResize);
