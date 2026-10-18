@@ -198,8 +198,34 @@ class SoundEngine {
     }
   }
 
-  // Playful Cartoon Dog Bark ("Woof! Ruff!") - Rich, loud, and unmistakably canine
+  // Playful Cartoon Dog Bark ("Woof! Ruff!") - Real audio recording with synthesis fallback
   playDogBark(pitchShift = 1.0, isDouble = false) {
+    if (this.muted) return;
+    try {
+      const audio = new Audio('/audio/dog-bark.mp3');
+      audio.volume = 0.95;
+      audio.playbackRate = Math.max(0.8, Math.min(1.3, pitchShift || 1.0));
+      audio.play().catch(() => {
+        this.playDogBarkSynth(pitchShift, isDouble);
+      });
+
+      if (isDouble) {
+        setTimeout(() => {
+          if (!this.muted) {
+            const audio2 = new Audio('/audio/dog-bark.mp3');
+            audio2.volume = 0.85;
+            audio2.playbackRate = Math.max(0.8, Math.min(1.35, (pitchShift || 1.0) * 1.12));
+            audio2.play().catch(() => {});
+          }
+        }, 170);
+      }
+    } catch (e) {
+      this.playDogBarkSynth(pitchShift, isDouble);
+    }
+  }
+
+  // Synthesizer fallback for Dog Bark
+  playDogBarkSynth(pitchShift = 1.0, isDouble = false) {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
@@ -209,14 +235,13 @@ class SoundEngine {
         const now = startTime;
         const baseFreq = (270 + Math.random() * 35) * pitchShift * pitchMult;
 
-        // 1. Vocal cord sawtooth for husky canine rasp & punch
+        // Vocal cord sawtooth
         const osc = this.ctx.createOscillator();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(baseFreq * 1.6, now);
         osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.1, now + 0.035);
         osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.55, now + 0.15);
 
-        // Resonant throat formant lowpass filter (keeps low punch, adds barking bite)
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(1500 * pitchMult, now);
@@ -228,7 +253,7 @@ class SoundEngine {
         gain.gain.linearRampToValueAtTime(vol, now + 0.015);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.17);
 
-        // 2. Chest resonance sub-oscillator (triangle wave)
+        // Sub oscillator
         const subOsc = this.ctx.createOscillator();
         subOsc.type = 'triangle';
         subOsc.frequency.setValueAtTime(baseFreq * 0.9, now);
@@ -239,7 +264,7 @@ class SoundEngine {
         subGain.gain.linearRampToValueAtTime(vol * 0.7, now + 0.018);
         subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
 
-        // 3. Breathy snout burst noise
+        // Noise burst
         const bufferSize = Math.floor(this.ctx.sampleRate * 0.10);
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -259,7 +284,6 @@ class SoundEngine {
         noiseGain.gain.linearRampToValueAtTime(vol * 0.4, now + 0.012);
         noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.10);
 
-        // Routing
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(this.masterGain || this.ctx.destination);
@@ -285,21 +309,33 @@ class SoundEngine {
 
     const now = this.ctx.currentTime;
     singleBark(now, 1.0, 0.95);
-    // Real dogs often bark in pairs ("Arf-arf!")
     if (isDouble || Math.random() < 0.55) {
       singleBark(now + 0.13, 1.14, 0.85);
     }
   }
 
-  // Cartoon Spring Jump Sound ("Boing!")
+  // Cartoon Spring Jump Sound ("Boing!") - Real audio recording with synthesis fallback
   playJumpBoing() {
+    if (this.muted) return;
+    try {
+      const audio = new Audio('/audio/jump-boing.mp3');
+      audio.volume = 0.85;
+      audio.play().catch(() => {
+        this.playJumpBoingSynth();
+      });
+    } catch (e) {
+      this.playJumpBoingSynth();
+    }
+  }
+
+  // Synthesizer fallback for Jump Boing
+  playJumpBoingSynth() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
 
     try {
       const now = this.ctx.currentTime;
-      // Rising pitch oscillator
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
@@ -307,7 +343,6 @@ class SoundEngine {
       osc.frequency.setValueAtTime(260, now);
       osc.frequency.exponentialRampToValueAtTime(780, now + 0.22);
 
-      // LFO for comic spring vibrato
       const lfo = this.ctx.createOscillator();
       const lfoGain = this.ctx.createGain();
       lfo.frequency.setValueAtTime(22, now);

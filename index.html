@@ -1105,27 +1105,27 @@
         <!-- LEFT: BABU & HIS EXECUTIVE CHAIR -->
         <div class="relative flex flex-col items-center">
           <!-- Babu's Toddler Executive Armchair -->
-          <div id="vinyl-chair" class="relative w-24 sm:w-28 h-20 sm:h-24 bg-[#E07A5F] border-[3px] border-ink-black rounded-t-2xl shadow-[4px_4px_0_#292521] flex flex-col items-center justify-end p-2 pointer-events-none">
+          <div id="vinyl-chair" class="relative w-28 sm:w-36 md:w-40 h-24 sm:h-28 md:h-32 bg-[#E07A5F] border-[3px] border-ink-black rounded-t-2xl shadow-[4px_4px_0_#292521] flex flex-col items-center justify-end p-2 pointer-events-none">
             <!-- Backrest cushion button stitches -->
-            <div class="absolute top-3 flex gap-3 text-[8px] text-ink-black/60">
+            <div class="absolute top-3.5 flex gap-4 text-[9px] text-ink-black/60">
               <span>✕</span><span>✕</span><span>✕</span>
             </div>
             <!-- Seat Cushion -->
-            <div class="w-full h-6 bg-[#F4A261] border-2 border-ink-black rounded-lg shadow-inner"></div>
+            <div class="w-full h-8 bg-[#F4A261] border-2 border-ink-black rounded-lg shadow-inner"></div>
             <!-- Chair Legs -->
-            <div class="absolute -bottom-2 left-2 w-2 h-2 bg-[#70422C] border border-ink-black"></div>
-            <div class="absolute -bottom-2 right-2 w-2 h-2 bg-[#70422C] border border-ink-black"></div>
+            <div class="absolute -bottom-2 left-2.5 w-2.5 h-2.5 bg-[#70422C] border border-ink-black"></div>
+            <div class="absolute -bottom-2 right-2.5 w-2.5 h-2.5 bg-[#70422C] border border-ink-black"></div>
           </div>
 
-          <!-- BABU CHARACTER ASSET (Uses exact official babu_transparent.png) -->
+          <!-- BABU CHARACTER ASSET (Uses exact official babu_transparent.png, enlarged for prominent visibility) -->
           <div id="vinyl-babu" class="absolute bottom-3 left-1/2 -translate-x-1/2 will-change-transform z-30 select-none pointer-events-none flex flex-col items-center" aria-label="Babu sitting on chair">
             <!-- Dance animation target wrapper -->
             <div id="vinyl-babu-body" class="relative flex flex-col items-center">
-              <img src="/assets/babu_transparent.png" alt="Babu the CEO" class="w-[88px] sm:w-[104px] md:w-[115px] h-auto object-contain filter drop-shadow-[0_8px_14px_rgba(41,37,33,0.35)] pointer-events-none select-none">
+              <img src="/assets/babu_transparent.png" alt="Babu the CEO" class="w-[130px] sm:w-[155px] md:w-[178px] h-auto object-contain filter drop-shadow-[0_10px_18px_rgba(41,37,33,0.4)] pointer-events-none select-none">
               
               <!-- Carried Record in Babu's Hands (Hidden until Babu takes it) -->
-              <div id="babu-carried-record" class="absolute bottom-4 -right-3 w-12 h-12 rounded-full border-2 border-ink-black shadow-[3px_3px_0_#292521] flex items-center justify-center hidden rotate-12" style="background: radial-gradient(circle, #333 0%, #111 100%);">
-                <div id="carried-record-label" class="w-5 h-5 rounded-full border border-ink-black flex items-center justify-center text-[5px] font-bold">#01</div>
+              <div id="babu-carried-record" class="absolute bottom-5 -right-4 w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-ink-black shadow-[3px_3px_0_#292521] flex items-center justify-center hidden rotate-12" style="background: radial-gradient(circle, #333 0%, #111 100%);">
+                <div id="carried-record-label" class="w-6 h-6 rounded-full border border-ink-black flex items-center justify-center text-[6px] font-bold">#01</div>
               </div>
             </div>
           </div>
@@ -1236,6 +1236,33 @@
       </p>
     </div>
 
+  </div>
+</div>
+
+<!-- FLOATING VINYL MINIPLAYER (Appears on main website when music is playing and room modal is closed) -->
+<div id="vinyl-floating-miniplayer" class="fixed bottom-4 right-4 z-40 bg-paper-cream border-[3px] border-ink-black shadow-[6px_6px_0_#292521] rounded-2xl p-2.5 sm:p-3 flex items-center gap-3 hidden transition-all duration-300 max-w-sm select-none">
+  <!-- Spinning mini vinyl disc -->
+  <div class="relative w-11 h-11 rounded-full border-2 border-ink-black animate-vinyl-spin flex items-center justify-center shrink-0 shadow-sm" style="background: radial-gradient(circle, #333 0%, #111 100%);">
+    <div id="miniplayer-vinyl-label" class="w-4.5 h-4.5 rounded-full bg-sunshine-yellow border border-ink-black flex items-center justify-center text-[7px] font-bold">♪</div>
+  </div>
+
+  <!-- Track Title & Artist -->
+  <div class="flex-1 min-w-0 pr-1">
+    <div class="flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full bg-crayon-red animate-ping shrink-0"></span>
+      <p id="miniplayer-title" class="text-xs font-black text-ink-black truncate font-mono uppercase">RECORD 001</p>
+    </div>
+    <p id="miniplayer-artist" class="text-[10px] text-on-surface-variant font-medium truncate">by Kevin MacLeod</p>
+  </div>
+
+  <!-- Actions: Stop and Open Room -->
+  <div class="flex items-center gap-1.5 shrink-0">
+    <button id="miniplayer-stop-btn" class="px-2.5 py-1 text-[10px] font-mono font-black bg-crayon-red text-white border border-ink-black rounded shadow-[2px_2px_0_#292521] hover:bg-crayon-red/90 active:translate-x-0.5 active:translate-y-0.5 cursor-pointer" title="Stop Music & Eject">
+      ⏹ STOP
+    </button>
+    <button id="miniplayer-open-btn" class="px-2.5 py-1 text-[10px] font-mono font-black bg-sunshine-yellow text-ink-black border border-ink-black rounded shadow-[2px_2px_0_#292521] hover:scale-105 active:translate-x-0.5 active:translate-y-0.5 cursor-pointer" title="Open Babu's Room">
+      👶 ROOM
+    </button>
   </div>
 </div>
 

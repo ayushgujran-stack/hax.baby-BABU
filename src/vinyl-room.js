@@ -33,6 +33,14 @@ class VinylRoomController {
     this.recordsContainer = null;
     this.tapToPlayBanner = null;
 
+    // Floating Miniplayer elements
+    this.miniplayer = null;
+    this.miniplayerStopBtn = null;
+    this.miniplayerOpenBtn = null;
+    this.miniplayerTitle = null;
+    this.miniplayerArtist = null;
+    this.miniplayerVinylLabel = null;
+
     // Bound listeners for teardown
     this.handleKeydown = this.handleKeydown.bind(this);
   }
@@ -55,6 +63,36 @@ class VinylRoomController {
     this.recordsContainer = document.getElementById('wall-records-container');
     this.tapToPlayBanner = document.getElementById('vinyl-tap-to-play');
 
+    // Miniplayer Elements
+    this.miniplayer = document.getElementById('vinyl-floating-miniplayer');
+    this.miniplayerStopBtn = document.getElementById('miniplayer-stop-btn');
+    this.miniplayerOpenBtn = document.getElementById('miniplayer-open-btn');
+    this.miniplayerTitle = document.getElementById('miniplayer-title');
+    this.miniplayerArtist = document.getElementById('miniplayer-artist');
+    this.miniplayerVinylLabel = document.getElementById('miniplayer-vinyl-label');
+
+    if (this.miniplayerStopBtn) {
+      this.miniplayerStopBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sound.playPop();
+        this.stopPlayback(false);
+      });
+    }
+
+    if (this.miniplayerOpenBtn) {
+      this.miniplayerOpenBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sound.playPop();
+        this.open();
+      });
+    }
+
+    if (this.miniplayer) {
+      this.miniplayer.addEventListener('click', () => {
+        this.open();
+      });
+    }
+
     // Initialize Audio instance
     this.audio = new Audio();
     this.audio.preload = 'none';
@@ -66,7 +104,7 @@ class VinylRoomController {
     this.audio.addEventListener('error', (e) => {
       console.warn('Vinyl audio playback error:', e);
       this.showFeedback('Audio could not be loaded');
-      this.resetTurntableAndBabu();
+      this.stopPlayback(true);
     });
 
     // Close button
@@ -84,7 +122,7 @@ class VinylRoomController {
     // Render interactive records on the wall
     this.renderWallRecords();
 
-    // Turntable Stop/Eject button
+    // Turntable Stop/Eject button inside the room
     const stopBtn = document.getElementById('turntable-stop-btn');
     if (stopBtn) {
       stopBtn.addEventListener('click', () => {
@@ -206,12 +244,21 @@ class VinylRoomController {
     this.modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
+    // Hide background miniplayer while inside room
+    this.hideMiniplayer();
+
     // Prime audio system
     sound.init();
-    sound.playPop();
 
-    // Reset Babu to chair
-    this.positionBabuOnChair();
+    if (this.state === 'playing' && this.currentTrack) {
+      // Babu is already grooving: re-anchor him on the center rug dancefloor
+      this.positionBabuOnDancefloor();
+      this.startBabuDance(this.currentTrack.danceStyle);
+      this.startMusicalNotes();
+    } else {
+      // Reset Babu to chair
+      this.positionBabuOnChair();
+    }
 
     // Register Escape key
     window.addEventListener('keydown', this.handleKeydown);
@@ -222,18 +269,28 @@ class VinylRoomController {
     }, 100);
   }
 
-  // Close Room Modal & Clean Teardown
+  // Close Room Modal
   close() {
     if (!this.modal) return;
     this.isOpen = false;
     this.modal.classList.add('hidden');
     document.body.style.overflow = '';
 
-    // Stop and cleanup all music & timers
-    this.stopPlayback(false);
-    this.clearAllTimers();
-
     window.removeEventListener('keydown', this.handleKeydown);
+
+    // IF MUSIC IS PLAYING: KEEP PLAYING! Do not stop!
+    if (this.state === 'playing') {
+      this.showMiniplayer();
+      // Pause floating notes particle emission while room is hidden
+      if (this.noteInterval) {
+        clearInterval(this.noteInterval);
+        this.noteInterval = null;
+      }
+    } else {
+      // If idle or interrupted before music started, clean up
+      this.stopPlayback(false);
+      this.clearAllTimers();
+    }
   }
 
   handleKeydown(e) {
@@ -253,7 +310,7 @@ class VinylRoomController {
 
   setSafeTimeout(fn, ms) {
     const id = setTimeout(() => {
-      if (this.isOpen) fn();
+      fn();
     }, ms);
     this.animationTimers.push(id);
     return id;
@@ -263,12 +320,30 @@ class VinylRoomController {
   positionBabuOnChair() {
     if (!this.babuEl) return;
     this.clearBabuAnimations();
-    // Default armchair coordinates (relative to room stage)
     this.babuEl.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
     this.babuEl.style.transform = 'translate3d(0, 0, 0) scaleX(1)';
     if (this.carriedRecordEl) {
       this.carriedRecordEl.classList.add('hidden');
     }
+  }
+
+  // Position Babu in the center of the room on the cozy cardboard rug
+  positionBabuOnDancefloor() {
+    const stage = document.getElementById('vinyl-room-stage');
+    const chairEl = document.getElementById('vinyl-chair');
+    if (!stage || !chairEl || !this.babuEl) return;
+
+    const stageRect = stage.getBoundingClientRect();
+    const chairRect = chairEl.getBoundingClientRect();
+
+    const rugCenterX = stageRect.left + stageRect.width / 2;
+    const chairCenterX = chairRect.left + chairRect.width / 2;
+
+    const danceX = rugCenterX - chairCenterX;
+    const danceY = 12; // Stand firmly on the rug floor
+
+    this.babuEl.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    this.babuEl.style.transform = `translate3d(${danceX}px, ${danceY}px, 0) scaleX(1)`;
   }
 
   clearBabuAnimations() {
@@ -310,7 +385,7 @@ class VinylRoomController {
 
     // 2. STATE 2: BABU GETS UP FROM CHAIR
     this.babuEl.style.transition = 'transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)';
-    this.babuEl.style.transform = 'translate3d(15px, -18px, 0) scaleX(1)';
+    this.babuEl.style.transform = 'translate3d(20px, 8px, 0) scaleX(1)';
 
     this.setSafeTimeout(() => {
       // 3. STATE 3: BABU WALKS TO THE WALL
@@ -332,19 +407,22 @@ class VinylRoomController {
   }
 
   babuWalkToWall(record) {
-    const stage = document.getElementById('vinyl-room-stage');
     const wallRecordCard = document.querySelector(`[data-vinyl-id="${record.id}"]`);
-    if (!stage || !wallRecordCard || !this.babuEl) {
+    const chairEl = document.getElementById('vinyl-chair');
+    if (!wallRecordCard || !chairEl || !this.babuEl) {
       this.babuWalkToTurntable(record);
       return;
     }
 
-    const stageRect = stage.getBoundingClientRect();
+    const chairRect = chairEl.getBoundingClientRect();
     const cardRect = wallRecordCard.getBoundingClientRect();
 
-    // Calculate delta relative to Babu's original chair origin
-    const targetX = (cardRect.left + cardRect.width / 2) - stageRect.left - 60;
-    const targetY = (cardRect.bottom - stageRect.top) - 15;
+    const chairCenterX = chairRect.left + chairRect.width / 2;
+    const chairBottomY = chairRect.bottom;
+    const cardCenterX = cardRect.left + cardRect.width / 2;
+
+    const targetX = cardCenterX - chairCenterX;
+    const targetY = (cardRect.bottom - chairBottomY) + 30; // reach up to plaque
 
     this.babuEl.classList.add('babu-is-walking');
     this.babuEl.style.transition = 'transform 0.65s ease-in-out';
@@ -352,13 +430,12 @@ class VinylRoomController {
 
     this.setSafeTimeout(() => {
       // 4. STATE 4: BABU TAKES THE RECORD
-      this.babuTakesRecord(record);
+      this.babuTakesRecord(record, targetX, targetY);
     }, 660);
   }
 
-  babuTakesRecord(record) {
+  babuTakesRecord(record, currX, currY) {
     this.clearBabuAnimations();
-    // Sound: vinyl pick up
     sound.playPeel();
 
     // Hide vinyl from wall slot, show empty dashed outline
@@ -380,10 +457,7 @@ class VinylRoomController {
 
     // Little reach-up motion
     this.babuEl.style.transition = 'transform 0.22s ease-out';
-    const currTrans = this.babuEl.style.transform.replace(/translate3d\(([^,]+),\s*([^,]+),/g, (m, x, y) => {
-      return `translate3d(${x}, ${parseFloat(y) - 15}px,`;
-    });
-    this.babuEl.style.transform = currTrans;
+    this.babuEl.style.transform = `translate3d(${currX}px, ${currY - 14}px, 0) scaleX(1)`;
 
     this.setSafeTimeout(() => {
       // 5. STATE 5: BABU WALKS TO THE TURNTABLE
@@ -392,19 +466,20 @@ class VinylRoomController {
   }
 
   babuWalkToTurntable(record) {
-    const stage = document.getElementById('vinyl-room-stage');
     const tableEl = document.getElementById('turntable-cabinet');
-    if (!stage || !tableEl || !this.babuEl) {
+    const chairEl = document.getElementById('vinyl-chair');
+    if (!tableEl || !chairEl || !this.babuEl) {
       this.babuPlacesRecord(record);
       return;
     }
 
-    const stageRect = stage.getBoundingClientRect();
     const tableRect = tableEl.getBoundingClientRect();
+    const chairRect = chairEl.getBoundingClientRect();
+    const chairCenterX = chairRect.left + chairRect.width / 2;
 
-    // Stand just to the left of the turntable
-    const targetX = (tableRect.left - stageRect.left) - 45;
-    const targetY = (tableRect.bottom - stageRect.top) - 150;
+    // Stand just to the left of the turntable table
+    const targetX = (tableRect.left - 50) - chairCenterX;
+    const targetY = 12;
 
     this.babuEl.classList.add('babu-is-walking');
     this.babuEl.style.transition = 'transform 0.72s ease-in-out';
@@ -449,21 +524,11 @@ class VinylRoomController {
       this.platterEl.classList.add('animate-vinyl-spin');
     }
 
-    // Move Babu to center rug dancefloor!
-    const stage = document.getElementById('vinyl-room-stage');
-    const tableEl = document.getElementById('turntable-cabinet');
-    if (stage && tableEl && this.babuEl) {
-      const stageRect = stage.getBoundingClientRect();
-      const tableRect = tableEl.getBoundingClientRect();
-      // Center stage dancefloor on the rug
-      const danceX = (tableRect.left - stageRect.left) - 95;
-      const danceY = (tableRect.bottom - stageRect.top) - 130;
-      this.babuEl.style.transition = 'transform 0.4s ease-out';
-      this.babuEl.style.transform = `translate3d(${danceX}px, ${danceY}px, 0) scaleX(1)`;
-    }
+    // Step out onto center rug dancefloor!
+    this.positionBabuOnDancefloor();
 
     this.setSafeTimeout(() => {
-      // 7. STATE 7: MUSIC STARTS
+      // 7. STATE 7: MUSIC STARTS & BABU DANCES
       this.startMusicPlayback(record);
     }, 450);
   }
@@ -494,11 +559,16 @@ class VinylRoomController {
       }
     }
 
-    // 8. STATE 8: BABU PERFORMS TODDLER DANCE!
+    // 8. STATE 8: BABU DANCES ON THE FLOOR!
     this.startBabuDance(record.danceStyle);
 
     // Start emitting cartoon musical notes from turntable
     this.startMusicalNotes();
+
+    // If modal is not open, show floating miniplayer immediately
+    if (!this.isOpen) {
+      this.showMiniplayer();
+    }
   }
 
   startBabuDance(danceStyle) {
@@ -547,6 +617,8 @@ class VinylRoomController {
       this.audio.currentTime = 0;
     }
 
+    this.hideMiniplayer();
+
     if (this.noteInterval) {
       clearInterval(this.noteInterval);
       this.noteInterval = null;
@@ -589,8 +661,9 @@ class VinylRoomController {
 
     this.clearBabuAnimations();
     this.state = 'idle';
+    this.currentTrack = null;
 
-    if (returnToChair) {
+    if (returnToChair && this.isOpen) {
       // Babu waddles back to his chair
       this.babuEl.classList.add('babu-is-walking');
       this.babuEl.style.transition = 'transform 0.65s ease-in-out';
@@ -600,6 +673,29 @@ class VinylRoomController {
         this.clearBabuAnimations();
         this.babuEl.style.transform = 'translate3d(0, 0, 0) scaleX(1)';
       }, 660);
+    } else {
+      this.positionBabuOnChair();
+    }
+  }
+
+  showMiniplayer() {
+    if (!this.miniplayer || !this.currentTrack) return;
+    if (this.miniplayerTitle) {
+      this.miniplayerTitle.textContent = `${this.currentTrack.concept}: ${this.currentTrack.title}`;
+    }
+    if (this.miniplayerArtist) {
+      this.miniplayerArtist.textContent = `by ${this.currentTrack.artist}`;
+    }
+    if (this.miniplayerVinylLabel) {
+      this.miniplayerVinylLabel.style.backgroundColor = this.currentTrack.labelColor;
+      this.miniplayerVinylLabel.style.color = this.currentTrack.accentColor;
+    }
+    this.miniplayer.classList.remove('hidden');
+  }
+
+  hideMiniplayer() {
+    if (this.miniplayer) {
+      this.miniplayer.classList.add('hidden');
     }
   }
 
