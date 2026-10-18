@@ -9,6 +9,8 @@ import { mountDotCursor } from './cursor-init.tsx';
 import { initChaseScene } from './chase-scene.js';
 import { initVinylRoom } from './vinyl-room.js';
 import { initAuth } from './auth-ui.js';
+import { initHeroBaby } from './hero-baby.js';
+import { initTheme } from './theme.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Expose sound engine globally
@@ -21,9 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initEasterEggs();
   initComplaints();
   mountDotCursor();
+  initHeroBaby();
   initChaseScene();
   initVinylRoom();
   initAuth();
+  initTheme();
 
   // Play pop on interactive button clicks that don't already have specific sounds
   document.addEventListener('click', (e) => {
@@ -40,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isCustomHandled = 
         button.hasAttribute('data-product') ||
         button.id === 'audio-toggle-btn' ||
+        button.id === 'theme-toggle-btn' ||
         button.id === 'easter-egg-btn' ||
         button.id === 'close-modal-btn' ||
         button.id === 'modal-ok-btn' ||

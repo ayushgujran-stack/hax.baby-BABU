@@ -277,6 +277,311 @@ body.chase-in-arena #originkit-cursor-root {
   contain: content;
 }
 
+/* ==========================================================================
+   HERO BABY CURSOR TRACKING & SLEEPING ANIMATIONS
+   ========================================================================== */
+
+/* Baby CEO Sleeping Breathing Rhythm */
+@keyframes baby-sleep-breath {
+  0%, 100% {
+    transform: perspective(700px) translateY(0) scaleY(1);
+  }
+  50% {
+    transform: perspective(700px) translateY(3.5px) scaleY(1.018);
+  }
+}
+
+.baby-sleeping-breathing {
+  animation: baby-sleep-breath 3.4s ease-in-out infinite !important;
+}
+
+/* Floating Hero Baby Zzz Doodles */
+@keyframes hero-zzz-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6) rotate(0deg);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-46px) scale(1.2) rotate(16deg);
+  }
+}
+
+/* ==========================================================================
+   PLAYGROUND BEDROOM MODE ANIMATIONS
+   ========================================================================== */
+
+#chase-arena.arena-bedroom-mode {
+  background-color: #121020 !important;
+  transition: background-color 0.4s ease;
+}
+
+/* Bedroom Babu Bed Breathing */
+@keyframes babu-bed-breath {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(2.5px) scaleY(1.015);
+  }
+}
+
+.animate-babu-bed-breathing {
+  transform-origin: 50% 90%;
+  animation: babu-bed-breath 3.6s ease-in-out infinite;
+}
+
+/* Bedroom Tommy Curled Breathing */
+@keyframes tommy-bed-breath {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(2px) scale(1.025, 0.98);
+  }
+}
+
+.animate-tommy-bed-breathing {
+  transform-origin: 50% 80%;
+  animation: tommy-bed-breath 3.2s ease-in-out infinite;
+}
+
+/* Bedroom Floating Zzz Bubbles */
+@keyframes bedroom-zzz-drift {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.65);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.18);
+  }
+}
+
+.bedroom-zzz {
+  animation: bedroom-zzz-drift 2.6s ease-in-out infinite;
+}
+
+.zzz-babu-1 { animation-delay: 0s; }
+.zzz-babu-2 { animation-delay: 0.85s; }
+.zzz-babu-3 { animation-delay: 1.7s; }
+
+/* ==========================================================================
+   GLOBAL DAY / NIGHT MODE THEME ENGINE
+   Adapts the entire website to a rich, cohesive nighttime cardboard palette:
+   - Deep slate ink paper background (#15131E)
+   - Dark notebook cardboard surfaces (#241F33)
+   - High contrast warm off-white text (#F8F2EC)
+   - Clear secondary muted text (#BDB4C7)
+   - Crisp midnight borders and shadows (#0E0C14)
+   - Luminous crayon accents (sunshine yellow, crayon pink, marker blue)
+   - Luminous chalk doodles and sleeping celestial moon
+   ========================================================================== */
+
+html[data-theme="night"] {
+  color-scheme: dark;
+}
+
+/* Main Background and Structural Layout */
+html[data-theme="night"] body,
+html[data-theme="night"] main,
+html[data-theme="night"] .bg-background {
+  background-color: #15131E !important;
+  color: #F8F2EC !important;
+}
+
+/* Cardboard Paper Surfaces */
+html[data-theme="night"] .bg-paper-cream {
+  background-color: #241F33 !important;
+}
+
+html[data-theme="night"] .bg-surface-container {
+  background-color: #1C1827 !important;
+}
+
+html[data-theme="night"] .bg-surface-container-low {
+  background-color: #181522 !important;
+}
+
+html[data-theme="night"] .bg-surface-container-high,
+html[data-theme="night"] .bg-surface-container-highest,
+html[data-theme="night"] .bg-surface {
+  background-color: #2B253B !important;
+}
+
+/* Text Colors with WCAG High Contrast Readability */
+html[data-theme="night"] .text-ink-black,
+html[data-theme="night"] .text-on-surface {
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] .text-on-surface-variant {
+  color: #BDB4C7 !important;
+}
+
+/* Header & Navigation */
+html[data-theme="night"] header {
+  background-color: #1E1A2B !important;
+  border-bottom-color: #0E0C14 !important;
+  box-shadow: 0 4px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] header nav a:not([aria-current="page"]) {
+  color: #BDB4C7 !important;
+}
+
+html[data-theme="night"] header nav a:not([aria-current="page"]):hover {
+  color: #FFD84D !important;
+}
+
+html[data-theme="night"] header .bottom-0 {
+  background-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] header .bottom-0 span {
+  color: #FFE066 !important;
+}
+
+/* Borders & Dividers */
+html[data-theme="night"] .border-ink-black {
+  border-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] .border-ink-black\/20,
+html[data-theme="night"] .border-ink-black\/30 {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Neobrutalist Midnight Box Shadows */
+html[data-theme="night"] .shadow-\[0_4px_0_\#292521\] {
+  box-shadow: 0 4px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .shadow-\[2px_2px_0_\#292521\],
+html[data-theme="night"] .shadow-\[2px_2px_0px_\#292521\] {
+  box-shadow: 2px 2px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .shadow-\[3px_3px_0_\#292521\] {
+  box-shadow: 3px 3px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .shadow-\[4px_4px_0_\#292521\] {
+  box-shadow: 4px 4px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .shadow-\[6px_6px_0_\#292521\] {
+  box-shadow: 6px 6px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .shadow-\[8px_8px_0_\#292521\] {
+  box-shadow: 8px 8px 0 #0E0C14 !important;
+}
+
+/* Hero Speech Bubble in Night Mode */
+html[data-theme="night"] #speech-bubble {
+  background-color: #241F33 !important;
+  border-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] #speech-bubble:hover {
+  background-color: #2B253B !important;
+}
+
+html[data-theme="night"] #speech-text {
+  color: #FFE066 !important;
+}
+
+html[data-theme="night"] #speech-sub {
+  color: #BDB4C7 !important;
+}
+
+html[data-theme="night"] #speech-bubble .border-t-paper-cream {
+  border-top-color: #241F33 !important;
+}
+
+html[data-theme="night"] #speech-bubble .border-t-ink-black {
+  border-top-color: #0E0C14 !important;
+}
+
+/* Theme Toggle Button in Night Mode */
+html[data-theme="night"] #theme-toggle-btn {
+  background-color: #55B9F5 !important;
+  color: #0E0C14 !important;
+  box-shadow: 2px 2px 0 #0E0C14 !important;
+}
+
+/* Child Doodles Background Layer in Night Mode */
+html[data-theme="night"] #child-doodles-background-layer {
+  opacity: 0.88;
+}
+
+html[data-theme="night"] #child-doodles-background-layer svg {
+  filter: drop-shadow(0 0 5px rgba(255, 216, 77, 0.22));
+}
+
+html[data-theme="night"] #child-doodles-background-layer .text-crayon-pink {
+  color: #FF7AA2 !important;
+}
+
+html[data-theme="night"] #child-doodles-background-layer .text-marker-blue {
+  color: #60C5FF !important;
+}
+
+html[data-theme="night"] #child-doodles-background-layer .text-sunshine-yellow {
+  color: #FFE066 !important;
+}
+
+html[data-theme="night"] #child-doodles-background-layer .text-lime-green {
+  color: #A6E85B !important;
+}
+
+/* Modals & Dialogs in Night Mode */
+html[data-theme="night"] #confidential-modal > div > div,
+html[data-theme="night"] #auth-modal > div > div,
+html[data-theme="night"] #order-confirmation-modal > div > div {
+  background-color: #241F33 !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] input[type="text"],
+html[data-theme="night"] input[type="email"],
+html[data-theme="night"] input[type="password"],
+html[data-theme="night"] textarea {
+  background-color: #1A1626 !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+}
+
+/* Odometer & Stats in Night Mode */
+html[data-theme="night"] .odometer-digit-window {
+  background-color: #181522 !important;
+  border-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] .odometer-digit-strip span {
+  color: #FFE066 !important;
+}
+
+/* Footer in Night Mode */
+html[data-theme="night"] footer {
+  background-color: #161320 !important;
+  border-top-color: #0E0C14 !important;
+}
+
 /* Accessibility Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-mom-rocking,
@@ -291,10 +596,16 @@ body.chase-in-arena #originkit-cursor-root {
   .babu-dancing-wobble-rave,
   .floating-music-note,
   .vinyl-active-selection,
-  .odometer-digit-strip {
+  .odometer-digit-strip,
+  .baby-sleeping-breathing,
+  .hero-zzz,
+  .animate-babu-bed-breathing,
+  .animate-tommy-bed-breathing,
+  .bedroom-zzz {
     animation: none !important;
     transition: none !important;
   }
 }
+
 
 

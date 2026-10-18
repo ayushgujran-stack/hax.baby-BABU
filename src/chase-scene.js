@@ -6,10 +6,23 @@
 
 import { sound } from './audio.js';
 
+let chaseSceneController = null;
+let pendingNightMode = null;
+
+export function setChaseSceneNightMode(isNight) {
+  if (chaseSceneController && chaseSceneController.setNightMode) {
+    chaseSceneController.setNightMode(isNight);
+  } else {
+    pendingNightMode = isNight;
+  }
+}
+
 export function initChaseScene() {
   const section = document.getElementById('chase-section');
   const arena = document.getElementById('chase-arena');
   if (!section || !arena) return;
+
+  let isNightMode = false;
 
   const tapPrompt = document.getElementById('chase-tap-prompt');
   const pacifierEl = document.getElementById('chase-pacifier');
@@ -214,7 +227,7 @@ export function initChaseScene() {
 
   // Start chase
   function startChase(e) {
-    if (hasStarted) return;
+    if (hasStarted || isNightMode) return;
     hasStarted = true;
     isResetting = false;
 
@@ -303,6 +316,7 @@ export function initChaseScene() {
   // Clicking TAP or Pacifier starts chase
   if (tapPrompt) {
     tapPrompt.addEventListener('pointerdown', (e) => {
+      if (isNightMode) return;
       e.stopPropagation();
       e.preventDefault();
       startChase(e);
@@ -314,6 +328,7 @@ export function initChaseScene() {
   }
 
   pacifierEl.addEventListener('pointerdown', (e) => {
+    if (isNightMode) return;
     if (!hasStarted) {
       e.stopPropagation();
       e.preventDefault();
@@ -332,6 +347,7 @@ export function initChaseScene() {
   // Clicking Tommy makes him bark and wag his tail on demand!
   if (tommyEl) {
     tommyEl.addEventListener('pointerdown', (e) => {
+      if (isNightMode) return;
       e.stopPropagation();
       triggerTommyBark(1.05, true);
       tommy.tailPhase += 20;
@@ -340,7 +356,7 @@ export function initChaseScene() {
 
   // Arena enter
   arena.addEventListener('pointerenter', (e) => {
-    if (!hasStarted) return;
+    if (!hasStarted || isNightMode) return;
     if (e.pointerType === 'mouse') {
       isPointerInside = true;
       document.body.classList.add('chase-in-arena');
@@ -370,7 +386,7 @@ export function initChaseScene() {
 
   // Arena pointermove
   arena.addEventListener('pointermove', (e) => {
-    if (!hasStarted) return;
+    if (!hasStarted || isNightMode) return;
 
     if (e.pointerType === 'mouse') {
       isPointerInside = true;
@@ -429,6 +445,7 @@ export function initChaseScene() {
   let animationFrameId = null;
 
   function tick(now) {
+    if (isNightMode) return;
     const dt = Math.min((now - lastTime) / 1000, 0.05); // Cap delta time at 50ms
     lastTime = now;
 
@@ -779,6 +796,89 @@ export function initChaseScene() {
     }
   }
 
+  // Bedroom Scene night mode controller
+  function setNightMode(isNight) {
+    isNightMode = isNight;
+    const gardenBg = document.getElementById('chase-garden-bg');
+    const bedroomScene = document.getElementById('chase-bedroom-scene');
+
+    if (isNight) {
+      // Pause any active chase and remove cursor hiding
+      if (hasStarted) stopChase();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      arena.classList.add('arena-bedroom-mode');
+      arena.classList.remove('chase-cursor-hide', 'chase-active');
+      document.body.classList.remove('chase-in-arena');
+
+      // Hide active daytime characters & meadow
+      if (gardenBg) gardenBg.style.display = 'none';
+      if (momEl) momEl.style.display = 'none';
+      if (babuEl) babuEl.style.display = 'none';
+      if (tommyEl) tommyEl.style.display = 'none';
+      if (pacifierEl) pacifierEl.style.display = 'none';
+      if (tapPrompt) tapPrompt.style.display = 'none';
+
+      // Show cozy bedroom scene
+      if (bedroomScene) {
+        bedroomScene.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          bedroomScene.style.opacity = '1';
+          bedroomScene.style.pointerEvents = 'auto';
+        });
+      }
+    } else {
+      // Wake up: return to daytime garden meadow
+      arena.classList.remove('arena-bedroom-mode');
+      if (bedroomScene) {
+        bedroomScene.style.opacity = '0';
+        bedroomScene.style.pointerEvents = 'none';
+        setTimeout(() => {
+          if (!isNightMode) bedroomScene.classList.add('hidden');
+        }, 300);
+      }
+
+      if (gardenBg) gardenBg.style.display = '';
+      if (momEl) momEl.style.display = '';
+      if (babuEl) babuEl.style.display = '';
+      if (tommyEl) tommyEl.style.display = '';
+      if (pacifierEl) pacifierEl.style.display = '';
+      if (tapPrompt) tapPrompt.style.display = '';
+
+      resetPositions();
+      hasStarted = false;
+      isResetting = false;
+      lastTime = performance.now();
+      if (!animationFrameId) {
+        animationFrameId = requestAnimationFrame(tick);
+      }
+    }
+  }
+
+  // Bedroom interactive elements (Clicking sleeping Babu or Tommy)
+  const bedroomTommy = document.getElementById('bedroom-tommy-sleeping');
+  const bedroomBabu = document.getElementById('bedroom-babu-bed');
+  if (bedroomTommy) {
+    bedroomTommy.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sound.playPop();
+    });
+  }
+  if (bedroomBabu) {
+    bedroomBabu.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sound.playPop();
+    });
+  }
+
+  // Expose controller instance
+  chaseSceneController = { setNightMode };
+  if (pendingNightMode !== null) {
+    setNightMode(pendingNightMode);
+  }
+
   // Start animation loop
   animationFrameId = requestAnimationFrame(tick);
 
@@ -788,5 +888,6 @@ export function initChaseScene() {
     window.removeEventListener('resize', handleResize);
     window.removeEventListener('pointerup', handlePointerUp);
     window.removeEventListener('pointercancel', handlePointerUp);
+    chaseSceneController = null;
   };
 }
