@@ -198,66 +198,96 @@ class SoundEngine {
     }
   }
 
-  // Playful Cartoon Dog Bark ("Woof! Arf!")
-  playDogBark(pitchShift = 1.0) {
+  // Playful Cartoon Dog Bark ("Woof! Ruff!") - Rich, loud, and unmistakably canine
+  playDogBark(pitchShift = 1.0, isDouble = false) {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
 
-    try {
-      const now = this.ctx.currentTime;
-      const baseFreq = (240 + Math.random() * 45) * pitchShift;
+    const singleBark = (startTime, pitchMult = 1.0, vol = 0.95) => {
+      try {
+        const now = startTime;
+        const baseFreq = (270 + Math.random() * 35) * pitchShift * pitchMult;
 
-      // Vocal tract oscillator with punchy pitch drop
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
+        // 1. Vocal cord sawtooth for husky canine rasp & punch
+        const osc = this.ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(baseFreq * 1.6, now);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.1, now + 0.035);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.55, now + 0.15);
 
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(baseFreq * 1.5, now);
-      osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.9, now + 0.04);
-      osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.45, now + 0.16);
+        // Resonant throat formant lowpass filter (keeps low punch, adds barking bite)
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1500 * pitchMult, now);
+        filter.frequency.exponentialRampToValueAtTime(750 * pitchMult, now + 0.13);
+        filter.Q.value = 3.2;
 
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.7, now + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(vol, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.17);
 
-      // Formant mouth cavity bandpass filter
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(820, now);
-      filter.frequency.linearRampToValueAtTime(650, now + 0.14);
-      filter.Q.value = 2.4;
+        // 2. Chest resonance sub-oscillator (triangle wave)
+        const subOsc = this.ctx.createOscillator();
+        subOsc.type = 'triangle';
+        subOsc.frequency.setValueAtTime(baseFreq * 0.9, now);
+        subOsc.frequency.exponentialRampToValueAtTime(baseFreq * 0.45, now + 0.15);
 
-      // Noise layer for husky breathy canine bark texture
-      const bufferSize = Math.floor(this.ctx.sampleRate * 0.12);
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+        const subGain = this.ctx.createGain();
+        subGain.gain.setValueAtTime(0.001, now);
+        subGain.gain.linearRampToValueAtTime(vol * 0.7, now + 0.018);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+        // 3. Breathy snout burst noise
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.10);
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 1.4);
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const noiseFilter = this.ctx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.value = 1400;
+        noiseFilter.Q.value = 1.2;
+
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.001, now);
+        noiseGain.gain.linearRampToValueAtTime(vol * 0.4, now + 0.012);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.10);
+
+        // Routing
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.masterGain || this.ctx.destination);
+
+        subOsc.connect(subGain);
+        subGain.connect(this.masterGain || this.ctx.destination);
+
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(this.masterGain || this.ctx.destination);
+
+        osc.start(now);
+        subOsc.start(now);
+        noise.start(now);
+
+        osc.stop(now + 0.18);
+        subOsc.stop(now + 0.17);
+        noise.stop(now + 0.11);
+      } catch (e) {
+        console.warn('Audio singleBark error:', e);
       }
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = buffer;
-      const noiseFilter = this.ctx.createBiquadFilter();
-      noiseFilter.type = 'lowpass';
-      noiseFilter.frequency.value = 1200;
-      const noiseGain = this.ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.3, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    };
 
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.masterGain || this.ctx.destination);
-
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(this.masterGain || this.ctx.destination);
-
-      osc.start(now);
-      noise.start(now);
-      osc.stop(now + 0.18);
-      noise.stop(now + 0.12);
-    } catch (e) {
-      console.warn('Audio playDogBark error:', e);
+    const now = this.ctx.currentTime;
+    singleBark(now, 1.0, 0.95);
+    // Real dogs often bark in pairs ("Arf-arf!")
+    if (isDouble || Math.random() < 0.55) {
+      singleBark(now + 0.13, 1.14, 0.85);
     }
   }
 

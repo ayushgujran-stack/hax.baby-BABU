@@ -9,6 +9,9 @@ import { mountDotCursor } from './cursor-init.tsx';
 import { initChaseScene } from './chase-scene.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Expose sound engine globally
+  window.sound = sound;
+
   // Initialize all interactive frontend and backend systems
   const cart = new CartManager();
   initOdometer();

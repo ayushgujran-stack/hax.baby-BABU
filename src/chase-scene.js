@@ -181,6 +181,37 @@ export function initChaseScene() {
     paci.targetY = clampedY;
   }
 
+  // Comic Bark Speech Bubble above Tommy
+  function showTommyBarkBubble() {
+    let bubble = document.getElementById('tommy-bark-bubble');
+    if (!bubble) {
+      bubble = document.createElement('div');
+      bubble.id = 'tommy-bark-bubble';
+      bubble.className = 'absolute z-30 pointer-events-none font-extrabold text-xs md:text-sm px-2.5 py-1 bg-sunshine-yellow border-2 border-ink-black shadow-[2px_2px_0_#292521] rounded-lg rotate-[-6deg] transition-all duration-200 select-none';
+      arena.appendChild(bubble);
+    }
+    const words = ['WOOF! 🐾', 'ARF! 🦴', 'RUFF! 🐶', 'WOOF WOOF!'];
+    bubble.textContent = words[Math.floor(Math.random() * words.length)];
+    const clampLeft = Math.max(12, Math.min(arenaRect.width - 110, tommy.x - 35));
+    const clampTop = Math.max(10, tommy.y - TOMMY_HEIGHT / 2 - 32);
+    bubble.style.left = `${clampLeft}px`;
+    bubble.style.top = `${clampTop}px`;
+    bubble.style.opacity = '1';
+    bubble.style.transform = 'scale(1.15) translateY(-4px)';
+
+    clearTimeout(bubble._timer);
+    bubble._timer = setTimeout(() => {
+      bubble.style.opacity = '0';
+      bubble.style.transform = 'scale(0.7) translateY(-12px)';
+    }, 650);
+  }
+
+  function triggerTommyBark(pitch = 1.0, isDouble = false) {
+    sound.init();
+    sound.playDogBark(pitch, isDouble);
+    showTommyBarkBubble();
+  }
+
   // Start chase
   function startChase(e) {
     if (hasStarted) return;
@@ -203,12 +234,11 @@ export function initChaseScene() {
 
     sound.init();
     sound.playPop();
-    // Dog gives enthusiastic start bark!
-    setTimeout(() => {
-      if (hasStarted) sound.playDogBark(1.15);
-    }, 180);
 
-    barkTimer = 1.8 + Math.random() * 1.0;
+    // Dog gives immediate energetic double bark!
+    triggerTommyBark(1.05, true);
+
+    barkTimer = 1.4 + Math.random() * 0.8;
 
     if (e && typeof e.clientX === 'number') {
       updatePointerTarget(e.clientX, e.clientY);
@@ -298,6 +328,15 @@ export function initChaseScene() {
       updatePointerTarget(e.clientX, e.clientY);
     }
   });
+
+  // Clicking Tommy makes him bark and wag his tail on demand!
+  if (tommyEl) {
+    tommyEl.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      triggerTommyBark(1.05, true);
+      tommy.tailPhase += 20;
+    });
+  }
 
   // Arena enter
   arena.addEventListener('pointerenter', (e) => {
@@ -527,8 +566,8 @@ export function initChaseScene() {
     if (hasStarted && tommy.state === 'CHASE') {
       barkTimer -= dt;
       if (barkTimer <= 0) {
-        sound.playDogBark(0.95 + Math.random() * 0.25);
-        barkTimer = 2.0 + Math.random() * 1.8; // Bark every 2 to 3.8s
+        triggerTommyBark(0.95 + Math.random() * 0.25, Math.random() < 0.6);
+        barkTimer = 1.5 + Math.random() * 1.5; // Bark every 1.5s to 3.0s
       }
     }
 
