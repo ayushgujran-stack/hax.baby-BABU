@@ -9,7 +9,7 @@
     "client": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node test/guestbook.test.js && node test/orders.test.js",
+    "test": "node test/guestbook.test.js && node test/orders.test.js && node test/intro-scroll.test.js && node test/journey-timeline.test.js && node test/storybook.test.js && node test/stonks.test.js",
     "test:orders": "node test/orders.test.js",
     "test:api": "node test/api.test.js"
   },

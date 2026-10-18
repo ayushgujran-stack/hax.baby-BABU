@@ -190,29 +190,47 @@ export const BABU_REACTIONS = {
   positive: [
     "YOU'RE MY FAVOURITE HUMAN! I AM PROMOTING YOU TO SENIOR SUCKER.",
     "GOO GOO GA GA! YOU GET IT! YOU HAVE EXECUTIVE TASTE.",
-    "I WOULD GIVE YOU A PACIFIER, BUT I NEED ALL OF THEM.",
-    "Babu clapped excitedly, drooled on his desk, and approved your review!",
-    "HIGH FIVE! (Babu misses your hand and taps his own forehead)."
+    "I WOULD GIVE YOU A PACIFIER, BUT I NEED ALL OF THEM FOR MY NAP.",
+    "Babu clapped excitedly, drooled on his desk, and approved your bonus!",
+    "HIGH FIVE! (Babu misses your hand completely and slaps his own knee).",
+    "You just earned 500 imaginary shares of THIS SUCKS™ Corp!",
+    "Babu signed an executive decree granting you unlimited imaginary cookies.",
+    "EXCELLENT FEEDBACK. I am scheduling you for a 3-hour boardroom giggle session.",
+    "Your review gave me the energy to crawl across the entire living room rug!",
+    "Mom printed your review and stuck it on the fridge with a magnet!"
   ],
   neutral: [
     "HMM. I WILL THINK ABOUT THIS DURING NAP TIME.",
     "OKAY. FAIR ENOUGH. AS LONG AS REVENUE STAYS UP.",
     "I HEARD YOU. NOW WHERE IS MY WARM MILK?",
     "Babu stared intently, blinked twice, and reached for a pacifier.",
-    "Duly noted in the Official Cardboard Ledger."
+    "Duly noted in the Official Cardboard Ledger.",
+    "Babu yawned, signed the receipt with a purple crayon, and took a nap.",
+    "Interesting proposal. Submit it in writing with attached animal crackers.",
+    "The CEO nodded thoughtfully while balancing a block on his head.",
+    "Under review by the Toddler Board of Directors."
   ],
   negative: [
     "WOW. OKAY. I AM GOING TO CRY ABOUT THIS IN BOARDROOM A.",
     "THIS IS A BUSINESS, NOT A DAYCARE! RESPECT THE HUSTLE.",
     "Babu stared silently for 5 seconds, then started clapping sarcastically.",
     "Your grievance has been filed directly under my nap pillow.",
-    "I HAVE SOILED MY EXECUTIVE DIAPER WITH RAGE."
+    "I HAVE SOILED MY EXECUTIVE DIAPER WITH RAGE.",
+    "Refund denied. That munny has already been invested into apple puree.",
+    "Babu threw his rattle across the nursery in protest of this memo.",
+    "My lawyers (Mom & Teddy Bear) will be contacting you shortly.",
+    "I will address this immediately after my scheduled 2:00 PM tantrum.",
+    "Noted. I chewed on a plastic block until I forgot what you said."
   ],
   issue: [
     "OH NO. MOM! WE HAVE A TECHNICAL GLITCH! CODE RED IN NURSERY!",
-    "Babu looked extremely concerned and shook his rattle at the server.",
-    "WE ARE DISPATCHING TOMMY THE DOG TO INVESTIGATE IMMEDIATELY.",
-    "Hold on! Mom is looking at the computer right now."
+    "Babu looked extremely concerned and shook his rattle at the server rack.",
+    "WE ARE DISPATCHING TOMMY THE DOG TO SNIFF OUT THE BUG IMMEDIATELY.",
+    "Hold on! Mom is looking at the computer right now while I watch.",
+    "I pressed 47 random buttons on the keyboard to fix it. Did it work?",
+    "Dev team (me with a plastic wrench) is investigating this breakdown.",
+    "Unplugging the pacifier and plugging it back in...",
+    "Server error 404: Pacifier dropped under the sofa."
   ]
 };
 

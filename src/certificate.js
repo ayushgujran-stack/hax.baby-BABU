@@ -33,15 +33,11 @@ export function initCertificate() {
     });
   }
 
-  // Make the owner name customizable inline
+  // Legal owner is strictly constant: Babu only (no editing allowed)
   const ownerPara = certSection.querySelector('p.font-headline-md');
-  if (ownerPara && ownerPara.textContent.includes('Babu')) {
-    ownerPara.setAttribute('contenteditable', 'true');
-    ownerPara.title = 'Click to customize CEO or baby name!';
-    ownerPara.classList.add('hover:bg-sunshine-yellow/30', 'px-1', 'rounded', 'outline-dashed', 'outline-1', 'outline-ink-black/40', 'cursor-text');
-    ownerPara.addEventListener('focus', () => {
-      sound.playTick();
-    });
+  if (ownerPara) {
+    ownerPara.removeAttribute('contenteditable');
+    ownerPara.textContent = 'Babu';
   }
 
   // Add a "PRINT / DOWNLOAD LICENSE" button to the certificate

@@ -654,5 +654,111 @@ html[data-theme="night"] #guestbook-feed-empty {
   }
 }
 
+/* ==========================================================================
+   JOURNEY TO WORLD DOMINATION SCROLL TIMELINE THEME INTEGRATION
+   ========================================================================== */
+
+.journey-timeline-card {
+  will-change: transform, opacity;
+  transition: box-shadow 0.2s ease;
+}
+
+html[data-theme="night"] #journey-timeline-svg path {
+  stroke: #F8F2EC !important;
+}
+
+html[data-theme="night"] #timeline-desktop-guide,
+html[data-theme="night"] #timeline-mobile-guide {
+  stroke: #BDB4C7 !important;
+  opacity: 0.3 !important;
+}
+
+html[data-theme="night"] #journey-timeline-svg circle[stroke="#292521"] {
+  stroke: #0E0C14 !important;
+}
+
+/* ==========================================================================
+   VIRTUAL 3D STORYBOOK (DEARFLIP WEBGL INTEGRATION)
+   ========================================================================== */
+#storybook-stage-wrapper {
+  height: 640px;
+  background: radial-gradient(circle at 50% 30%, #151d30 0%, #070a12 100%);
+  box-shadow: inset 0 4px 24px rgba(0, 0, 0, 0.55);
+  transition: background-color 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  #storybook-stage-wrapper {
+    height: 540px;
+  }
+}
+
+@media (max-width: 768px) {
+  #storybook-stage-wrapper {
+    height: 480px;
+  }
+}
+
+@media (max-width: 480px) {
+  #storybook-stage-wrapper {
+    height: 420px;
+  }
+}
+
+/* DearFlip 3D UI Overrides matching THIS SUCKS.™ aesthetic */
+.df-ui-wrapper {
+  background: transparent !important;
+}
+
+.df-ui-controls {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 2px solid #292521 !important;
+  border-radius: 12px !important;
+  bottom: 14px !important;
+  box-shadow: 3px 3px 0px #292521 !important;
+}
+
+.df-ui-btn {
+  color: #94a3b8 !important;
+  transition: all 0.2s ease !important;
+}
+
+.df-ui-btn:hover {
+  color: #FFD84D !important;
+  transform: translateY(-1px) !important;
+}
+
+.df-page-number {
+  color: #f8fafc !important;
+  font-family: 'Schoolbell', 'Short Stack', cursive, sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Explicitly hide fullscreen, page number, and layout change controls */
+.df-ui-fullscreen,
+.df-ui-page,
+.df-page-number,
+.df-ui-pagemode,
+.df-ui-share,
+.df-ui-more,
+.df-ui-download,
+.df-ui-thumbnail,
+.df-ui-outline,
+.df-ui-sound {
+  display: none !important;
+}
+
+/* Night Mode Theme Adaptations */
+html[data-theme="night"] #storybook-stage-wrapper {
+  background: radial-gradient(circle at 50% 30%, #101524 0%, #04060c 100%) !important;
+}
+
+html[data-theme="night"] .df-ui-controls {
+  background: rgba(8, 12, 22, 0.92) !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 3px 3px 0px #0E0C14 !important;
+}
 
 

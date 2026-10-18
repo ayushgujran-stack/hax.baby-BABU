@@ -12,10 +12,18 @@ import { initVinylRoom } from './vinyl-room.js';
 import { initAuth } from './auth-ui.js';
 import { initHeroBaby } from './hero-baby.js';
 import { initTheme } from './theme.js';
+import { initIntroScroll } from './intro-scroll.js';
+import { initJourneyTimeline } from './journey-timeline.js';
+import { initStorybook } from './storybook.js';
+import { initStonksChart } from './stonks-chart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Expose sound engine globally
   window.sound = sound;
+
+  // Initialize intro scroll-controlled sequential frame animation
+  const introController = initIntroScroll();
+  window.introScrollController = introController;
 
   // Initialize all interactive frontend and backend systems
   const cart = new CartManager();
@@ -30,6 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initVinylRoom();
   initAuth();
   initTheme();
+  initLicenseStackEffect();
+  initChaseDominationStackEffect();
+  initJourneyTimeline();
+  initStorybook();
+  initStonksChart();
 
   // Play pop on interactive button clicks that don't already have specific sounds
   document.addEventListener('click', (e) => {
@@ -76,34 +89,47 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target) {
           e.preventDefault();
           sound.playPeel();
+          if (href !== '#hero-section' && window.introScrollController && !window.introScrollController.isDismissed()) {
+            window.introScrollController.dismiss();
+          }
           target.scrollIntoView({ behavior: 'smooth' });
         }
       }
     });
   });
 
-  // Nav item active state switcher
+  // Nav item active state switcher & scroll
   const navLinks = document.querySelectorAll('header nav a');
-  navLinks.forEach(link => {
+  const allNavLinks = document.querySelectorAll('header nav a, footer a[data-path]');
+  allNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const path = link.getAttribute('data-path');
       if (path === 'the-products') {
         const showcase = document.getElementById('showcase');
         if (showcase) {
           e.preventDefault();
+          if (window.introScrollController && !window.introScrollController.isDismissed()) {
+            window.introScrollController.dismiss();
+          }
           showcase.scrollIntoView({ behavior: 'smooth' });
         }
       } else if (path === 'the-story') {
         const bio = document.getElementById('biography');
         if (bio) {
           e.preventDefault();
+          if (window.introScrollController && !window.introScrollController.isDismissed()) {
+            window.introScrollController.dismiss();
+          }
           bio.scrollIntoView({ behavior: 'smooth' });
         }
-      } else if (path === 'the-empire') {
-        const timeline = document.querySelector('section:has(.grid-cols-5)') || document.getElementById('biography');
-        if (timeline) {
+      } else if (path === 'the-storybook') {
+        const storybook = document.getElementById('storybook-section');
+        if (storybook) {
           e.preventDefault();
-          timeline.scrollIntoView({ behavior: 'smooth' });
+          if (window.introScrollController && !window.introScrollController.isDismissed()) {
+            window.introScrollController.dismiss();
+          }
+          storybook.scrollIntoView({ behavior: 'smooth' });
         }
       } else if (path === 'home') {
         e.preventDefault();
@@ -114,9 +140,76 @@ document.addEventListener('DOMContentLoaded', () => {
         l.className = 'font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-1 transition-all';
         l.removeAttribute('aria-current');
       });
-      link.className = 'font-label-lg px-space-sm py-1 transition-all bg-sunshine-yellow text-ink-black shadow-[2px_2px_0px_#292521] border-2 border-ink-black rounded-lg';
-      link.setAttribute('aria-current', 'page');
+      const matchingHeaderLink = document.querySelector(`header nav a[data-path="${path}"]`);
+      if (matchingHeaderLink) {
+        matchingHeaderLink.className = 'font-label-lg px-space-sm py-1 transition-all bg-sunshine-yellow text-ink-black shadow-[2px_2px_0px_#292521] border-2 border-ink-black rounded-lg';
+        matchingHeaderLink.setAttribute('aria-current', 'page');
+      }
       sound.playPop();
     });
   });
 });
+
+// Desk Stacking Effect: As Autobiography slides up from bottom, License recedes smoothly
+function initLicenseStackEffect() {
+  const licenseCard = document.getElementById('license-card-inner');
+  const bio = document.getElementById('biography');
+  if (!licenseCard || !bio) return;
+
+  function onScroll() {
+    const bioRect = bio.getBoundingClientRect();
+    const winH = window.innerHeight;
+
+    // When bio enters from the bottom (bioRect.top < winH) until it reaches header (bioRect.top <= 80):
+    if (bioRect.top < winH && bioRect.top > 60) {
+      const overlapProgress = Math.min(1, Math.max(0, (winH - bioRect.top) / (winH - 80)));
+      // Subtle tactile scale down and dim as it gets covered
+      const scale = 1 - overlapProgress * 0.05;
+      const opacity = 1 - overlapProgress * 0.35;
+      const translateY = overlapProgress * 15;
+      licenseCard.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+      licenseCard.style.opacity = opacity.toFixed(3);
+    } else if (bioRect.top >= winH) {
+      licenseCard.style.transform = 'scale(1) translateY(0)';
+      licenseCard.style.opacity = '1';
+    } else {
+      // Completely covered
+      licenseCard.style.transform = 'scale(0.95) translateY(15px)';
+      licenseCard.style.opacity = '0.65';
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+// Desk Stacking Effect: As Domination Timeline slides up from bottom, Chase Game recedes smoothly
+function initChaseDominationStackEffect() {
+  const chaseCard = document.getElementById('chase-card-inner');
+  const domination = document.getElementById('domination');
+  if (!chaseCard || !domination) return;
+
+  function onScroll() {
+    const domRect = domination.getBoundingClientRect();
+    const winH = window.innerHeight;
+
+    // When domination enters from the bottom (domRect.top < winH) until it reaches header (domRect.top <= 80):
+    if (domRect.top < winH && domRect.top > 60) {
+      const overlapProgress = Math.min(1, Math.max(0, (winH - domRect.top) / (winH - 80)));
+      const scale = 1 - overlapProgress * 0.05;
+      const opacity = 1 - overlapProgress * 0.35;
+      const translateY = overlapProgress * 15;
+      chaseCard.style.transform = `scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+      chaseCard.style.opacity = opacity.toFixed(3);
+    } else if (domRect.top >= winH) {
+      chaseCard.style.transform = 'scale(1) translateY(0)';
+      chaseCard.style.opacity = '1';
+    } else {
+      chaseCard.style.transform = 'scale(0.95) translateY(15px)';
+      chaseCard.style.opacity = '0.65';
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
