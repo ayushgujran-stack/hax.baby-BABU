@@ -303,6 +303,7 @@ export default function DotCursor(props: Props) {
         let inside = false;
         let hitX = 0;
         let hitY = 0;
+        let lastHitSample = 0;
 
         const seedAt = (x: number, y: number) => {
             seeded = true;
@@ -359,11 +360,12 @@ export default function DotCursor(props: Props) {
         let last = performance.now();
 
         const frame = (now: number) => {
-            const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
-            last = now;
-            const p = live.current;
+            try {
+                const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
+                last = now;
+                const p = live.current;
 
-            ctx.clearRect(0, 0, w, h);
+                ctx.clearRect(0, 0, w, h);
 
             if (!seeded) {
                 raf = requestAnimationFrame(frame);
@@ -510,16 +512,24 @@ export default function DotCursor(props: Props) {
                     ctx.fill();
                 }
             }
+            } catch (err) {
+                console.error("DotCursor render error:", err);
+                hideNativeCursor(false);
+            }
 
             raf = requestAnimationFrame(frame);
         };
         raf = requestAnimationFrame(frame);
+
+        const onBlur = () => hideNativeCursor(false);
+        window.addEventListener("blur", onBlur);
 
         return () => {
             cancelAnimationFrame(raf);
             hideNativeCursor(false);
             window.removeEventListener("pointermove", onMove);
             window.removeEventListener("resize", resize);
+            window.removeEventListener("blur", onBlur);
             ro?.disconnect();
             document.documentElement.removeEventListener(
                 "pointerleave",

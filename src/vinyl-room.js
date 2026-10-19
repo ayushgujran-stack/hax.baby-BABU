@@ -218,7 +218,6 @@ class VinylRoomController {
             ${rec.concept}
           </span>
           <p class="font-headline-sm text-xs sm:text-sm font-bold text-ink-black truncate mt-1">${rec.title}</p>
-          <p class="text-[10px] text-on-surface-variant font-medium truncate">by ${rec.artist}</p>
         </div>
       `;
 

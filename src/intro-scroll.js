@@ -92,7 +92,9 @@ export function initIntroScroll() {
     }
 
     const queue = [...priorityIndices, ...remainingIndices];
-    const CONCURRENCY = 8;
+    // Dynamic concurrency: lower on mobile (<768px) to prevent network saturation
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const CONCURRENCY = isMobile ? 3 : 6;
     let activeWorkers = 0;
 
     function next() {

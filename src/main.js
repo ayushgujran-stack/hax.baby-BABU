@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFireflies();
   initLicenseStackEffect();
   initChaseDominationStackEffect();
+  initMobileMenu();
 
   // Defer below-the-fold & non-critical interactive components to avoid main-thread freeze
   const scheduleInit = (fn) => {
@@ -55,11 +56,31 @@ document.addEventListener('DOMContentLoaded', () => {
     initStonksChart();
     initStorybook();
     initVinylRoom();
+  });
+
+  // Defer heavy network components (Auth, Odometer, Guestbook, Memory) until user interacts or scrolls near them
+  const initNetworkFeatures = () => {
+    if (window.__networkFeaturesLoaded) return;
+    window.__networkFeaturesLoaded = true;
     initAuth();
     initOdometer();
     initGuestbook();
     initVisitorMemory();
-  });
+  };
+
+  // If user scrolls or after 3.5s idle, trigger network features
+  if (window.scrollY > 200) {
+    initNetworkFeatures();
+  } else {
+    const onScrollOrTouch = () => {
+      initNetworkFeatures();
+      window.removeEventListener('scroll', onScrollOrTouch);
+      window.removeEventListener('touchstart', onScrollOrTouch);
+    };
+    window.addEventListener('scroll', onScrollOrTouch, { passive: true });
+    window.addEventListener('touchstart', onScrollOrTouch, { passive: true });
+    setTimeout(initNetworkFeatures, 3500);
+  }
 
   // Play pop on interactive button clicks that don't already have specific sounds
   document.addEventListener('click', (e) => {
@@ -117,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Nav item active state switcher & scroll
   const navLinks = document.querySelectorAll('header nav a');
-  const allNavLinks = document.querySelectorAll('header nav a, footer a[data-path]');
+  const allNavLinks = document.querySelectorAll('header nav a, footer a[data-path], #mobile-nav-drawer a[data-path]');
   allNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const path = link.getAttribute('data-path');
@@ -173,14 +194,13 @@ function initLicenseStackEffect() {
   const bio = document.getElementById('biography');
   if (!licenseCard || !bio) return;
 
-  function onScroll() {
+  let ticking = false;
+  function update() {
     const bioRect = bio.getBoundingClientRect();
     const winH = window.innerHeight;
 
-    // When bio enters from the bottom (bioRect.top < winH) until it reaches header (bioRect.top <= 80):
     if (bioRect.top < winH && bioRect.top > 60) {
       const overlapProgress = Math.min(1, Math.max(0, (winH - bioRect.top) / (winH - 80)));
-      // Subtle tactile scale down and dim as it gets covered
       const scale = 1 - overlapProgress * 0.05;
       const opacity = 1 - overlapProgress * 0.35;
       const translateY = overlapProgress * 15;
@@ -190,14 +210,21 @@ function initLicenseStackEffect() {
       licenseCard.style.transform = 'scale(1) translateY(0)';
       licenseCard.style.opacity = '1';
     } else {
-      // Completely covered
       licenseCard.style.transform = 'scale(0.95) translateY(15px)';
       licenseCard.style.opacity = '0.65';
+    }
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
     }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  update();
 }
 
 // Desk Stacking Effect: As Domination Timeline slides up from bottom, Chase Game recedes smoothly
@@ -206,11 +233,11 @@ function initChaseDominationStackEffect() {
   const domination = document.getElementById('domination');
   if (!chaseCard || !domination) return;
 
-  function onScroll() {
+  let ticking = false;
+  function update() {
     const domRect = domination.getBoundingClientRect();
     const winH = window.innerHeight;
 
-    // When domination enters from the bottom (domRect.top < winH) until it reaches header (domRect.top <= 80):
     if (domRect.top < winH && domRect.top > 60) {
       const overlapProgress = Math.min(1, Math.max(0, (winH - domRect.top) / (winH - 80)));
       const scale = 1 - overlapProgress * 0.05;
@@ -225,8 +252,83 @@ function initChaseDominationStackEffect() {
       chaseCard.style.transform = 'scale(0.95) translateY(15px)';
       chaseCard.style.opacity = '0.65';
     }
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  update();
+}
+
+
+// Mobile Navigation Drawer Controller
+function initMobileMenu() {
+  const toggleBtn = document.getElementById('mobile-menu-toggle-btn');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  if (!toggleBtn || !drawer) return;
+
+  let isOpen = false;
+
+  const openMenu = () => {
+    isOpen = true;
+    drawer.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
+    drawer.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    if (overlay) {
+      overlay.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100', 'pointer-events-auto');
+    }
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    const icon = toggleBtn.querySelector('.menu-icon');
+    if (icon) icon.textContent = '✕';
+    if (window.sound) window.sound.playPop();
+  };
+
+  const closeMenu = () => {
+    isOpen = false;
+    drawer.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
+    drawer.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+    if (overlay) {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        if (!isOpen) overlay.classList.add('hidden');
+      }, 300);
+    }
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    const icon = toggleBtn.querySelector('.menu-icon');
+    if (icon) icon.textContent = '☰';
+  };
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isOpen) closeMenu();
+    else openMenu();
+  });
+
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      closeMenu();
+      if (window.sound) window.sound.playPop();
+    });
+  }
+
+  // Close when tapping any link in drawer
+  drawer.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  // Close on Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      closeMenu();
+    }
+  });
 }

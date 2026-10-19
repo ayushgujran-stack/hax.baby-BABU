@@ -787,3 +787,94 @@ html[data-theme="night"] .df-ui-controls {
 }
 
 
+
+
+/* ==========================================================================
+   RESPONSIVE MOBILE & TOUCH OPTIMIZATIONS (320px - 1024px)
+   ========================================================================== */
+
+/* Global viewport horizontal overflow safety */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Touch form inputs: 16px font prevents auto-zoom on iOS Safari */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Storybook Stage responsive height scaling */
+@media (max-width: 480px) {
+  #storybook-stage-wrapper {
+    height: 380px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #storybook-stage-wrapper {
+    height: 330px !important;
+  }
+}
+
+/* Secret Vinyl Room Modal responsive scrolling & scaling */
+#vinyl-room-modal > div > div {
+  max-height: 94vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  #vinyl-room-stage {
+    min-height: 320px !important;
+    padding: 0.65rem !important;
+  }
+  #vinyl-chair {
+    width: 95px !important;
+    height: 80px !important;
+  }
+  #vinyl-babu img {
+    width: 105px !important;
+  }
+  #turntable-cabinet .relative.w-40,
+  #turntable-cabinet .sm\:w-48 {
+    width: 140px !important;
+    height: 95px !important;
+  }
+}
+
+/* Mobile Navigation Drawer in Night Mode */
+html[data-theme="night"] #mobile-nav-drawer {
+  background-color: #241F33 !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+html[data-theme="night"] #mobile-nav-drawer a {
+  background-color: #1E192B !important;
+  color: #F8F2EC !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 3px 3px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] #mobile-nav-drawer a:hover {
+  background-color: #352D4A !important;
+}
+
+html[data-theme="night"] #mobile-nav-drawer a[data-path="join-the-club"] {
+  background-color: #FF719A !important;
+  color: #0E0C14 !important;
+}
+
+html[data-theme="night"] #mobile-menu-toggle-btn {
+  background-color: #55B9F5 !important;
+  color: #0E0C14 !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 2px 2px 0 #0E0C14 !important;
+}

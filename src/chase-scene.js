@@ -420,6 +420,45 @@ export function initChaseScene() {
   window.addEventListener('pointerup', handlePointerUp);
   window.addEventListener('pointercancel', handlePointerUp);
 
+  // End game when user scrolls away from the chase section/arena (especially on mobile)
+  const handleScrollAway = () => {
+    if (!hasStarted) return;
+    const rect = arena.getBoundingClientRect();
+    const winH = window.innerHeight || 800;
+
+    // Check if arena scrolled out of visible viewport
+    if (rect.bottom < 80 || rect.top > winH - 80) {
+      stopChase();
+      return;
+    }
+
+    // Check if covered by domination section sliding up from bottom
+    const domination = document.getElementById('domination');
+    if (domination) {
+      const domTop = domination.getBoundingClientRect().top;
+      if (domTop <= 100) {
+        stopChase();
+      }
+    }
+  };
+
+  window.addEventListener('scroll', handleScrollAway, { passive: true });
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    const chaseObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.2) {
+          if (hasStarted) {
+            stopChase();
+          }
+        }
+      });
+    }, {
+      threshold: [0, 0.2]
+    });
+    chaseObserver.observe(arena);
+  }
+
   // Clicking anywhere inside arena starts or steers
   arena.addEventListener('pointerdown', (e) => {
     if (!hasStarted) {
@@ -888,6 +927,7 @@ export function initChaseScene() {
     window.removeEventListener('resize', handleResize);
     window.removeEventListener('pointerup', handlePointerUp);
     window.removeEventListener('pointercancel', handlePointerUp);
+    window.removeEventListener('scroll', handleScrollAway);
     chaseSceneController = null;
   };
 }

@@ -113,12 +113,18 @@ export class FirefliesController {
 
   onScroll() {
     if (!this.isActive || this.targetAlpha === 0) return;
+    if (this.scrollTicking) return;
 
-    const newSectionId = this.detectActiveSection();
-    if (newSectionId && newSectionId !== this.currentSectionId) {
-      this.currentSectionId = newSectionId;
-      this.transitionSectionFireflies();
-    }
+    this.scrollTicking = true;
+    requestAnimationFrame(() => {
+      this.scrollTicking = false;
+      if (!this.isActive || this.targetAlpha === 0) return;
+      const newSectionId = this.detectActiveSection();
+      if (newSectionId && newSectionId !== this.currentSectionId) {
+        this.currentSectionId = newSectionId;
+        this.transitionSectionFireflies();
+      }
+    });
   }
 
   /**
