@@ -1,3 +1,29 @@
+
+let dearFlipLoadingPromise = null;
+function loadDearFlipScripts() {
+  if (window.jQuery && window.DFLIP) return Promise.resolve();
+  if (dearFlipLoadingPromise) return dearFlipLoadingPromise;
+
+  dearFlipLoadingPromise = new Promise((resolve) => {
+    const loadScript = (src, cb) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = cb;
+      s.onerror = cb;
+      document.body.appendChild(s);
+    };
+
+    // Load jQuery -> Three.js -> DearFlip sequentially on demand
+    loadScript('https://code.jquery.com/jquery-3.7.1.min.js', () => {
+      loadScript('https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/js/libs/three.min.js', () => {
+        loadScript('https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/js/dflip.min.js', () => {
+          resolve();
+        });
+      });
+    });
+  });
+  return dearFlipLoadingPromise;
+}
 // ============================================================================
 // BABU'S BEDTIME STORYBOOK — 3D INTERACTIVE VIRTUAL FLIPBOOK
 // Engine: DearFlip WebGL 3D Mesh Physics (Powered by Three.js)
@@ -34,6 +60,27 @@ export const STORYBOOK_CONFIG = {
 let flipbookInstance = null;
 
 export function initStorybook() {
+  const viewerContainer = document.getElementById('flipbook-viewer');
+  if (!viewerContainer) return null;
+
+  // Use IntersectionObserver so the massive 3D flipbook engine loads ONLY when the user scrolls near #storybook-section
+  const section = document.getElementById('storybook-section');
+  if (section && 'IntersectionObserver' in window && !window.__storyBookObserverAttached) {
+    window.__storyBookObserverAttached = true;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        observer.disconnect();
+        loadDearFlipScripts().then(() => initActualStorybook());
+      }
+    }, { rootMargin: '300px' });
+    observer.observe(section);
+    return null;
+  }
+
+  return initActualStorybook();
+}
+
+function initActualStorybook() {
   const viewerContainer = document.getElementById('flipbook-viewer');
   if (!viewerContainer) return null;
 

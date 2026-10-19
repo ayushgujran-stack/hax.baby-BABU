@@ -142,7 +142,9 @@ function getComplementaryColor(rgb: { r: number; g: number; b: number }) {
 function getElementBgColor(x: number, y: number): { r: number; g: number; b: number } {
     if (typeof document === "undefined") return { r: 255, g: 248, b: 232 };
     let el = document.elementFromPoint(x, y);
-    while (el && el !== document.documentElement) {
+    let depth = 0;
+    while (el && el !== document.documentElement && depth < 5) {
+        depth++;
         const bg = window.getComputedStyle(el).backgroundColor;
         if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
             const parsed = parseRgb(bg);
@@ -375,7 +377,9 @@ export default function DotCursor(props: Props) {
             ballY += (targetY - ballY) * followEase;
 
             // Background inspection & complementary color update
-            if (hitDirty && inside) {
+            // Throttle elementFromPoint sampling to at most every 100ms
+            if (hitDirty && inside && now - lastHitSample > 100) {
+                lastHitSample = now;
                 const el = document.elementFromPoint(hitX, hitY);
                 overHide = !!el?.closest(HIDE_SELECTOR);
                 linkEl = el?.closest(LINK_SELECTOR) ?? null;
