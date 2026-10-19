@@ -4,7 +4,7 @@
 
 import { sound } from './audio.js';
 import { getVisitorCount, recordVisitorHit } from './api.js';
-import { subscribeToVisitorCounter } from './firebase.js';
+// subscribeToVisitorCounter is dynamically imported
 
 const STORAGE_SESSION_KEY = 'paci_boss_visit_session_active';
 const STORAGE_CACHE_KEY = 'paci_boss_last_visitor_count';
@@ -141,11 +141,11 @@ export async function initOdometer() {
   // 3. Realtime Firestore Sync (attached non-blockingly so synthetic audits/Lighthouse complete clean)
   const attachSync = () => {
     try {
-      subscribeToVisitorCounter((liveCount) => {
+      import('./firebase.js').then(({ subscribeToVisitorCounter }) => { subscribeToVisitorCounter((liveCount) => {
         if (typeof liveCount === 'number' && liveCount !== displayedCount) {
           animateToCount(liveCount);
         }
-      });
+      }); });
     } catch (err) {}
   };
   if (typeof window.requestIdleCallback === 'function') {

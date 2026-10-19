@@ -10,7 +10,7 @@
 import { sound } from './audio.js';
 import { submitGuestbookMessage, getGuestbookFeed } from './api.js';
 import { getVisitorId } from './visitor-memory.js';
-import { subscribeToGuestbook } from './firebase.js';
+// subscribeToGuestbook is dynamically imported
 
 // Predefined rich response pool to ensure every single review gets a UNIQUE response
 const BABU_RESPONSES = {
@@ -515,11 +515,11 @@ export function initGuestbook() {
   // Attach live Firestore listener for real-time synchronization (deferred to idle to keep initial network quiet)
   let unsubscribe = null;
   const attachGbSub = () => {
-    unsubscribe = subscribeToGuestbook((liveMessages) => {
+    import('./firebase.js').then(({ subscribeToGuestbook }) => { unsubscribe = subscribeToGuestbook((liveMessages) => {
       if (liveMessages && liveMessages.length > 0) {
         renderFeed(liveMessages);
       }
-    }, 20);
+    }, 20); });
   };
   if (typeof window.requestIdleCallback === 'function') {
     window.requestIdleCallback(attachGbSub, { timeout: 3500 });

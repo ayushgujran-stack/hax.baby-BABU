@@ -1,12 +1,10 @@
 // Reusable API Client for THIS SUCKS.™ Backend
-import {
-  placeFirestoreOrder,
-  recordFirestoreVisitorHit,
-  fetchFirestoreVisitorCount,
-  submitFirestoreGuestbookMessage,
-  fetchFirestoreGuestbookMessages,
-  getFirestoreVisitorMemory
-} from './firebase.js';
+// Firebase methods are loaded dynamically on demand
+let _fb = null;
+async function getFirebase() {
+  if (!_fb) _fb = await import('./firebase.js');
+  return _fb;
+}
 
 const API_BASE = '/api';
 
@@ -30,7 +28,7 @@ export async function placeOrder(productName) {
   }
 
   // 2. Resilient Cloud Firestore fallback for deployed static Vercel environments
-  return await placeFirestoreOrder(productName);
+  const fb = await getFirebase(); return await fb.placeFirestoreOrder(productName);
 }
 
 export async function submitComplaint(complaintText) {
@@ -60,7 +58,7 @@ export async function getVisitorCount() {
     }
   } catch (err) {}
 
-  return await fetchFirestoreVisitorCount();
+  const fb = await getFirebase(); return await fb.fetchFirestoreVisitorCount();
 }
 
 export async function recordVisitorHit() {
@@ -74,7 +72,7 @@ export async function recordVisitorHit() {
     }
   } catch (err) {}
 
-  return await recordFirestoreVisitorHit();
+  const fb = await getFirebase(); return await fb.recordFirestoreVisitorHit();
 }
 
 export async function getClassifiedFiles() {
@@ -108,7 +106,7 @@ export async function submitGuestbookMessage({ message, visitorId }) {
     console.warn('Backend /api/guestbook unavailable, falling back to direct Firestore:', err.message);
   }
 
-  return await submitFirestoreGuestbookMessage({ message, visitorId });
+  const fb = await getFirebase(); return await fb.submitFirestoreGuestbookMessage({ message, visitorId });
 }
 
 export async function getGuestbookFeed(limit = 20) {
@@ -122,7 +120,7 @@ export async function getGuestbookFeed(limit = 20) {
     }
   } catch (err) {}
 
-  return await fetchFirestoreGuestbookMessages(limit);
+  const fb = await getFirebase(); return await fb.fetchFirestoreGuestbookMessages(limit);
 }
 
 export async function getVisitorMemory(visitorId) {
@@ -138,6 +136,6 @@ export async function getVisitorMemory(visitorId) {
     }
   } catch (err) {}
 
-  return await getFirestoreVisitorMemory(visitorId);
+  const fb = await getFirebase(); return await fb.getFirestoreVisitorMemory(visitorId);
 }
 

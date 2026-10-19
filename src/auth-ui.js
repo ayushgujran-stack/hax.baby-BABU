@@ -4,13 +4,11 @@
 // Project: baby-46ada
 // ============================================================================
 
-import {
-  signUpWithEmail,
-  signInWithEmail,
-  signOutUser,
-  subscribeToAuthChanges,
-  getCurrentUser
-} from './firebase.js';
+let _fbAuth = null;
+async function getFbAuth() {
+  if (!_fbAuth) _fbAuth = await import('./firebase.js');
+  return _fbAuth;
+}
 import { sound } from './audio.js';
 
 export class AuthUIManager {
@@ -115,10 +113,10 @@ export class AuthUIManager {
 
     // Subscribe to Firebase Auth State Changes non-blockingly on idle
     const initAuthSub = () => {
-      subscribeToAuthChanges((user) => {
+      getFbAuth().then(fb => fb.subscribeToAuthChanges((user) => {
         this.currentUser = user;
         this.updateUIForUser(user);
-      });
+      }));
     };
     if (typeof window.requestIdleCallback === 'function') {
       window.requestIdleCallback(initAuthSub, { timeout: 3500 });
@@ -209,7 +207,7 @@ export class AuthUIManager {
     if (btn) btn.disabled = true;
 
     try {
-      await signInWithEmail(email, password);
+      (await getFbAuth()).signInWithEmail(email, password);
       sound.playStamp();
       this.showSuccess('WELCOME BACK TO THE EXECUTIVE BOARD!');
       setTimeout(() => {
@@ -229,7 +227,7 @@ export class AuthUIManager {
     if (btn) btn.disabled = true;
 
     try {
-      await signUpWithEmail(email, password, name || 'Toddler Board Member');
+      (await getFbAuth()).signUpWithEmail(email, password, name || 'Toddler Board Member');
       sound.playStamp();
       this.showSuccess('EXECUTIVE ACCESS GRANTED! WELCOME TO THIS SUCKS.™');
       setTimeout(() => {
@@ -245,7 +243,7 @@ export class AuthUIManager {
 
   async handleSignOut() {
     try {
-      await signOutUser();
+      (await getFbAuth()).signOutUser();
       sound.playPop();
       this.switchTab('signin');
       this.showSuccess('SIGNED OUT. BABU REVOKED YOUR EXECUTIVE MILK PRIVILEGES.');
