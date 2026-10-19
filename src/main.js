@@ -142,7 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
   allNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const path = link.getAttribute('data-path');
-      if (path === 'the-products') {
+      if (path === 'about') {
+        const about = document.getElementById('about-section');
+        if (about) {
+          e.preventDefault();
+          if (window.introScrollController && !window.introScrollController.isDismissed()) {
+            window.introScrollController.dismiss();
+          }
+          about.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (path === 'the-products') {
         const showcase = document.getElementById('showcase');
         if (showcase) {
           e.preventDefault();
@@ -185,6 +194,48 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       sound.playPop();
     });
+  });
+
+  // Credits Modal Controller
+  const creditsModal = document.getElementById('credits-modal');
+  const closeCreditsBtn = document.getElementById('close-credits-btn');
+  const creditsOkBtn = document.getElementById('credits-ok-btn');
+  const aboutCreditsBtn = document.getElementById('about-credits-btn');
+  const footerCreditsBtn = document.getElementById('footer-credits-btn');
+
+  const openCreditsModal = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (creditsModal) {
+      creditsModal.classList.remove('hidden');
+      sound.playStamp();
+    }
+  };
+
+  const closeCreditsModal = () => {
+    if (creditsModal) {
+      creditsModal.classList.add('hidden');
+      sound.playPop();
+    }
+  };
+
+  if (aboutCreditsBtn) aboutCreditsBtn.addEventListener('click', openCreditsModal);
+  if (footerCreditsBtn) footerCreditsBtn.addEventListener('click', openCreditsModal);
+  if (closeCreditsBtn) closeCreditsBtn.addEventListener('click', closeCreditsModal);
+  if (creditsOkBtn) creditsOkBtn.addEventListener('click', closeCreditsModal);
+
+  if (creditsModal) {
+    creditsModal.addEventListener('click', (e) => {
+      if (e.target === creditsModal) closeCreditsModal();
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && creditsModal && !creditsModal.classList.contains('hidden')) {
+      closeCreditsModal();
+    }
   });
 });
 
