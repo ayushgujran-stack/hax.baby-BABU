@@ -501,12 +501,20 @@ export function initGuestbook() {
 
   loadInitialFeed();
 
-  // Attach live Firestore listener for real-time synchronization
-  const unsubscribe = subscribeToGuestbook((liveMessages) => {
-    if (liveMessages && liveMessages.length > 0) {
-      renderFeed(liveMessages);
-    }
-  }, 20);
+  // Attach live Firestore listener for real-time synchronization (deferred to idle to keep initial network quiet)
+  let unsubscribe = null;
+  const attachGbSub = () => {
+    unsubscribe = subscribeToGuestbook((liveMessages) => {
+      if (liveMessages && liveMessages.length > 0) {
+        renderFeed(liveMessages);
+      }
+    }, 20);
+  };
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(attachGbSub, { timeout: 3500 });
+  } else {
+    setTimeout(attachGbSub, 2000);
+  }
 
   return () => {
     if (typeof unsubscribe === 'function') unsubscribe();
