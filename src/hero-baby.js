@@ -55,9 +55,9 @@ export class HeroBabyController {
     // Check if the interactive wrapper is already built
     let wrapper = document.getElementById('baby-ceo-wrapper');
     if (!wrapper) {
-      // Find the existing img
-      const existingImg = this.babyContainer.querySelector('img');
-      if (!existingImg) return;
+      // Find existing picture or img
+      const targetElement = this.babyContainer.querySelector('picture') || this.babyContainer.querySelector('img');
+      if (!targetElement) return;
 
       // Create wrapper that preserves the exact existing baby image
       wrapper = document.createElement('div');
@@ -67,9 +67,9 @@ export class HeroBabyController {
       wrapper.style.transformStyle = 'preserve-3d';
       wrapper.style.willChange = 'transform';
 
-      // Insert wrapper and move image inside
-      existingImg.parentNode.insertBefore(wrapper, existingImg);
-      wrapper.appendChild(existingImg);
+      // Insert wrapper and move target inside
+      targetElement.parentNode.insertBefore(wrapper, targetElement);
+      wrapper.appendChild(targetElement);
 
       // Create SVG overlay aligned 1:1 with the 384x512 baby artwork
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
