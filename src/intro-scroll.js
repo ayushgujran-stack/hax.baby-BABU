@@ -224,11 +224,24 @@ export function initIntroScroll() {
 
   // Initial draw and kick off preloading
   updateScroll();
-  // Defer batch frame preloading until browser is completely idle or user scrolls
-  if (typeof window.requestIdleCallback === 'function') {
-    window.requestIdleCallback(() => startPreloading(), { timeout: 3000 });
+  // Start progressive batch preloading ONLY when the user begins scrolling or interacting
+  let preloadStarted = false;
+  function triggerPreloadOnInteraction() {
+    if (preloadStarted) return;
+    preloadStarted = true;
+    window.removeEventListener('scroll', triggerPreloadOnInteraction);
+    window.removeEventListener('touchstart', triggerPreloadOnInteraction);
+    window.removeEventListener('wheel', triggerPreloadOnInteraction);
+    startPreloading();
+  }
+
+  // If user is already scrolled, or as soon as they scroll/touch, begin preloading
+  if (window.scrollY > 10) {
+    triggerPreloadOnInteraction();
   } else {
-    setTimeout(startPreloading, 1500);
+    window.addEventListener('scroll', triggerPreloadOnInteraction, { passive: true });
+    window.addEventListener('touchstart', triggerPreloadOnInteraction, { passive: true });
+    window.addEventListener('wheel', triggerPreloadOnInteraction, { passive: true });
   }
 
   // Expose dismiss function for external internal navigations
