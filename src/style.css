@@ -446,14 +446,66 @@ html[data-theme="night"] .bg-surface {
   background-color: #2B253B !important;
 }
 
-/* Text Colors with WCAG High Contrast Readability */
+/* Text Colors with WCAG AAA High Contrast Readability */
 html[data-theme="night"] .text-ink-black,
 html[data-theme="night"] .text-on-surface {
   color: #F8F2EC !important;
 }
 
 html[data-theme="night"] .text-on-surface-variant {
-  color: #BDB4C7 !important;
+  color: #CBC2D5 !important;
+}
+
+/* Preserving Crisp Dark Text On Light / Vibrant Neobrutalist Badges & Buttons */
+html[data-theme="night"] .bg-sunshine-yellow,
+html[data-theme="night"] .bg-sunshine-yellow .text-ink-black,
+html[data-theme="night"] .bg-sunshine-yellow.text-ink-black,
+html[data-theme="night"] .bg-lime-green,
+html[data-theme="night"] .bg-lime-green .text-ink-black,
+html[data-theme="night"] .bg-lime-green.text-ink-black,
+html[data-theme="night"] .bg-crayon-pink,
+html[data-theme="night"] .bg-crayon-pink .text-ink-black,
+html[data-theme="night"] .bg-crayon-pink.text-ink-black,
+html[data-theme="night"] .bg-marker-blue,
+html[data-theme="night"] .bg-marker-blue .text-ink-black,
+html[data-theme="night"] .bg-marker-blue.text-ink-black,
+html[data-theme="night"] [class*="bg-sunshine-yellow"] .text-ink-black,
+html[data-theme="night"] [class*="bg-lime-green"] .text-ink-black,
+html[data-theme="night"] [class*="bg-crayon-pink"] .text-ink-black,
+html[data-theme="night"] [class*="bg-marker-blue"] .text-ink-black,
+html[data-theme="night"] button.bg-sunshine-yellow,
+html[data-theme="night"] button.bg-crayon-pink,
+html[data-theme="night"] button.bg-marker-blue,
+html[data-theme="night"] button.bg-lime-green,
+html[data-theme="night"] .bg-sunshine-yellow span,
+html[data-theme="night"] .bg-lime-green span,
+html[data-theme="night"] .bg-crayon-pink span,
+html[data-theme="night"] .bg-marker-blue span,
+html[data-theme="night"] .bg-sunshine-yellow p,
+html[data-theme="night"] .bg-lime-green p,
+html[data-theme="night"] .bg-crayon-pink p,
+html[data-theme="night"] .bg-marker-blue p {
+  color: #292521 !important;
+}
+
+/* Active Nav Link Pill in Header */
+html[data-theme="night"] header nav a[aria-current="page"] {
+  background-color: #FFD84D !important;
+  color: #292521 !important;
+}
+
+/* Baby Speech Bubble Contrast */
+html[data-theme="night"] #speech-bubble {
+  background-color: #241F33 !important;
+  border-color: #0E0C14 !important;
+}
+
+html[data-theme="night"] #speech-text {
+  color: #FFE066 !important;
+}
+
+html[data-theme="night"] #speech-sub {
+  color: #CBC2D5 !important;
 }
 
 /* Header & Navigation */
@@ -788,6 +840,69 @@ html[data-theme="night"] .df-ui-controls {
 
 
 
+
+
+/* Biography and Certificate Highlighter / Stamp Night Mode Contrast */
+html[data-theme="night"] .bg-crayon-pink > p,
+html[data-theme="night"] .bg-crayon-pink > span,
+html[data-theme="night"] .relative:has(> .bg-crayon-pink) p,
+html[data-theme="night"] .bg-crayon-pink .text-ink-black,
+html[data-theme="night"] [class*="bg-crayon-pink"] .text-ink-black {
+  color: #292521 !important;
+}
+
+/* Make sure text on lighter pastel accents stays crisp #292521 */
+html[data-theme="night"] .bg-sunshine-yellow *,
+html[data-theme="night"] .bg-lime-green *,
+html[data-theme="night"] .bg-crayon-pink *,
+html[data-theme="night"] .bg-marker-blue * {
+  color: #292521 !important;
+}
+
+/* Exceptions: If an inner element is explicitly crayon-red, keep its bright accent */
+html[data-theme="night"] .bg-sunshine-yellow .text-crayon-red,
+html[data-theme="night"] .bg-lime-green .text-crayon-red,
+html[data-theme="night"] .bg-crayon-pink .text-crayon-red,
+html[data-theme="night"] .bg-marker-blue .text-crayon-red {
+  color: #FF5B55 !important;
+}
+
+/* Journey timeline cards in night mode: keep text crisp and clear */
+html[data-theme="night"] .journey-timeline-card {
+  background-color: #241F33 !important;
+  border-color: #0E0C14 !important;
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] .journey-timeline-card p,
+html[data-theme="night"] .journey-timeline-card h4 {
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] .journey-timeline-card span.font-label-stamp {
+  color: #292521 !important;
+}
+
+/* Biography lined paper background contrast */
+html[data-theme="night"] #biography .bg-paper-cream {
+  background-color: #241F33 !important;
+  color: #F8F2EC !important;
+}
+
+html[data-theme="night"] #biography .text-ink-black {
+  color: #F8F2EC !important;
+}
+
+/* Ensure secondary text in night mode has >7:1 contrast ratio */
+html[data-theme="night"] .text-on-surface-variant {
+  color: #D6CEE0 !important;
+}
+
+/* Input placeholder text contrast */
+html[data-theme="night"] input::placeholder,
+html[data-theme="night"] textarea::placeholder {
+  color: #9D94A8 !important;
+}
 
 /* ==========================================================================
    RESPONSIVE MOBILE & TOUCH OPTIMIZATIONS (320px - 1024px)
