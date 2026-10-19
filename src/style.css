@@ -868,18 +868,48 @@ html[data-theme="night"] .bg-marker-blue .text-crayon-red {
 }
 
 /* Journey timeline cards in night mode: keep text crisp and clear */
-html[data-theme="night"] .journey-timeline-card {
+html[data-theme="night"] .journey-timeline-card.bg-paper-cream {
   background-color: #241F33 !important;
   border-color: #0E0C14 !important;
   color: #F8F2EC !important;
 }
 
-html[data-theme="night"] .journey-timeline-card p,
-html[data-theme="night"] .journey-timeline-card h4 {
+html[data-theme="night"] .journey-timeline-card.bg-paper-cream h3,
+html[data-theme="night"] .journey-timeline-card.bg-paper-cream p {
   color: #F8F2EC !important;
 }
 
-html[data-theme="night"] .journey-timeline-card span.font-label-stamp {
+/* Card 1 Phase stamp */
+html[data-theme="night"] .journey-timeline-card .text-crayon-pink {
+  color: #FF7AA2 !important;
+}
+/* Card 2 Phase stamp */
+html[data-theme="night"] .journey-timeline-card .text-marker-blue {
+  color: #60C5FF !important;
+}
+/* Card 3 Phase stamp */
+html[data-theme="night"] .journey-timeline-card .text-tertiary {
+  color: #A6E85B !important;
+}
+/* Card 4 Phase stamp */
+html[data-theme="night"] .journey-timeline-card .text-crayon-red {
+  color: #FF5B55 !important;
+}
+
+/* Card 5 (Crowing milestone: keep signature golden card with crisp dark text) */
+html[data-theme="night"] .journey-timeline-card.bg-sunshine-yellow {
+  background-color: #FFD84D !important;
+  border-color: #0E0C14 !important;
+  box-shadow: 4px 4px 0 #0E0C14 !important;
+}
+
+html[data-theme="night"] .journey-timeline-card.bg-sunshine-yellow,
+html[data-theme="night"] .journey-timeline-card.bg-sunshine-yellow * {
+  color: #292521 !important;
+}
+
+html[data-theme="night"] .journey-timeline-card.bg-sunshine-yellow span[style*="background-color"] {
+  background-color: #FFF3CC !important;
   color: #292521 !important;
 }
 
