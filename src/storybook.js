@@ -37,10 +37,15 @@ export function initStorybook() {
   const viewerContainer = document.getElementById('flipbook-viewer');
   if (!viewerContainer) return null;
 
-  // Ensure jQuery and DearFlip are loaded
+  // Ensure jQuery and DearFlip are loaded (with max retry limit)
   if (typeof window.jQuery === 'undefined' || typeof window.DFLIP === 'undefined') {
-    console.warn('DearFlip or jQuery not yet loaded, retrying in 100ms...');
-    setTimeout(initStorybook, 100);
+    window._dfRetryCount = (window._dfRetryCount || 0) + 1;
+    if (window._dfRetryCount < 30) {
+      setTimeout(initStorybook, 200);
+    } else {
+      console.warn('DearFlip scripts taking longer to load, listening for window load');
+      window.addEventListener('load', () => setTimeout(initStorybook, 300), { once: true });
+    }
     return null;
   }
 

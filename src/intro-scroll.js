@@ -224,7 +224,12 @@ export function initIntroScroll() {
 
   // Initial draw and kick off preloading
   updateScroll();
-  setTimeout(startPreloading, 50);
+  // Defer batch frame preloading until browser is completely idle or user scrolls
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(() => startPreloading(), { timeout: 3000 });
+  } else {
+    setTimeout(startPreloading, 1500);
+  }
 
   // Expose dismiss function for external internal navigations
   return {
