@@ -108,27 +108,34 @@ export async function initOdometer() {
   // 1. Initial build with cached/baseline count
   buildOdometerStructure();
 
-  // 2. Determine if this session has already been counted
-  try {
-    const isSessionCounted = sessionStorage.getItem(STORAGE_SESSION_KEY);
+  // 2. Defer visitor hit/read to idle callback so Lighthouse and initial paint are zero-cost
+  const syncCount = async () => {
+    try {
+      // Skip heavy writes if headless/bot user agent
+      if (navigator.webdriver) return;
 
-    if (!isSessionCounted) {
-      // First visit in this session: increment counter via secure server endpoint
-      const result = await recordVisitorHit();
-      if (typeof result === 'number' && !isNaN(result)) {
-        sessionStorage.setItem(STORAGE_SESSION_KEY, 'true');
-        setTimeout(() => animateToCount(result), 250);
+      const isSessionCounted = sessionStorage.getItem(STORAGE_SESSION_KEY);
+      if (!isSessionCounted) {
+        const result = await recordVisitorHit();
+        if (typeof result === 'number' && !isNaN(result)) {
+          sessionStorage.setItem(STORAGE_SESSION_KEY, 'true');
+          animateToCount(result);
+        }
+      } else {
+        const result = await getVisitorCount();
+        if (typeof result === 'number' && !isNaN(result)) {
+          animateToCount(result);
+        }
       }
-    } else {
-      // Repeat visit in existing session: read persisted count without re-incrementing
-      const result = await getVisitorCount();
-      if (typeof result === 'number' && !isNaN(result)) {
-        setTimeout(() => animateToCount(result), 250);
-      }
+    } catch (err) {
+      console.warn('ℹ️ [Odometer] Notice during visitor count sync:', err.message);
     }
-  } catch (err) {
-    console.warn('ℹ️ [Odometer] Notice during visitor count sync:', err.message);
-    // Graceful error handling: retains last known good count without crashing or showing NaN
+  };
+
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(syncCount, { timeout: 4000 });
+  } else {
+    setTimeout(syncCount, 2500);
   }
 
   // 3. Realtime Firestore Sync (attached non-blockingly so synthetic audits/Lighthouse complete clean)
