@@ -142,16 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   allNavLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const path = link.getAttribute('data-path');
-      if (path === 'about') {
-        const about = document.getElementById('about-section');
-        if (about) {
-          e.preventDefault();
-          if (window.introScrollController && !window.introScrollController.isDismissed()) {
-            window.introScrollController.dismiss();
-          }
-          about.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else if (path === 'the-products') {
+      if (path === 'the-products') {
         const showcase = document.getElementById('showcase');
         if (showcase) {
           e.preventDefault();
