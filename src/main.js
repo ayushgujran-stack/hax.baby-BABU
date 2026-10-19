@@ -12,6 +12,7 @@ import { initVinylRoom } from './vinyl-room.js';
 import { initAuth } from './auth-ui.js';
 import { initHeroBaby } from './hero-baby.js';
 import { initTheme } from './theme.js';
+import { initFireflies } from './fireflies.js';
 import { initIntroScroll } from './intro-scroll.js';
 import { initJourneyTimeline } from './journey-timeline.js';
 import { initStorybook } from './storybook.js';
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVinylRoom();
   initAuth();
   initTheme();
+  initFireflies();
   initLicenseStackEffect();
   initChaseDominationStackEffect();
   initJourneyTimeline();
