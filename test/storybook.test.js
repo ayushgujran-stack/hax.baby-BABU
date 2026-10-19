@@ -76,19 +76,20 @@ assert.ok(indexHtml.includes('id="storybook-stage-wrapper"'), 'index.html must i
 assert.ok(indexHtml.includes('"STONKS ONLY GO UP."'), 'index.html must include giant STONKS ONLY GO UP section');
 console.log('  ✅ Frameless book stage, THE LEGEND OF BABU title, and giant Stonks section verified');
 
+const storybookJsPath = path.join(rootDir, 'src', 'storybook.js');
+const storybookCode = fs.readFileSync(storybookJsPath, 'utf-8');
+
 // --- 3. DearFlip CSS & Scripts ---
 console.log('\n--- 3. DearFlip CSS & Scripts ---');
 assert.ok(indexHtml.includes('dflip.min.css'), 'index.html must include dflip.min.css');
-assert.ok(indexHtml.includes('jquery-3.7.1.min.js'), 'index.html must include jQuery script');
-assert.ok(indexHtml.includes('dflip.min.js'), 'index.html must include dflip.min.js');
+// jQuery and DearFlip are now loaded dynamically on-demand by src/storybook.js
+assert.ok(storybookCode.includes('jquery-3.7.1.min.js'), 'src/storybook.js must include dynamic loader for jQuery');
+assert.ok(storybookCode.includes('dflip.min.js'), 'src/storybook.js must include dynamic loader for dflip.min.js');
 console.log('  ✅ DearFlip stylesheets and runtime scripts correctly embedded');
 
 // --- 4. JavaScript Module Interface ---
 console.log('\n--- 4. JavaScript Module Interface ---');
-const storybookJsPath = path.join(rootDir, 'src', 'storybook.js');
 assert.ok(fs.existsSync(storybookJsPath), 'src/storybook.js must exist');
-
-const storybookCode = fs.readFileSync(storybookJsPath, 'utf-8');
 assert.ok(storybookCode.includes('export const STORYBOOK_PAGES'), 'src/storybook.js must export STORYBOOK_PAGES');
 assert.ok(storybookCode.includes('export const STORYBOOK_CONFIG'), 'src/storybook.js must export STORYBOOK_CONFIG');
 assert.ok(storybookCode.includes('export function initStorybook'), 'src/storybook.js must export initStorybook');

@@ -26,25 +26,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const introController = initIntroScroll();
   window.introScrollController = introController;
 
-  // Initialize all interactive frontend and backend systems
-  const cart = new CartManager();
-  initOdometer();
-  initCertificate();
-  initEasterEggs();
-  initGuestbook();
-  initVisitorMemory();
-  mountDotCursor();
-  initHeroBaby();
-  initChaseScene();
-  initVinylRoom();
-  initAuth();
+  // Core immediate visual setups
   initTheme();
   initFireflies();
   initLicenseStackEffect();
   initChaseDominationStackEffect();
-  initJourneyTimeline();
-  initStorybook();
-  initStonksChart();
+
+  // Defer below-the-fold & non-critical interactive components to avoid main-thread freeze
+  const scheduleInit = (fn) => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(fn, { timeout: 1500 });
+    } else {
+      setTimeout(fn, 100);
+    }
+  };
+
+  scheduleInit(() => {
+    const cart = new CartManager();
+    mountDotCursor();
+    initHeroBaby();
+    initJourneyTimeline();
+    initCertificate();
+    initEasterEggs();
+  });
+
+  scheduleInit(() => {
+    initChaseScene();
+    initStonksChart();
+    initStorybook();
+    initVinylRoom();
+    initAuth();
+    initOdometer();
+    initGuestbook();
+    initVisitorMemory();
+  });
 
   // Play pop on interactive button clicks that don't already have specific sounds
   document.addEventListener('click', (e) => {
