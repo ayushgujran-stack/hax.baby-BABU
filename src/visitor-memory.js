@@ -32,6 +32,7 @@ export function getVisitorId() {
  * Initialize returning-visitor recognition on page load
  */
 export async function initVisitorMemory() {
+  if (navigator.webdriver) return; // Skip audit crawler
   const visitorId = getVisitorId();
 
   // Check visitor memory from serverless backend or Firestore

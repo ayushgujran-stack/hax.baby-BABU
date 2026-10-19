@@ -113,11 +113,18 @@ export class AuthUIManager {
       });
     }
 
-    // Subscribe to Firebase Auth State Changes
-    subscribeToAuthChanges((user) => {
-      this.currentUser = user;
-      this.updateUIForUser(user);
-    });
+    // Subscribe to Firebase Auth State Changes non-blockingly on idle
+    const initAuthSub = () => {
+      subscribeToAuthChanges((user) => {
+        this.currentUser = user;
+        this.updateUIForUser(user);
+      });
+    };
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(initAuthSub, { timeout: 3500 });
+    } else {
+      setTimeout(initAuthSub, 2000);
+    }
   }
 
   open() {

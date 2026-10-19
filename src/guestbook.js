@@ -499,7 +499,18 @@ export function initGuestbook() {
     }
   }
 
-  loadInitialFeed();
+  const complaintsSection = document.getElementById('complaints');
+  if (complaintsSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        observer.disconnect();
+        loadInitialFeed();
+      }
+    }, { rootMargin: '400px' });
+    observer.observe(complaintsSection);
+  } else {
+    loadInitialFeed();
+  }
 
   // Attach live Firestore listener for real-time synchronization (deferred to idle to keep initial network quiet)
   let unsubscribe = null;
