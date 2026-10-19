@@ -4,21 +4,31 @@ import confetti from 'canvas-confetti';
 
 export function initEasterEggs() {
   // 1. Audio Mute / Unmute Toggle Button in Navbar
-  const headerRight = document.querySelector('header .flex.items-center.gap-space-md');
-  if (headerRight && !document.getElementById('audio-toggle-btn')) {
-    const audioBtn = document.createElement('button');
-    audioBtn.id = 'audio-toggle-btn';
-    audioBtn.className = 'w-9 h-9 rounded-lg bg-paper-cream border-2 border-ink-black shadow-[2px_2px_0_#292521] flex items-center justify-center text-lg hover:bg-sunshine-yellow active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer';
-    audioBtn.title = 'Toggle Toy Sounds';
-    audioBtn.innerHTML = sound.isMuted() ? '🔇' : '🔊';
+  let audioBtn = document.getElementById('audio-toggle-btn');
+  if (!audioBtn) {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (themeBtn && themeBtn.parentNode) {
+      audioBtn = document.createElement('button');
+      audioBtn.id = 'audio-toggle-btn';
+      audioBtn.className = 'flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-paper-cream border-2 border-ink-black shadow-[2px_2px_0_#292521] text-base hover:bg-sunshine-yellow active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer select-none';
+      audioBtn.title = 'Toggle Sound Effects';
+      audioBtn.setAttribute('aria-label', 'Toggle Sound Effects');
+      themeBtn.parentNode.insertBefore(audioBtn, themeBtn);
+    }
+  }
+
+  if (audioBtn) {
+    audioBtn.textContent = sound.isMuted() ? '🔇' : '🔊';
+    audioBtn.setAttribute('aria-label', sound.isMuted() ? 'Unmute Sound Effects' : 'Mute Sound Effects');
+    audioBtn.title = sound.isMuted() ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Enabled (Click to Mute)';
 
     audioBtn.addEventListener('click', () => {
       const isMuted = sound.toggleMute();
-      audioBtn.innerHTML = isMuted ? '🔇' : '🔊';
+      audioBtn.textContent = isMuted ? '🔇' : '🔊';
+      audioBtn.setAttribute('aria-label', isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects');
+      audioBtn.title = isMuted ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Enabled (Click to Mute)';
       if (!isMuted) sound.playSqueak();
     });
-
-    headerRight.prepend(audioBtn);
   }
 
   // 2. Interactive Sticky Notes (physics jiggle & peel sound)

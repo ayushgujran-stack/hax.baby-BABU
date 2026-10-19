@@ -37,7 +37,7 @@
         <a href="/#showcase" class="hidden md:inline-flex font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-1 transition-all">Products</a>
         <a href="/#biography" class="hidden md:inline-flex font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-1 transition-all">Story</a>
         <a href="/#storybook-section" class="hidden md:inline-flex font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-1 transition-all">Storybook</a>
-        <button id="theme-toggle-btn" class="flex items-center gap-1 font-label-md text-xs bg-sunshine-yellow text-ink-black px-2.5 py-1.5 border-2 border-ink-black shadow-[2px_2px_0_#292521] rounded-lg rotate-[1.5deg] hover:scale-105 active:scale-95 transition-all cursor-pointer" aria-label="Toggle Night Mode">
+        <button id="audio-toggle-btn" class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-paper-cream border-2 border-ink-black shadow-[2px_2px_0_#292521] text-base hover:bg-sunshine-yellow active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer select-none" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">🔊</button><button id="theme-toggle-btn" class="flex items-center gap-1 font-label-md text-xs bg-sunshine-yellow text-ink-black px-2.5 py-1.5 border-2 border-ink-black shadow-[2px_2px_0_#292521] rounded-lg rotate-[1.5deg] hover:scale-105 active:scale-95 transition-all cursor-pointer" aria-label="Toggle Night Mode">
           <span id="theme-icon">🌙</span> <span id="theme-label" class="hidden sm:inline font-bold">SLEEP</span>
         </button>
       </nav>
@@ -401,6 +401,20 @@
     const savedTheme = localStorage.getItem('paci_theme') || 'day';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateUI(savedTheme === 'night');
+
+    const audioBtn = document.getElementById('audio-toggle-btn');
+    if (audioBtn) {
+      const isMuted = localStorage.getItem('paci_boss_muted') === 'true';
+      audioBtn.textContent = isMuted ? '🔇' : '🔊';
+      audioBtn.title = isMuted ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Enabled (Click to Mute)';
+      audioBtn.addEventListener('click', () => {
+        const currentlyMuted = localStorage.getItem('paci_boss_muted') === 'true';
+        const nextMuted = !currentlyMuted;
+        localStorage.setItem('paci_boss_muted', nextMuted);
+        audioBtn.textContent = nextMuted ? '🔇' : '🔊';
+        audioBtn.title = nextMuted ? 'Sound Effects: Muted (Click to Unmute)' : 'Sound Effects: Enabled (Click to Mute)';
+      });
+    }
 
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => {
